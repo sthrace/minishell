@@ -43,6 +43,7 @@ int				ft_tolower(int c);
 char			*ft_strtoupper (char *str);
 char			*ft_strtolower (char *str);
 
+void			*ft_realloc(void *ptr, size_t size);
 void			*ft_calloc(size_t nmemb, size_t size);
 char			*ft_strdup(const char *str);
 
