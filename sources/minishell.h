@@ -2,9 +2,8 @@
 # define MINISHELL_H
 
 # include "../libft/libft.h"
-
 # include <term.h>
-# include <unistd.h>
+// # include "termcap.h"
 
 # include <stdio.h>	/////////////////
 

@@ -1,7 +1,8 @@
 #SETUP
 NAME		= minishell
 CC			= gcc
-CFLAGS		= -Wall -Wextra -Werror
+# CFLAGS		= -Wall -Wextra -Werror
+CFLAGS		=
 RM			= rm -f
 
 #FILES
@@ -19,7 +20,7 @@ LIBFT		= $(LIBFT_DIR)libft.a
 all:		tools $(NAME)
 
 $(NAME):	$(LIBFT) $(HEADER) $(OBJS)
-			$(CC) $(CFLAGS) $(LIBFT) $(OBJS) -o $(NAME)
+			$(CC) $(CFLAGS) $(LIBFT) -ltermcap $(OBJS) -o $(NAME)
 			@echo $(NAME) created!
 
 tools:
