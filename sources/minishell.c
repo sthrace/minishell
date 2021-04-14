@@ -83,7 +83,7 @@ int	main()
 	ft_init(&shell);
 	ft_initterm(&term);
 	str[0] = '0';
-	while (ft_strcmp(str, "\n"))
+	while (1)
 	{
 		len = read(0, str, 3);
 		if (str[0] == '\e' || !ft_strncmp(str, "\177", len))
@@ -95,7 +95,8 @@ int	main()
 			write(1, str, len);
 			ft_line(shell, str, len);
 		}
+		if (str[0] == 10)
+			ft_parse(shell);
 	}
-	printf("Str: %s\n", shell->line);
 	return(0);
 }
