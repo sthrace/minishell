@@ -1,12 +1,11 @@
 #SETUP
 NAME		= minishell
 CC			= gcc
-# CFLAGS		= -Wall -Wextra -Werror
-CFLAGS		=
+CFLAGS		= -fsanitize=address -Wall -Wextra -Werror
 RM			= rm -f
 
 #FILES
-FLS			= main.c
+FLS			= minishell.c
 
 SRCS_DIR	= sources/
 HEADER		= $(SRCS_DIR)minishell.h

@@ -6,5 +6,13 @@
 // # include "termcap.h"
 
 # include <stdio.h>	/////////////////
+# include <sys/errno.h>
+# include <string.h>
+
+typedef struct s_shell
+{
+    char    *line;
+    int     linelen;
+}               t_shell;
 
 #endif
