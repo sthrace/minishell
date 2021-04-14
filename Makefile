@@ -1,7 +1,7 @@
 #SETUP
 NAME		= minishell
 CC			= gcc
-CFLAGS		= -fsanitize=address -Wall -Wextra -Werror
+CFLAGS		= -g -Wall -Wextra -Werror
 RM			= rm -f
 
 #FILES
