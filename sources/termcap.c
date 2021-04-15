@@ -7,7 +7,7 @@ void ft_initterm(struct termios *term)
 	term->c_lflag &= ~ICANON;		// переходим в неканонический посимвольный режим ввода
 	tcsetattr(0, TCSANOW,  term);	// применяем настройки
 	tgetent(0, getenv("TERM"));	// загружаем базу данных текущего терминала
-	tputs(save_cursor, 1, &ft_putchar);
+	// tputs(save_cursor, 1, &ft_putchar);
 }
 
 void	ft_termios(t_shell *shell, char *str, int len)

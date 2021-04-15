@@ -60,6 +60,7 @@ void			ft_putstr_fd(char *s, int fd);
 void			ft_putendl_fd(char *s, int fd);
 void			ft_putnbr_fd(int n, int fd);
 
+int     		ft_metachar(int c);
 int     		ft_symbol(int c);
 
 typedef struct	s_list

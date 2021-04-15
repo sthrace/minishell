@@ -13,8 +13,14 @@ typedef struct s_shell
 {
     char    *line;
     int     linelen;
-    char    **cmd;
+    char    ***cmd;
+    int     cmd_cnt;
+    int     *smcln_pos;
+    int     tkn_cnt;
+    int     tkn_len;
 }               t_shell;
+
+char    **g_env;
 
 void ft_initterm(struct termios *term);
 void	ft_termios(t_shell *shell, char *str, int len);
