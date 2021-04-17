@@ -52,7 +52,10 @@ int	main(int argc, char **argv, char **envp)
 			ft_line(shell, str, len);
 		}
 		if (str[0] == '\n')
-			ft_parser(shell);
+		{
+			ft_count_commands(shell, 0);
+			ft_count_tokens(shell, -1, 0);
+		}
 		if (str[0] == '\4')
 			break ;
 	}

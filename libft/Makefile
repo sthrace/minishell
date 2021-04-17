@@ -59,7 +59,8 @@ SRCS	=\
 		get_next_line.c\
 		ft_realloc.c\
 		ft_metachar.c\
-		ft_symbol.c
+		ft_symbol.c\
+		ft_istoken.c
 SRCS_B	=\
 		ft_lstadd_back.c\
 		ft_lstadd_front.c\
