@@ -53,13 +53,13 @@
 //     }
 // }
 
-void    ft_parser(t_shell *shell)
-{
-    int     i;
+// void    ft_parser(t_data *data)
+// {
+//     int     i;
 
-    i = 0;
+//     i = 0;
     // ft_syntax_check(shell, i);
     // ft_save_commands(shell, &i);
-    free(shell->line);
-    shell->line = NULL;
-}
+//     free(data->line);
+//     data->line = NULL;
+// }

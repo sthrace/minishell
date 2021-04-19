@@ -1,93 +1,79 @@
 #include "minishell.h"
 
-static void	ft_tokensize(t_shell *shell, int i, int x, int y)
-{
-	int		len;
+// void	ft_set_tokens(t_data *data, int x, int y, int i)
+// {
+// 	int	start;
 
-	while (x < shell->ccnt)
-	{
-		while (y < shell->cmd[i].tcnt)
-		{
-			len = 0;
-			if (shell->line[i] == ' ' && i == 0)
-				y++;
-		}
-		x++;
-	}
-}
+// 	while (x < data->ccnt)
+// 	{
+// 		start = 0;
+// 		y = 0;
+// 		ft_splittkn(data, &start, x, y);
+// 		x++;
+// 	}
+// 	i = 0;
+// }
 
-void		ft_count_tokens(t_shell *shell, int i, int x)
+void	ft_set_commands(t_data *data, int x, int i)
 {
-	while (++i < shell->ccnt)
-		shell->cmd[i].tcnt = 0;
-	i = 0;
-	while (shell->line[i] != '\0')
+	char *tmp;
+	int	start;
+
+	ft_initq(data);
+	tmp = data->line;
+	start = 0;
+	while (data->line[i])
 	{
-		if(shell->line[i] == ';')
-		{
-			shell->cmd[x].token = (t_token *)malloc(sizeof(t_token) * shell->cmd[x].tcnt);
+		if (ft_splitcmd(data, i, &start, x))
 			x++;
-		}
-		if ((i == 0 && ft_istoken(shell->line[i])) ||
-				(i != 0 && ft_istoken(shell->line[i]) 
-				&& shell->line[i - 1] == ' ') || 
-				(i != 0 && ft_istoken(shell->line[i]) && 
-				(shell->line[i - 1] == ';' || shell->line[i + 1] == ';')))
-			shell->cmd[x].tcnt++;
 		i++;
 	}
-	ft_tokensize(shell, 0, 0, 0);
+	// ft_set_tokens(data, 0, 0, 0);
+	data->line = NULL;
+	free(data->line);
 }
 
-void		ft_count_commands(t_shell *shell, int i)
+void	ft_count_commands(t_data *data, int i)
 {
-	shell->ccnt = 1;
-	if (shell->cmd)
-		free(shell->cmd);
-	while (shell->line[i] != '\0')
+	char	*tmp;
+
+	ft_initq(data);
+	data->ccnt = 1;
+	tmp = data->line;
+	while (tmp[i])
 	{
-		if (shell->line[i] == ';')
-		{
-			if (shell->line[i + 1] == ';')
-			{
-				shell->ccnt = 0;
-				shell->line = NULL;
-				printf("parse error near `;;'\n");
-				break ;
-			}	
-			else
-				shell->ccnt++;
-		}	
+		ft_ccnt(data, tmp, i);
 		i++;
 	}
-	shell->cmd = (t_command *)malloc(sizeof(t_command) * shell->ccnt);
-	if (shell->cmd == NULL)
+	data->cmd = (t_command *)malloc(sizeof(t_command) * data->ccnt);
+	if (data->cmd == NULL)
 		printf("%s\n", strerror(errno));
+	ft_set_commands(data, 0, 0);
 }
 
-void ft_line(t_shell *shell, char *str, int len)
+void ft_line(t_data *data, char *str, int len)
 {
-	if (!shell->line)
+	if (!data->line)
 	{
-		shell->line = (char *)malloc(sizeof(char) * 2);
-		shell->line[0] = str[0];
-		shell->line[1] = '\0';
-		shell->linelen = len;
+		data->line = (char *)malloc(sizeof(char) * 2);
+		data->line[0] = str[0];
+		data->line[1] = '\0';
+		data->linelen = len;
 	}
 	else
 	{
-		shell->linelen += len;
-		if (shell->linelen > 0)
+		data->linelen += len;
+		if (data->linelen > 0)
 		{
-			shell->line = (char *)ft_realloc(shell->line, (sizeof(char) * (shell->linelen + 1)));
+			data->line = (char *)ft_realloc(data->line, (sizeof(char) * (data->linelen + 1)));
 			if (len > 0)
-				shell->line[shell->linelen - 1] = str[0];
-			shell->line[shell->linelen] = '\0';
+				data->line[data->linelen - 1] = str[0];
+			data->line[data->linelen] = '\0';
 		}
 		else
 		{
-			free(shell->line);
-			shell->line = NULL;
+			data->line = NULL;
+			free(data->line);
 		}
 	}
 }

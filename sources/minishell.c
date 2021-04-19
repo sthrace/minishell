@@ -17,16 +17,16 @@ static void	ft_init_env(char **envp)
 		g_env[cnt] = ft_strdup(envp[cnt]);
 }
 
-static void ft_init(t_shell **shell, char **envp)
+static void ft_init(t_data **data, char **envp)
 {
-	*shell = (t_shell *)malloc(sizeof(t_shell));
-	if (shell == NULL)
+	*data = (t_data *)malloc(sizeof(t_data));
+	if (data == NULL)
 	{
 		printf("%s\n", strerror(errno));
 		exit(1);
 	}
-	(*shell)->line = NULL;
-	(*shell)->cmd = NULL;
+	(*data)->line = NULL;
+	(*data)->cmd = NULL;
 	ft_init_env(envp);
 }
 
@@ -35,26 +35,28 @@ int	main(int argc, char **argv, char **envp)
 	char	str[3];				// буфер для посимвольного чтения (3 байта для эскейп последовательностей)
 	int		len;
 	struct	termios term;
-	t_shell	*shell;
+	t_data	*data;
 
 	if (argc != 1 && !argv[0])
 		return (1);
-	ft_init(&shell, envp);
+	ft_init(&data, envp);
 	ft_initterm(&term);
 	while (1)
 	{
 		len = read(0, str, 3);
 		if (str[0] == '\e' || !ft_strncmp(str, "\177", len))
-			ft_termios(shell, str, len);
+			ft_termios(data, str, len);
 		else
 		{
 			write(1, str, len);
-			ft_line(shell, str, len);
+			ft_line(data, str, len);
 		}
 		if (str[0] == '\n')
 		{
-			ft_count_commands(shell, 0);
-			ft_count_tokens(shell, -1, 0);
+			ft_count_commands(data, 0);
+			
+			// free(data->line);
+			// data->line = NULL;
 		}
 		if (str[0] == '\4')
 			break ;

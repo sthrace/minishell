@@ -1,11 +1,11 @@
 #SETUP
 NAME		= minishell
 CC			= gcc
-CFLAGS		= -g -Wall -Wextra -Werror
+CFLAGS		= -fsanitize=address -Wall -Wextra -Werror
 RM			= rm -f
 
 #FILES
-FLS			= minishell.c termcap.c lexer.c parser.c
+FLS			= minishell.c termcap.c lexer.c lexer_utils.c
 
 SRCS_DIR	= sources/
 HEADER		= $(SRCS_DIR)minishell.h
