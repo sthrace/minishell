@@ -9,11 +9,19 @@
 # include <sys/errno.h>
 # include <string.h>
 
+typedef struct s_token
+{
+    char    *argv;
+    int     fd_in;
+    int     fd_out;
+}               t_token;
+
+
 typedef struct s_command
 {
     int     tcnt;
     char    *arg;
-    char    **token;
+    t_token *token;
 }               t_command;
 
 
@@ -37,8 +45,10 @@ void	    ft_count_commands(t_data *data, int i);
 
 void        ft_ccnt(t_data *data, char *line, int i);
 void        ft_markup_cmd(t_data *data, char *line, int i);
-void        ft_initq(t_data *data);
+void        ft_initqt(t_data *data, int type);
 int         ft_splitcmd(t_data *data, int i, int *start, int x);
-void        ft_splittkn(t_data *data, int *start, int x, int y);
+int         ft_splittkn(t_data *data, char *arg, int x, int *start);
+void        ft_validator(t_data *data);
+void        ft_tcnt(t_data *data, char *line, int i, int x);
 
 #endif

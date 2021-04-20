@@ -1,5 +1,32 @@
 #include "minishell.h"
 
+void ft_line(t_data *data, char *str, int len)
+{
+	if (!data->line)
+	{
+		data->line = (char *)malloc(sizeof(char) * 2);
+		data->line[0] = str[0];
+		data->line[1] = '\0';
+		data->linelen = len;
+	}
+	else
+	{
+		data->linelen += len;
+		if (data->linelen > 0)
+		{
+			data->line = (char *)ft_realloc(data->line, (sizeof(char) * (data->linelen + 1)));
+			if (len > 0)
+				data->line[data->linelen - 1] = str[0];
+			data->line[data->linelen] = '\0';
+		}
+		else
+		{
+			data->line = NULL;
+			free(data->line);
+		}
+	}
+}
+
 static void	ft_init_env(char **envp)
 {
 	int	cnt;
@@ -52,12 +79,7 @@ int	main(int argc, char **argv, char **envp)
 			ft_line(data, str, len);
 		}
 		if (str[0] == '\n')
-		{
-			ft_count_commands(data, 0);
-			
-			// free(data->line);
-			// data->line = NULL;
-		}
+			ft_count_commands(data, -1);
 		if (str[0] == '\4')
 			break ;
 	}
