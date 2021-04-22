@@ -1,63 +1,65 @@
 #include "minishell.h"
 
-void	ft_set_tokens(t_data *data, int x)
+int    ft_semicolumn(t_data *data, char c)
 {
-	int	start;
+    ft_flagswitch(data, c);
+    if (c == 59 && !data->quotes && !data->screen)
+        return (1);
+    return (0);
+}
 
-	ft_initqt(data, 0);
-	while (++x < data->ccnt)
+void		ft_splitcmd(t_data *data, char *line, int i, int len)
+{
+	int		start;
+
+	if (!ft_validate(data, line))
 	{
+		ft_init_flags(data);
 		start = 0;
-		ft_splittkn(data, data->cmd[x].arg, x, &start);
+		while (line[++i])
+		{
+			len++;
+			if (ft_semicolumn(data, line[i]) || !line[i + 1])
+			{
+				if (ft_semicolumn(data, line[i]))
+				{
+					data->cmd = ft_substr(line, start, len - 1);
+					start = i + 1;
+					len = 0;
+				}
+				else
+					data->cmd = ft_substr(line, start, len);
+				ft_parser(data);
+			}
+		}
 	}
-}
-
-void	ft_count_tokens(t_data *data, int i, int x)
-{
-	char	*tmp;
-
-	ft_initqt(data, 2);
-	while (++x < data->ccnt)
-	{
-		i = 0;
-		tmp = data->cmd[x].arg;
-		ft_tcnt(data, tmp, i, x);
-		data->cmd[x].token = (t_token *)malloc(sizeof(t_token) * data->cmd[x].tcnt);
-		if (data->cmd[x].token == NULL)
-			printf("%s\n", strerror(errno));
-	}	
-	ft_set_tokens(data, -1);
-}
-
-void	ft_set_commands(t_data *data, int x, int i)
-{
-	int	start;
-
-	ft_initqt(data, 0);
-	start = 0;
-	while (data->line[i])
-	{
-		if (ft_splitcmd(data, i, &start, x))
-			x++;
-		i++;
-	}
-	ft_count_tokens(data, 0, -1);
 	data->line = NULL;
 	free(data->line);
 }
 
-void	ft_count_commands(t_data *data, int i)
+void ft_line(t_data *data, char *str, int len)
 {
-	char	*tmp;
-
-	ft_validator(data);
-	ft_initqt(data, 0);
-	data->ccnt = 1;
-	tmp = data->line;
-	while (tmp[++i])
-		ft_ccnt(data, tmp, i);
-	data->cmd = (t_command *)malloc(sizeof(t_command) * data->ccnt);
-	if (data->cmd == NULL)
-		printf("%s\n", strerror(errno));
-	ft_set_commands(data, 0, 0);
+	if (!data->line)
+	{
+		data->line = (char *)malloc(sizeof(char) * 2);
+		data->line[0] = str[0];
+		data->line[1] = '\0';
+		data->len = len;
+	}
+	else
+	{
+		data->len += len;
+		if (data->len > 0)
+		{
+			data->line = (char *)ft_realloc(data->line, (sizeof(char) * (data->len + 1)));
+			if (len > 0)
+				data->line[data->len - 1] = str[0];
+			data->line[data->len] = '\0';
+		}
+		else
+		{
+			data->line = NULL;
+			free(data->line);
+		}
+	}
 }

@@ -3,52 +3,54 @@
 
 # include "../libft/libft.h"
 # include <term.h>
-// # include "termcap.h"
-
-# include <stdio.h>	/////////////////
+# include <stdio.h>
 # include <sys/errno.h>
 # include <string.h>
-
-typedef struct s_token
-{
-    char    *argv;
-    int     fd_in;
-    int     fd_out;
-}               t_token;
-
+# include <stdlib.h>
 
 typedef struct s_command
 {
-    int     tcnt;
-    char    *arg;
-    t_token *token;
+    int     argc;
+    char    **argv;
+    int     fd_in;
+    int     fd_out;
 }               t_command;
 
 
 typedef struct s_data
 {
     char        *line;
-    int         linelen;
-    int         dqotes;
-    int         sqotes; 
-    int         ccnt;
-    t_command   *cmd;
+    int         len;
+    int         quotes;
+    int         screen;
+    char        *cmd;
+    t_command   *command;
 }               t_data;
 
-char    **g_env;
+// term.c //
 
 void        ft_initterm(struct termios *term);
 void	    ft_termios(t_data *data, char *str, int len);
 
-void        ft_line(t_data *data, char *str, int len);
-void	    ft_count_commands(t_data *data, int i);
+// lexer.c //
 
-void        ft_ccnt(t_data *data, char *line, int i);
-void        ft_markup_cmd(t_data *data, char *line, int i);
-void        ft_initqt(t_data *data, int type);
-int         ft_splitcmd(t_data *data, int i, int *start, int x);
-int         ft_splittkn(t_data *data, char *arg, int x, int *start);
-void        ft_validator(t_data *data);
-void        ft_tcnt(t_data *data, char *line, int i, int x);
+void        ft_line(t_data *data, char *str, int len);
+void		ft_splitcmd(t_data *data, char *line, int i, int len);
+int         ft_semicolumn(t_data *data, char c);
+
+// utils.c //
+
+int         ft_validate(t_data *data, char *line);
+void        ft_flagswitch(t_data *data, char c);
+void        ft_init_flags(t_data *data);
+
+// parser.c //
+
+void 	    ft_parser(t_data *data);
+
+// minishell.c //
+
+void	    ft_sig_handler(int sig);
+void        ft_init(t_data **data);
 
 #endif

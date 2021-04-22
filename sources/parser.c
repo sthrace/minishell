@@ -1,65 +1,63 @@
 #include "minishell.h"
 
-// static void ft_alloc_commands(t_shell *shell, int *i)
-// {
-//     shell->cmd_cnt = 0;
-//     while (shell->line[*i] != '\0')
-//     {
-//         if (shell->line[*i] == ';')
-//             break ;
-//         if ((*i == 0 && shell->line[*i] != ' ') || 
-//         (shell->line[*i] == ' ' && shell->line[*i + 1] 
-//         && shell->line[*i + 1] != ' ' && shell->line[*i + 1] != ';'))
-//         {
-//             shell->cmd_cnt++;
-//             (*i)++;
-//         }
-//         else
-//             (*i)++;
-//     }
-// }
+static void		ft_splitt(t_data *data, int i, int start, int x)
+{
+	int len;
 
-// static void ft_save_commands(t_shell *shell, int *i)
-// {
-//     shell->cmd = NULL;
+	ft_init_flags(data);
+	len = 1;
+	while (data->cmd[i])
+	{
+		while (data->cmd[i] == 32 && !data->quotes && !data->screen)
+			i++;
+		ft_flagswitch(data, data->cmd[i]);
+		if (data->cmd[i] != 32 && i > 0 && data->cmd[i - 1] == 32)
+		{
+			start = i;
+			len = 1;
+		}
+		if (data->cmd[i] != 32 && !data->quotes && !data->screen && ((data->cmd[i + 1] && data->cmd[i + 1] == 32) || data->cmd[i + 1] == 0))
+		{
+			if (data->cmd[i] == 10)
+				len -= 1;
+			data->command->argv[x] = ft_substr(data->cmd, start, len);
+			printf("Token %d: %s\n", x, data->command->argv[x]);
+			len = 0;
+			x++;
+		}
+		i++;
+		len++;
+	}
+}
 
-//     while (shell->line[*i] != '\0')
-//     {
-//         if (shell->line[*i] == ';')
-//             break ;
-//         if ((*i == 0 && shell->line[*i] != ' ') || 
-//         (shell->line[*i - 1] && shell->line[*i - 1] == ' ' 
-//         && shell->line[*i] != ' ' && shell->line[*i] != ';'))
-//         {
-//             ft_lstadd_back(&cmd, )
-//             (*i)++;
-//         }
-//         else
-//             (*i)++;
-//     }
-// }
+static void		ft_count(t_data *data, int i)
+{
+	data->command->argc = 0;
+	ft_init_flags(data);
+	while (data->cmd[i])
+	{
+		while (data->cmd[i] == 32)
+			i++;
+		ft_flagswitch(data, data->cmd[i]);
+		if (data->cmd[i] != 32 && !data->quotes && !data->screen && ((data->cmd[i + 1] && data->cmd[i + 1] == 32) || data->cmd[i + 1] == 0))
+			data->command->argc++;
+		i++;
+	}
+}
 
-// static void ft_syntax_check(t_shell *shell, int i)
-// {
-//     while (shell->line[i])
-//     {
-//         if (shell->line[i] == ';' && shell->line[i + 1] == ';')
-//         {
-//             printf("parse error near `;;'\n");
-//             // init_prompt();
-//             exit (1);
-//         }
-//         i++;
-//     }
-// }
-
-// void    ft_parser(t_data *data)
-// {
-//     int     i;
-
-//     i = 0;
-    // ft_syntax_check(shell, i);
-    // ft_save_commands(shell, &i);
-//     free(data->line);
-//     data->line = NULL;
-// }
+void		ft_parser(t_data *data)
+{
+	if (!(data->command))
+	{
+		data->command = (t_command *)malloc(sizeof(t_command));
+		if (!(data->command))
+			ft_init(&data);
+	}
+	ft_count(data, 0);
+	data->command->argv = (char **)malloc(sizeof(char *) * (data->command->argc + 1));
+	if (!data->command->argv)
+		ft_init(&data);
+	ft_splitt(data, 0, 0, 0);
+	data->cmd = NULL;
+	free(data->cmd);
+}
