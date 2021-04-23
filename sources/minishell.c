@@ -9,13 +9,14 @@ void ft_init(t_data **data)
 		printf("%s\n", strerror(errno));
 		exit(1);
 	}
-	(*data)->command = NULL;
 	(*data)->line = NULL;
+	(*data)->command = NULL;
 	signal(SIGINT, ft_sig_handler);
 }
 
 void	ft_sig_handler(int sig)
 {
+	printf("SIGINT\n");
 	if (sig == SIGINT)
 	{
 		write(2, "\n", 1);

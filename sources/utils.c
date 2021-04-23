@@ -1,5 +1,13 @@
 #include "minishell.h"
 
+int    ft_semicolumn(t_data *data, char c)
+{
+    ft_flagswitch(data, c);
+    if (c == 59 && !data->quotes && !data->screen)
+        return (1);
+    return (0);
+}
+
 int    ft_validate(t_data *data, char *line)
 {
     int i;
