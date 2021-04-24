@@ -26,8 +26,6 @@ int    ft_validate(t_data *data, char *line)
     }
     if (duplicate)
     {
-        if (duplicate == 124)
-            exit (1);
         printf("syntax error near unexpected token `%c%c'\n", duplicate, duplicate);
         ft_init(&data);
         return (1);

@@ -16,7 +16,6 @@ void ft_init(t_data **data)
 
 void	ft_sig_handler(int sig)
 {
-	printf("SIGINT\n");
 	if (sig == SIGINT)
 	{
 		write(2, "\n", 1);
@@ -24,7 +23,7 @@ void	ft_sig_handler(int sig)
 	}
 }
 
-static void	ft_shell_prompt()
+void	ft_shell_prompt()
 {
 	write(2, "\033[1;34mminishell-> \033[0m", 23);
 }

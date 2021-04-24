@@ -5,8 +5,10 @@
 # include <term.h>
 # include <stdio.h>
 # include <sys/errno.h>
+# include <sys/stat.h>
 # include <string.h>
 # include <stdlib.h>
+# include <signal.h>
 
 typedef struct s_command
 {
@@ -42,6 +44,10 @@ void	ft_splitcmd(t_data *data, char *line, int i, int len);
 
 void    ft_parser(t_data *data);
 
+// parser_utils.c //
+
+char *ft_insert_env(char *line, int i, int cnt);
+
 // utils.c //
 
 int     ft_semicolumn(t_data *data, char c);
@@ -49,9 +55,17 @@ int     ft_validate(t_data *data, char *line);
 void    ft_flagswitch(t_data *data, char c);
 void    ft_init_flags(t_data *data);
 
+// builtins.c //
+
+void    ft_echo(int argc, char **argv);
+void    ft_exit(t_data *data, int argc, char **argv);
+void    ft_cd(int argc, char **argv);
+void    ft_pwd(void);
+
 // minishell.c //
 
 void	ft_sig_handler(int sig);
 void    ft_init(t_data **data);
+void	ft_shell_prompt();
 
 #endif

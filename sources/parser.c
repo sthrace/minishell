@@ -1,54 +1,81 @@
 #include "minishell.h"
 
-static char *ft_extract_env(char *line, char **output, int i, int *x)
+static void  ft_execute(int argc, char **argv, char *file)
 {
-    int start;
-    int end;
-    int len;
-    char *insert;
-
-    while (line[++i])
+    extern char **environ;
+    char **tmp;
+    int cnt;
+    int i;
+    int ret;
+    pid_t pid;
+    
+    ret = 0;
+    cnt = 0;
+    i = 0;
+    tmp = (char **)malloc(sizeof(char *) * argc);
+    while (++cnt < argc)
     {
-        if (ft_strchr("$", line[i]))
-        {
-            len = 0;
-            if (!*(output))
-                *output = ft_substr(line, 0, i);
-            i++;
-            start = i;
-            while(!(ft_strchr(" $\"'$<>|", line[i])))
-            {
-                i++;
-                len++;
-                end = i;
-            }
-            insert = ft_strdup(getenv(ft_substr(line, start, len)));
-            if (!insert)
-                return (0x0);
-            *output = ft_strjoin(*output, insert);
-            i--;
-            *x += 1;
-        }
+        tmp[i] = ft_strdup(argv[cnt]);
+        i++;
     }
-    *output = ft_strjoin(*output, ft_substr(line, end, (int)ft_strlen(line) - end + 1));
-    return (*output);
+    tmp[i] = NULL;
+    pid = fork();
+    if (!pid)
+    {
+        cnt = 20;
+        ret = execve(file, tmp, environ);
+    }
+    wait(&cnt);
+    kill (pid, 1);
 }
 
-static char *ft_insert_env(char *line, int i, int cnt)
+static char *ft_binsearch(char **argv)
 {
-    char    *output;
-    char    *insert;
-    int     x;
+    char        **paths;
+    char        *file;
+    int         cnt;
+    struct stat buf[4096]; 
 
-    while (line[++i])
-        if (ft_strchr("$", line[i]))
-            cnt++;
-    x = 0;
-    output = NULL;
-    insert = NULL;
-    while (x < cnt)
-        output = ft_extract_env(line, &output, -1, &x);
-    return (output);
+    cnt = 0;
+    if (!getenv("PATH"))
+    {
+        printf("bash: %s\n", strerror(errno));
+        return (0x0);
+    }
+    else
+    {
+        paths = ft_split(getenv("PATH"), ':');
+        cnt = -1;
+        while (paths[++cnt])
+        {
+            file = ft_strjoin(ft_strjoin(paths[cnt], "/"), argv[0]);
+            if (!stat(file, buf))
+                break ;
+            file = NULL;
+            free(file);
+        }
+    }
+    return (file);
+}
+
+static void ft_sorter(t_data *data, int argc, char **argv)
+{
+    if (!(ft_strncmp(argv[0], "echo", ft_strlen(argv[0]))) || !(ft_strncmp(argv[0], "ECHO", ft_strlen(argv[0]))))
+        ft_echo(argc, argv);
+    else if (!(ft_strncmp(argv[0], "cd", ft_strlen(argv[0]))) || !(ft_strncmp(argv[0], "CD", ft_strlen(argv[0]))))
+        ft_cd(argc, argv);
+    else if (!(ft_strncmp(argv[0], "pwd", ft_strlen(argv[0]))) || !(ft_strncmp(argv[0], "PWD", ft_strlen(argv[0]))))
+        ft_pwd();
+    // else if (!(ft_strncmp(argv[0], "export", ft_strlen(argv[0]))))
+    //     ft_export(data, argc, argv);
+    // else if (!(ft_strncmp(argv[0], "unset", ft_strlen(argv[0]))))
+    //     ft_unset(data, argc, argv);
+    // else if (!(ft_strncmp(argv[0], "env", ft_strlen(argv[0]))))
+    //     ft_env(data, argc, argv);
+    else if (!(ft_strncmp(argv[0], "exit", ft_strlen(argv[0]))))
+        ft_exit(data, argc, argv);
+    else
+        ft_execute(argc, argv, ft_binsearch(argv));
 }
 
 void    ft_parser(t_data *data)
@@ -72,6 +99,6 @@ void    ft_parser(t_data *data)
         free(data->command->argv[i]);
         if ((data->command->type[i] == 1 || data->command->type[i] == 34) && ft_strchr(argv[i], '$'))
             argv[i] = ft_insert_env(argv[i], -1, 0);
-        printf("ARGV: %s\n", argv[i]);
     }
+    ft_sorter(data, data->command->argc, argv);
 }
