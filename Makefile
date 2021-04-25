@@ -1,7 +1,8 @@
 #SETUP
 NAME		= minishell
-CC			= gcc
-CFLAGS		= -fsanitize=address -Wall -Wextra -Werror
+CC			= clang
+CFLAGS		= -fsanitize=address -g3 -Wall -Wextra -Werror
+CFLAGS		= -g3 -Wall -Wextra -Werror
 RM			= rm -f
 
 #FILES
@@ -18,8 +19,12 @@ LIBFT		= $(LIBFT_DIR)libft.a
 #COMMANDS
 all:		tools $(NAME)
 
+%.o: %.c
+			$(CC) $(CFLAGS) -c -I./libft/ $< -o $(<:.c=.o)
+
 $(NAME):	$(LIBFT) $(HEADER) $(OBJS)
-			$(CC) $(CFLAGS) $(LIBFT) -ltermcap $(OBJS) -o $(NAME)
+			# $(CC) $(CFLAGS) $(LIBFT) -ltermcap $(OBJS) -o $(NAME)
+			$(CC) $(CFLAGS) -o $(NAME) -ltermcap $(OBJS) $(LIBFT)
 			@echo $(NAME) created!
 
 tools:
@@ -33,6 +38,15 @@ clean:
 fclean:		clean
 			$(RM) $(NAME)
 			$(RM) $(LIBFT)
+
+leaks:
+			valgrind --show-leak-kinds=definite --leak-check=full ./$(NAME)
+
+git:
+			make fclean
+			git add *
+			git commit -m "commit"
+			git push
 
 re:			fclean all
 

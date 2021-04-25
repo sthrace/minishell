@@ -34,3 +34,13 @@ void	ft_termios(t_data *data, char *str, int len)
 		}
 	}
 }
+
+void	ft_restoreterm(void)
+{
+	struct termios term;
+
+	tcgetattr(0, &term);
+	term.c_lflag |= ECHO;
+	term.c_lflag |= ICANON;
+	tcsetattr(0, TCSANOW, &term);
+}

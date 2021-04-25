@@ -54,6 +54,7 @@ void ft_exit(t_data *data, int argc, char **argv)
             if (!(ft_isdigit(argv[1][i])))
             {
                 printf("exit\nbash: exit: %s: numeric argument required\n", argv[1]);
+                ft_restoreterm();
                 exit (1);
             }
         }
@@ -61,8 +62,10 @@ void ft_exit(t_data *data, int argc, char **argv)
     if (argc > 2)
     {
         printf("exit\nbash: exit: too many arguments\n");
+        ft_restoreterm();
         ft_init(&data);
     }
     printf("exit\n");
+    ft_restoreterm();
     exit(1);
 }

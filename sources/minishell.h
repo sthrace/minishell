@@ -2,10 +2,13 @@
 # define MINISHELL_H
 
 # include "../libft/libft.h"
+# include <ncurses.h>
 # include <term.h>
 # include <stdio.h>
 # include <sys/errno.h>
 # include <sys/stat.h>
+# include <sys/types.h>
+# include <sys/wait.h>
 # include <string.h>
 # include <stdlib.h>
 # include <signal.h>
@@ -32,6 +35,7 @@ typedef struct s_data
 
 // term.c //
 
+void	ft_restoreterm(void);
 void    ft_initterm(struct termios *term);
 void	ft_termios(t_data *data, char *str, int len);
 

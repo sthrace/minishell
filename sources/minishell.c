@@ -64,6 +64,7 @@ int	main(int argc, char **argv)
 		return (1);
 	ft_init(&data);
 	ft_initterm(&term);
+	//ft_term(1);
 	ft_input(data);
 	return(0);
 }

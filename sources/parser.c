@@ -1,31 +1,16 @@
 #include "minishell.h"
 
-static void  ft_execute(int argc, char **argv, char *file)
+static void  ft_execute(char **argv, char *file)
 {
     extern char **environ;
-    char **tmp;
-    int cnt;
-    int i;
-    int ret;
     pid_t pid;
+    int timer;
     
-    ret = 0;
-    cnt = 0;
-    i = 0;
-    tmp = (char **)malloc(sizeof(char *) * argc);
-    while (++cnt < argc)
-    {
-        tmp[i] = ft_strdup(argv[cnt]);
-        i++;
-    }
-    tmp[i] = NULL;
+    timer = 1;
     pid = fork();
     if (!pid)
-    {
-        cnt = 20;
-        ret = execve(file, tmp, environ);
-    }
-    wait(&cnt);
+        execve(file, argv, environ);
+    wait(&timer);
     kill (pid, 1);
 }
 
@@ -75,7 +60,7 @@ static void ft_sorter(t_data *data, int argc, char **argv)
     else if (!(ft_strncmp(argv[0], "exit", ft_strlen(argv[0]))))
         ft_exit(data, argc, argv);
     else
-        ft_execute(argc, argv, ft_binsearch(argv));
+        ft_execute(argv, ft_binsearch(argv));
 }
 
 void    ft_parser(t_data *data)
