@@ -1,12 +1,13 @@
 #SETUP
 NAME		= minishell
 CC			= clang
-CFLAGS		= -fsanitize=address -g3 -Wall -Wextra -Werror
+CFLAGS		= -fsanitize=address -fno-omit-frame-pointer \
+			--fsanitize=undefined -fsanitize=nullability -g3 -Wall -Wextra -Werror
 CFLAGS		= -g3 -Wall -Wextra -Werror
 RM			= rm -f
 
 #FILES
-FLS			= minishell.c termcap.c lexer.c parser.c parser_utils.c utils.c builtins.c
+FLS			= minishell.c termcap.c lexer.c parser.c parser_utils.c utils.c builtins.c execute.c
 
 SRCS_DIR	= sources/
 HEADER		= $(SRCS_DIR)minishell.h

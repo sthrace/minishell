@@ -9,8 +9,10 @@ void ft_init(t_data **data)
 		printf("%s\n", strerror(errno));
 		exit(1);
 	}
-	(*data)->line = NULL;
-	(*data)->command = NULL;
+	if ((*data)->line)
+		(*data)->line = NULL;
+	if ((*data)->command)
+		(*data)->command = NULL;
 	signal(SIGINT, ft_sig_handler);
 }
 

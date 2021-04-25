@@ -66,6 +66,11 @@ void    ft_exit(t_data *data, int argc, char **argv);
 void    ft_cd(int argc, char **argv);
 void    ft_pwd(void);
 
+// execute.c //
+
+char *ft_binsearch(char **argv);
+void  ft_execute(char **argv, char *file);
+
 // minishell.c //
 
 void	ft_sig_handler(int sig);
