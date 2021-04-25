@@ -58,6 +58,7 @@ int     ft_semicolumn(t_data *data, char c);
 int     ft_validate(t_data *data, char *line);
 void    ft_flagswitch(t_data *data, char c);
 void    ft_init_flags(t_data *data);
+void    ft_free_array(char **array);
 
 // builtins.c //
 

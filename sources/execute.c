@@ -20,6 +20,16 @@ void  ft_execute(char **argv, char *file)
     kill (pid, 1);
 }
 
+static char **ft_split_path(void)
+{
+   if (!getenv("PATH"))
+    {
+        printf("bash: %s\n", strerror(errno));
+        return (0x0);
+    }
+    return(ft_split(getenv("PATH"), ':'));
+}
+
 char *ft_binsearch(char **argv)
 {
     char        **paths;
@@ -28,28 +38,21 @@ char *ft_binsearch(char **argv)
     struct stat buf[4096];
     char        *dir;
 
-    cnt = 0;
-    if (!getenv("PATH"))
+    cnt = -1;
+    if (argv[0][0] != '.')
     {
-        printf("bash: %s\n", strerror(errno));
-        return (0x0);
-    }
-    else if (argv[0][0] != '.')
-    {
-        paths = ft_split(getenv("PATH"), ':');
+        paths = ft_split_path();
         cnt = -1;
         while (paths[++cnt])
         {
             dir = ft_strjoin(paths[cnt], "/");
             file = ft_strjoin(dir, argv[0]);
             free(dir);
-            free(paths[cnt]);
             if (!stat(file, buf))
                 break ;
-            file = NULL;
             free(file);
         }
-        free(paths);
+        ft_free_array(paths);
     }
     else
         file = ft_strdup(argv[0]);
