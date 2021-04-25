@@ -72,9 +72,12 @@ void    ft_pwd(void);
 char *ft_binsearch(char **argv);
 void  ft_execute(char **argv, char *file);
 
-// minishell.c //
+// signal.c //
 
 void	ft_sig_handler(int sig);
+
+// minishell.c //
+
 void    ft_init(t_data **data);
 void	ft_shell_prompt();
 

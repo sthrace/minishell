@@ -7,7 +7,8 @@ CFLAGS		= -g3 -Wall -Wextra -Werror
 RM			= rm -f
 
 #FILES
-FLS			= minishell.c termcap.c lexer.c parser.c parser_utils.c utils.c builtins.c execute.c
+FLS			= minishell.c termcap.c lexer.c parser.c parser_utils.c utils.c builtins.c execute.c \
+		signal.c
 
 SRCS_DIR	= sources/
 HEADER		= $(SRCS_DIR)minishell.h

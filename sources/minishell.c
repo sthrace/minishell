@@ -16,15 +16,6 @@ void ft_init(t_data **data)
 	signal(SIGINT, ft_sig_handler);
 }
 
-void	ft_sig_handler(int sig)
-{
-	if (sig == SIGINT)
-	{
-		write(2, "\n", 1);
-		write(2, "\033[1;34mminishell-> \033[0m", 23);
-	}
-}
-
 void	ft_shell_prompt()
 {
 	write(2, "\033[1;34mminishell-> \033[0m", 23);
