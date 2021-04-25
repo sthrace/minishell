@@ -3,7 +3,6 @@ NAME		= minishell
 CC			= clang
 CFLAGS		= -fsanitize=address -fno-omit-frame-pointer \
 			--fsanitize=undefined -fsanitize=nullability -g3 -Wall -Wextra -Werror
-CFLAGS		= -g3 -Wall -Wextra -Werror
 RM			= rm -f
 
 #FILES
