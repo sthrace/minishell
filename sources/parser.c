@@ -14,10 +14,10 @@ static void ft_sorter(t_data *data, int argc, char **argv)
     //     ft_unset(data, argc, argv);
     // else if (!(ft_strncmp(argv[0], "env", ft_strlen(argv[0]))))
     //     ft_env(data, argc, argv);
-    else if (!(ft_strncmp(argv[0], "exit", ft_strlen(argv[0]))))
-        ft_exit(data, argc, argv);
+    else if (!(ft_strncmp(argv[0], "exit", ft_strlen(argv[0]))) || !(ft_strncmp(argv[0], "EXIT", ft_strlen(argv[0]))))
+        ft_exit(data, argc, argv, -1);
     else
-        ft_execute(argv, ft_binsearch(argv));
+        ft_binsearch(argv);
 }
 
 void    ft_parser(t_data *data)
@@ -26,7 +26,7 @@ void    ft_parser(t_data *data)
     char    **argv;
 
     i = -1;
-    argv = (char **)malloc(sizeof(char *) * data->command->argc + 1);
+    argv = (char **)malloc(sizeof(char *) * (data->command->argc + 1));
     if (argv == NULL)
         ft_init(&data);
     while (++i < data->command->argc)
@@ -42,5 +42,6 @@ void    ft_parser(t_data *data)
         if ((data->command->type[i] == 1 || data->command->type[i] == 34) && ft_strchr(argv[i], '$'))
             argv[i] = ft_insert_env(argv[i], -1, 0);
     }
+    argv[data->command->argc] = 0x0;
     ft_sorter(data, data->command->argc, argv);
 }

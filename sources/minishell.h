@@ -12,6 +12,7 @@
 # include <string.h>
 # include <stdlib.h>
 # include <signal.h>
+# include <errno.h>
 
 typedef struct s_command
 {
@@ -30,6 +31,7 @@ typedef struct s_data
     int         quotes;
     int         screen;
     char        *cmd;
+    int         ret;
     t_command   *command;
 }               t_data;
 
@@ -63,14 +65,13 @@ void    ft_free_array(char **array);
 // builtins.c //
 
 void    ft_echo(int argc, char **argv);
-void    ft_exit(t_data *data, int argc, char **argv);
+void    ft_exit(t_data *data, int argc, char **argv, int i);
 void    ft_cd(int argc, char **argv);
 void    ft_pwd(void);
 
 // execute.c //
 
-char *ft_binsearch(char **argv);
-void  ft_execute(char **argv, char *file);
+void  ft_binsearch(char **argv);
 
 // signal.c //
 

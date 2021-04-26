@@ -1,8 +1,11 @@
 #SETUP
 NAME		= minishell
 CC			= clang
-CFLAGS		= -fsanitize=address -fno-omit-frame-pointer \
-			--fsanitize=undefined -fsanitize=nullability -g3 -Wall -Wextra -Werror
+CFLAGS		= -g3 -Wall -Wextra -Werror
+
+SFLAGS		= -fsanitize=address -fno-omit-frame-pointer \
+			-fsanitize=undefined -fsanitize=nullability -g3 -Wall -Wextra -Werror \
+			-fsanitize=array-bounds -fsanitize=pointer-overflow
 RM			= rm -f
 
 #FILES
@@ -18,29 +21,29 @@ LIBFT_DIR	= libft/
 LIBFT		= $(LIBFT_DIR)libft.a
 
 #COMMANDS
-all:		tools $(NAME)
+all:		$(NAME)
+
+$(NAME):	tools echoCM $(OBJS) echoOK
+			$(CC) $(SFLAGS) -o $(NAME) -ltermcap $(OBJS) $(LIBFT)
+			# @echo $(NAME) created!
 
 %.o: %.c
-			$(CC) $(CFLAGS) -c -I./libft/ $< -o $(<:.c=.o)
-
-$(NAME):	$(LIBFT) $(HEADER) $(OBJS)
-			# $(CC) $(CFLAGS) $(LIBFT) -ltermcap $(OBJS) -o $(NAME)
-			$(CC) $(CFLAGS) -o $(NAME) -ltermcap $(OBJS) $(LIBFT)
-			@echo $(NAME) created!
+			$(CC) -c $(SFLAGS) -o $@ $<
+			printf "$(WHITE)██"			
 
 tools:
 			$(MAKE) -C $(LIBFT_DIR)
 
-clean:
+clean:		echoCLEAN
 			$(RM) $(OBJS)
 			$(MAKE) -C $(LIBFT_DIR) clean
-			@echo $(NAME) cleaned!
+			# @echo $(SRCS_DIR)/$(NAME) cleaned!
 
-fclean:		clean
+fclean:		clean echoFCLEAN
 			$(RM) $(NAME)
 			$(RM) $(LIBFT)
 
-leaks:
+leaks:		
 			valgrind --show-leak-kinds=definite --leak-check=full ./$(NAME)
 
 git:
@@ -51,4 +54,25 @@ git:
 
 re:			fclean all
 
-.PHONY:		all clean fclean re
+.PHONY:		all clean fclean re leaks git
+.SILENT:
+
+RED = \033[1;31m
+GREEN = \033[1;32m
+YELLOW = \033[1;33m
+CYAN = \033[1;36m
+WHITE = \033[1;37m
+DEFAULT = \033[0m
+
+echoCM:
+	echo "$(CYAN)Project compiling$(DEFAULT)"
+
+echoOK:
+	echo "\n"
+	echo "$(GREEN)Project compiled$(DEFAULT)\n"
+
+echoCLEAN:
+	echo "\n$(RED)Object files removed$(DEFAULT)\n"
+
+echoFCLEAN :
+	echo "$(RED)Executable and libraries removed$(DEFAULT)\n"

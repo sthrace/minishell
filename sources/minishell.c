@@ -13,6 +13,7 @@ void ft_init(t_data **data)
 		(*data)->line = NULL;
 	if ((*data)->command)
 		(*data)->command = NULL;
+	(*data)->ret = 0;
 	signal(SIGINT, ft_sig_handler);
 }
 

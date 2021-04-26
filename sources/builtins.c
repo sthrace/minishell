@@ -32,40 +32,52 @@ void ft_cd(int argc, char **argv)
 void ft_echo(int argc, char **argv)
 {
     int i;
+    int n;
 
     i = 0;
+    n = 0;
+    if (argc > 1 && (!(ft_strncmp(argv[1], "-n", ft_strlen(argv[1])))))
+        n = 1;
     while (++i < argc)
     {
+        if (n)
+            i++;
         write(1, argv[i], (int)ft_strlen(argv[i]));
-        write(1, " ", 1);
     }
-    write(1, "\n", 1);
+    if (!n)
+        write(1, "\n", 1);
 }
 
-void ft_exit(t_data *data, int argc, char **argv)
+void ft_free_data(t_data *data)
 {
-    int i;
+    free(data->line);
+    free(data->command);
+}
 
-    i = -1;
+void ft_exit(t_data *data, int argc, char **argv, int i)
+{
     if (argc > 1)
     {
         while (argv[1][++i])
         {
             if (!(ft_isdigit(argv[1][i])))
             {
+                data->ret = 2;
                 printf("exit\nbash: exit: %s: numeric argument required\n", argv[1]);
-                ft_restoreterm();
-                exit (1);
             }
         }
     }
-    if (argc > 2)
+    if (argc > 2 && data->ret != 2)
     {
+        data->ret = 1;
         printf("exit\nbash: exit: too many arguments\n");
-        ft_restoreterm();
-        ft_init(&data);
     }
-    printf("exit\n");
-    ft_restoreterm();
-    exit(1);
+    if (data->ret != 2)
+    {
+        if (argc > 1)
+            data->ret = ft_atoi(argv[1]);
+        printf("exit\n");
+    }
+    ft_free_data(data);
+    exit(data->ret);
 }

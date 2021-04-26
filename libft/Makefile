@@ -76,20 +76,20 @@ all:		$(NAME)
 
 $(NAME):	$(OBJS)
 			@ar rcs $(NAME) $(OBJS)
-			@echo $(NAME) created!
+			# @echo $(NAME) created!
 
 clean:
 			@$(RM) $(OBJS) $(OBJS_B)
-			@echo $(NAME) cleaned!
+			# @echo $(NAME) cleaned!
 
 fclean:		clean
 			@$(RM) $(NAME)
-			@echo $(NAME) deleted!
+			# @echo $(NAME) deleted!
 
 re:			fclean all
 
 bonus:		$(OBJS) $(OBJS_B)
 			@ar rcs $(NAME) $(OBJS) $(OBJS_B)
-			@echo $(NAME) created!
+			# @echo $(NAME) created!
 
 .PHONY:   all clean fclean re bonus
