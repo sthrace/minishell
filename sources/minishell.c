@@ -9,10 +9,8 @@ void ft_init(t_data **data)
 		printf("%s\n", strerror(errno));
 		exit(1);
 	}
-	if ((*data)->line)
-		(*data)->line = NULL;
-	if ((*data)->command)
-		(*data)->command = NULL;
+	(*data)->line = NULL;
+	(*data)->cmds = NULL;
 	(*data)->ret = 0;
 	signal(SIGINT, ft_sig_handler);
 }
@@ -41,6 +39,7 @@ static void	ft_input(t_data *data)
 		}
 		if (str[0] == '\n')
 		{
+			data->line[data->len - 1] = 0;
 			ft_splitcmd(data, data->line, -1, 0);
 			ft_shell_prompt();
 		}

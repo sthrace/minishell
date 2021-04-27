@@ -4,13 +4,13 @@ CC			= clang
 CFLAGS		= -g3 -Wall -Wextra -Werror
 
 SFLAGS		= -fsanitize=address -fno-omit-frame-pointer \
-			-fsanitize=undefined -fsanitize=nullability -g3 -Wall -Wextra -Werror \
-			-fsanitize=array-bounds -fsanitize=pointer-overflow
+			-fsanitize=undefined -fsanitize=nullability \
+			-fsanitize=array-bounds -fsanitize=pointer-overflow \
+			-Wall -Wextra -Werror
 RM			= rm -f
 
 #FILES
-FLS			= minishell.c termcap.c lexer.c parser.c parser_utils.c utils.c builtins.c execute.c \
-		signal.c
+FLS			= minishell.c termcap.c lexer.c utils.c lexer_utils.c signal.c parser.c parser_utils.c builtins.c execute.c
 
 SRCS_DIR	= sources/
 HEADER		= $(SRCS_DIR)minishell.h
@@ -23,23 +23,21 @@ LIBFT		= $(LIBFT_DIR)libft.a
 #COMMANDS
 all:		$(NAME)
 
-$(NAME):	tools echoCM $(OBJS) echoOK
+$(NAME):	tools writeComp $(OBJS) writeOK
 			$(CC) $(SFLAGS) -o $(NAME) -ltermcap $(OBJS) $(LIBFT)
-			# @echo $(NAME) created!
 
 %.o: %.c
 			$(CC) -c $(SFLAGS) -o $@ $<
-			printf "$(WHITE)██"			
+			printf "$(WHITE)██"		
 
 tools:
 			$(MAKE) -C $(LIBFT_DIR)
 
-clean:		echoCLEAN
+clean:		writeCL
 			$(RM) $(OBJS)
 			$(MAKE) -C $(LIBFT_DIR) clean
-			# @echo $(SRCS_DIR)/$(NAME) cleaned!
 
-fclean:		clean echoFCLEAN
+fclean:		clean writeFCL
 			$(RM) $(NAME)
 			$(RM) $(LIBFT)
 
@@ -64,15 +62,15 @@ CYAN = \033[1;36m
 WHITE = \033[1;37m
 DEFAULT = \033[0m
 
-echoCM:
-	echo "$(CYAN)Project compiling$(DEFAULT)"
+writeComp:
+	echo "$(CYAN)COMPILING...$(DEFAULT)"
 
-echoOK:
+writeOK:
 	echo "\n"
-	echo "$(GREEN)Project compiled$(DEFAULT)\n"
+	echo "$(GREEN)$(NAME) => PROJECT COMPILED$(DEFAULT)\n"
 
-echoCLEAN:
-	echo "\n$(RED)Object files removed$(DEFAULT)\n"
+writeCL:
+	echo "\n$(YELLOW)*.o CLEANED$(DEFAULT)\n"
 
-echoFCLEAN :
-	echo "$(RED)Executable and libraries removed$(DEFAULT)\n"
+writeFCL:
+	echo "$(RED)ALL CLEAN$(DEFAULT)\n"

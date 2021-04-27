@@ -1,24 +1,15 @@
 #include "minishell.h"
 
-void    ft_free_array(char **array)
+void    ft_increment(t_data *data, int *i)
 {
-    int cnt;
-
-    cnt = 0;
-    if (!array)
-        return ;
-    while (array[cnt])
-    {
-        free(array[cnt]);
-        cnt++;
-    }
-    free(array);
+    data->len++;
+    *i += 1;
 }
 
 int    ft_semicolumn(t_data *data, char c)
 {
-    ft_flagswitch(data, c);
-    if (c == 59 && !data->quotes && !data->screen)
+    ft_flagswitch(data, c, 0);
+    if (c == 59 && !data->quotes && !data->escape)
         return (1);
     return (0);
 }
@@ -48,26 +39,20 @@ int    ft_validate(t_data *data, char *line)
     return (0);
 }
 
-void    ft_flagswitch(t_data *data, char c)
+void    ft_flagswitch(t_data *data, char c, int i)
 {
-    if ((c == 39 || c == 34) && !data->quotes && !data->screen)
+    if ((c == 39 || c == 34) && !data->quotes && !data->escape)
         data->quotes = c;
-    else if ((c == 39 || c == 34) && data->quotes == c && !data->screen)
+    else if ((c == 39 || c == 34) && data->quotes == c && !data->escape)
         data->quotes = 0;
-    else if (c == 92 && !data->screen)
-        data->screen = c;
-    else if (c != 92 && data->screen == 92)
-        data->screen = 0;
-    else if ((c == 39 || c == 34) && data->screen && (data->quotes == 34 || !data->quotes))
-        data->screen = 0;
-    else if (c == 39 && data->quotes == c && data->screen == 92)
-        data->screen = -1;
-    else if (c == 39 && data->screen == -1)
-        exit (1);
+    else if (c == 92 && !data->escape && data->quotes != 39)
+        data->escape = c;
+    else if (c != 92 && data->escape == 92 && i == 0)
+        data->escape = 0;
 }
 
 void    ft_init_flags(t_data *data)
 {
     data->quotes = 0;
-    data->screen = 0;
+    data->escape = 0;
 }

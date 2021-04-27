@@ -14,25 +14,40 @@
 # include <signal.h>
 # include <errno.h>
 
-typedef struct s_command
+typedef struct s_pipe
 {
     int     argc;
     char    **argv;
-    int     fd_in;
-    int     fd_out;
-    char    *type;
-}               t_command;
+    int     fd0;
+    int     fd1;
+    short   redir_read;
+    short   redir_write;
+    short   redir_append;
+}               t_pipe;
+
+
+typedef struct s_cmd
+{
+    int     argc;
+    char    **argv;
+    short   redir_read;
+    short   redir_write;
+    short   redir_append;
+    t_pipe  *pipe;
+}               t_cmd;
 
 
 typedef struct s_data
 {
     char        *line;
     int         len;
-    int         quotes;
-    int         screen;
-    char        *cmd;
+    short       quotes;
+    short       escape;
+    int         insert;
     int         ret;
-    t_command   *command;
+    int         start;
+    char        *cmd;
+    t_cmd       *cmds;    
 }               t_data;
 
 // term.c //
@@ -46,21 +61,28 @@ void	ft_termios(t_data *data, char *str, int len);
 void    ft_line(t_data *data, char *str, int len);
 void	ft_splitcmd(t_data *data, char *line, int i, int len);
 
+// lexer_utils.c
+
+char		*ft_escapes(t_data *data, char *command, int i);
+char		*ft_quotes(t_data *data, char *command, int i);
+
+
 // parser.c //
 
-void    ft_parser(t_data *data);
+void        ft_parser(t_data *data, char *command);
+void        ft_simple(t_data *data, char *cmd, int i);
 
 // parser_utils.c //
 
-char *ft_insert_env(char *line, int i, int cnt);
+char *ft_insert_env(t_data *data, char *line, int i, int cnt);
 
 // utils.c //
 
 int     ft_semicolumn(t_data *data, char c);
 int     ft_validate(t_data *data, char *line);
-void    ft_flagswitch(t_data *data, char c);
+void    ft_flagswitch(t_data *data, char c, int i);
 void    ft_init_flags(t_data *data);
-void    ft_free_array(char **array);
+void    ft_increment(t_data *data, int *i);
 
 // builtins.c //
 
@@ -76,6 +98,7 @@ void  ft_binsearch(char **argv);
 // signal.c //
 
 void	ft_sig_handler(int sig);
+void    ft_free_array(char **array);
 
 // minishell.c //
 

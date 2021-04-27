@@ -3,13 +3,14 @@
 static void  ft_execute(char **argv, char *file)
 {
     extern char **environ;
+    int i;
 
+    i = -1;
     if (!fork())
     {
         if ((execve(file, argv, environ)) && errno == EACCES)
             printf("bash: %s: command not found\n", file);
     }
-    else
     while ((wait(NULL)) != -1 || errno != ECHILD)
         ;
 }
