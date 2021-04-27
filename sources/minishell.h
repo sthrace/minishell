@@ -99,6 +99,7 @@ void  ft_binsearch(char **argv);
 
 void	ft_sig_handler(int sig);
 void    ft_free_array(char **array);
+void    ft_free_str(char *str);
 
 // minishell.c //
 

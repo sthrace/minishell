@@ -15,6 +15,11 @@ void    ft_free_array(char **array)
     free(array);
 }
 
+void    ft_free_str(char *str)
+{
+    free(str);
+}
+
 void	ft_sig_handler(int sig)
 {
 	if (sig == SIGINT)

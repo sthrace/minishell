@@ -48,12 +48,6 @@ void ft_echo(int argc, char **argv)
         write(1, "\n", 1);
 }
 
-void ft_free_data(t_data *data)
-{
-    free(data->line);
-    free(data->command);
-}
-
 void ft_exit(t_data *data, int argc, char **argv, int i)
 {
     if (argc > 1)
@@ -78,6 +72,5 @@ void ft_exit(t_data *data, int argc, char **argv, int i)
             data->ret = ft_atoi(argv[1]);
         printf("exit\n");
     }
-    ft_free_data(data);
     exit(data->ret);
 }
