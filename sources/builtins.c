@@ -29,7 +29,7 @@ void ft_cd(int argc, char **argv)
         printf("bash: cd: %s: %s\n", newdir, strerror(errno));
 }
 
-void ft_echo(int argc, char **argv)
+void ft_echo(t_data *data, int argc, char **argv)
 {
     int i;
     int n;
@@ -42,10 +42,10 @@ void ft_echo(int argc, char **argv)
     {
         if (n)
             i++;
-        write(1, argv[i], (int)ft_strlen(argv[i]));
+        write(data->cmds->fd1, argv[i], (int)ft_strlen(argv[i]));
     }
     if (!n)
-        write(1, "\n", 1);
+        write(data->cmds->fd1, "\n", 1);
 }
 
 void ft_exit(t_data *data, int argc, char **argv, int i)

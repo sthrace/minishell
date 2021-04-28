@@ -1,38 +1,10 @@
 #include "minishell.h"
 
-static void ft_sorter(t_data *data, int argc, char **argv)
-{
-    if (!(ft_strncmp(argv[0], "echo", ft_strlen(argv[0]))) || !(ft_strncmp(argv[0], "ECHO", ft_strlen(argv[0]))))
-        ft_echo(argc, argv);
-    else if (!(ft_strncmp(argv[0], "cd", ft_strlen(argv[0]))) || !(ft_strncmp(argv[0], "CD", ft_strlen(argv[0]))))
-        ft_cd(argc, argv);
-    else if (!(ft_strncmp(argv[0], "pwd", ft_strlen(argv[0]))) || !(ft_strncmp(argv[0], "PWD", ft_strlen(argv[0]))))
-        ft_pwd();
-    // else if (!(ft_strncmp(argv[0], "export", ft_strlen(argv[0]))))
-    //     ft_export(data, argc, argv);
-    // else if (!(ft_strncmp(argv[0], "unset", ft_strlen(argv[0]))))
-    //     ft_unset(data, argc, argv);
-    // else if (!(ft_strncmp(argv[0], "env", ft_strlen(argv[0]))))
-    //     ft_env(data, argc, argv);
-    else if (!(ft_strncmp(argv[0], "exit", ft_strlen(argv[0]))) || !(ft_strncmp(argv[0], "EXIT", ft_strlen(argv[0]))))
-        ft_exit(data, argc, argv, -1);
-    else
-        ft_binsearch(argv);
-}
-
-void    ft_pipe(t_data *data, char *cmd, int i)
-{
-    data->len = 0;
-    cmd = NULL;
-    i = 0;
-}
-
 void        ft_splits(t_data *data, char *cmd, int i, int x)
 {
     int start;
 
-	data->len = 0;
-    ft_init_flags(data);
+    data->len = 0;
 	while (++x < data->cmds->argc)
 	{
 		while (cmd[i] == 32)
@@ -52,21 +24,22 @@ void        ft_splits(t_data *data, char *cmd, int i, int x)
 		data->len = 0;
 		i++;
         data->cmds->argv[x] = ft_quotes(data, data->cmds->argv[x], -1);
-	}    
+	}
 }
 
 void        ft_simple(t_data *data, char *cmd, int i)
 {
-    data->cmds->argc = 0;
-	ft_init_flags(data);
-	while (cmd[i])
+    ft_check_redirect(data, cmd, -1);
+    ft_init_flags(data);
+	while (cmd[++i])
 	{
 		while (cmd[i] == 32)
 			i++;
+        if (!cmd[i])
+            break ;
 		ft_flagswitch(data, cmd[i], 0);
-		if (cmd[i] != 32 && !data->quotes && !data->escape && ((cmd[i + 1] && cmd[i + 1] == 32) || cmd[i + 1] == 0))
+		if (cmd[i] != 32 && !data->quotes && ((cmd[i + 1] && cmd[i + 1] == 32) || cmd[i + 1] == 0))
 			data->cmds->argc++;
-		i++;
 	}
     data->cmds->argv = (char **)malloc(sizeof(char *) * (data->cmds->argc + 1));
     data->cmds->argv[data->cmds->argc] = NULL;
@@ -95,6 +68,14 @@ void        ft_parser(t_data *data, char *command)
             return ;
         }
         else
-            ft_simple(data, command, 0);
+        {
+            data->cmds->argc = 0;
+            data->len = 0;
+            data->cmds->rread = 0;
+            data->cmds->rwrite = 0;
+            ft_close_fd(data, 2);
+            data->cmds->fdnum = 0;
+            ft_simple(data, command, -1);
+        }
     }
 }

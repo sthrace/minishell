@@ -23,7 +23,9 @@ int    ft_validate(t_data *data, char *line)
     duplicate = 0;
     while (line[i])
     {
-        if ((line[i] == 59 || line[i] == 124) && line[i + 1] && line[i + 1] == line[i])
+        if (((line[i] == 59 || line[i] == 124 || line[i] == 60) && line[i + 1] \
+        && line[i + 1] == line[i]) || (line[i] == 62 && line[i + 2] && \
+        line[i + 1] == 62 && line[i + 2] == 62))
         {
             duplicate = line[i];
             break ;
@@ -32,7 +34,7 @@ int    ft_validate(t_data *data, char *line)
     }
     if (duplicate)
     {
-        printf("syntax error near unexpected token `%c%c'\n", duplicate, duplicate);
+        printf("bash: syntax error near unexpected token `%c%c'\n", duplicate, duplicate);
         ft_init(&data);
         return (1);
     }

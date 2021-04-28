@@ -22,6 +22,7 @@ void    ft_free_str(char *str)
 
 void	ft_sig_handler(int sig)
 {
+    printf("signal: %d\n", sig);
 	if (sig == SIGINT)
 	{
 		write(2, "\n", 1);

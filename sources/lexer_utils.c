@@ -24,7 +24,7 @@ char		*ft_quotes(t_data *data, char *command, int i)
 	char	*output;
 
 	ft_init_quotes(data, &output, &stripped, 0);
-	if (!(ft_strchr(command, '"')) && !(ft_strchr(command, '"')))
+	if (!(ft_strchr(command, '\'')) && !(ft_strchr(command, '"')))
 		return (command);
 	while (command[++i])
 	{
@@ -76,7 +76,8 @@ char		*ft_escapes(t_data *data, char *command, int i)
 			if (command[i + 1] == 34 || command[i + 1] == 36 || command[i + 1] == 92 || command[i + 1] == 96)
 				command = ft_escapes_tool(command, i);
 		}
-		data->escape = 0;
+		if (data->escape && command[i + 1] && command[i + 1] != 92)
+			data->escape = 0;
 	}
 	return (command);
 }

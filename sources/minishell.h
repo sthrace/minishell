@@ -2,6 +2,7 @@
 # define MINISHELL_H
 
 # include "../libft/libft.h"
+# include <fcntl.h>
 # include <ncurses.h>
 # include <term.h>
 # include <stdio.h>
@@ -20,9 +21,8 @@ typedef struct s_pipe
     char    **argv;
     int     fd0;
     int     fd1;
-    short   redir_read;
-    short   redir_write;
-    short   redir_append;
+    short   rread;
+    short   rwrite;
 }               t_pipe;
 
 
@@ -30,9 +30,11 @@ typedef struct s_cmd
 {
     int     argc;
     char    **argv;
-    short   redir_read;
-    short   redir_write;
-    short   redir_append;
+    short   rread;
+    short   rwrite;
+    int     fd0;
+    int     fd1;
+    int     fdnum;
     t_pipe  *pipe;
 }               t_cmd;
 
@@ -86,14 +88,24 @@ void    ft_increment(t_data *data, int *i);
 
 // builtins.c //
 
-void    ft_echo(int argc, char **argv);
+void    ft_echo(t_data *data, int argc, char **argv);
 void    ft_exit(t_data *data, int argc, char **argv, int i);
 void    ft_cd(int argc, char **argv);
 void    ft_pwd(void);
 
 // execute.c //
 
-void  ft_binsearch(char **argv);
+void ft_sorter(t_data *data, int argc, char **argv);
+void ft_binsearch(t_data *data, char **argv, int cnt, char *dir);
+
+// pipe.c //
+
+void    ft_pipe(t_data *data, char *cmd, int i);
+
+// redirect.c //
+
+void    ft_check_redirect(t_data *data, char *cmd, int i);
+void    ft_close_fd(t_data *data, int fd);
 
 // signal.c //
 

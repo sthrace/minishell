@@ -10,7 +10,7 @@ SFLAGS		= -fsanitize=address -fno-omit-frame-pointer \
 RM			= rm -f
 
 #FILES
-FLS			= minishell.c termcap.c lexer.c utils.c lexer_utils.c signal.c parser.c parser_utils.c builtins.c execute.c
+FLS			= minishell.c termcap.c lexer.c utils.c lexer_utils.c signal.c parser.c parser_utils.c builtins.c execute.c pipe.c redirect.c
 
 SRCS_DIR	= sources/
 HEADER		= $(SRCS_DIR)minishell.h

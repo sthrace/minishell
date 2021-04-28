@@ -33,30 +33,51 @@ static char **ft_split_path(void)
     return(paths);
 }
 
-void ft_binsearch(char **argv)
+void ft_binsearch(t_data *data, char **argv, int cnt, char *dir)
 {
     char        **paths;
     char        *file;
-    int         cnt;
     struct stat buf[4096];
-    char        *dir;
 
-    if (argv[0][0] != '.')
+    paths = ft_split_path();
+    if (argv[0][0] == 46 || argv[0][0] == 47)
+        ft_execute(argv, ft_strdup(argv[0]));
+    else
     {
-        paths = ft_split_path();
-        cnt = -1;
         while (paths[++cnt])
         {
             dir = ft_strjoin(paths[cnt], "/");
             file = ft_strjoin(dir, argv[0]);
             free(dir);
-            if (!stat(file, buf))
+            data->ret = stat(file, buf);
+            if (!data->ret)
                 break ;
             free(file);
         }
+        if (data->ret == -1)
+            printf("bash: %s: command not found\n", argv[0]);
         ft_free_array(paths);
+        if (data->ret != -1)
+            ft_execute(argv, file);
     }
+}
+
+void ft_sorter(t_data *data, int argc, char **argv)
+{
+    if (!(ft_strncmp(argv[0], "echo", 4)) || !(ft_strncmp(argv[0], "ECHO", 4)))
+        ft_echo(data, argc, argv);
+    else if (!(ft_strncmp(argv[0], "cd", 2)) || !(ft_strncmp(argv[0], "CD", 2)))
+        ft_cd(argc, argv);
+    else if (!(ft_strncmp(argv[0], "pwd", 3)) || !(ft_strncmp(argv[0], "PWD", 3)))
+        ft_pwd();
+    // else if (!(ft_strncmp(argv[0], "export", ft_strlen(argv[0]))))
+    //     ft_export(data, argc, argv);
+    // else if (!(ft_strncmp(argv[0], "unset", ft_strlen(argv[0]))))
+    //     ft_unset(data, argc, argv);
+    // else if (!(ft_strncmp(argv[0], "env", ft_strlen(argv[0]))))
+    //     ft_env(data, argc, argv);
+    else if (!(ft_strncmp(argv[0], "exit", 4)) || !(ft_strncmp(argv[0], "EXIT", 4)))
+        ft_exit(data, argc, argv, -1);
     else
-        file = ft_strdup(argv[0]);
-    ft_execute(argv, file);
+        ft_binsearch(data, argv, -1, NULL);
 }

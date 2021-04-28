@@ -12,7 +12,6 @@ void ft_init(t_data **data)
 	(*data)->line = NULL;
 	(*data)->cmds = NULL;
 	(*data)->ret = 0;
-	signal(SIGINT, ft_sig_handler);
 }
 
 void	ft_shell_prompt()
@@ -57,7 +56,6 @@ int	main(int argc, char **argv)
 		return (1);
 	ft_init(&data);
 	ft_initterm(&term);
-	//ft_term(1);
 	ft_input(data);
 	return(0);
 }
