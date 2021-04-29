@@ -6,10 +6,10 @@ void    ft_increment(t_data *data, int *i)
     *i += 1;
 }
 
-int    ft_semicolumn(t_data *data, char c)
+int    ft_delimiter(t_data *data, char c, char delimiter)
 {
     ft_flagswitch(data, c, 0);
-    if (c == 59 && !data->quotes && !data->escape)
+    if (c == delimiter && !data->quotes && !data->escape)
         return (1);
     return (0);
 }
@@ -53,8 +53,31 @@ void    ft_flagswitch(t_data *data, char c, int i)
         data->escape = 0;
 }
 
-void    ft_init_flags(t_data *data)
+void    ft_reset_flags(t_data *data, int type, int cnt)
 {
-    data->quotes = 0;
-    data->escape = 0;
+    if (type == 1)
+    {
+        data->quotes = 0;
+        data->escape = 0;
+    }
+    else if (type == 2)
+    {
+        data->cmds->argc = 0;
+        data->len = 0;
+        data->cmds->rread = 0;
+        data->cmds->rwrite = 0;
+        data->cmds->fdnum = 0;
+        data->cmds->pipes = 1;
+        ft_close_fd(data, 2);
+    }
+    else if (type == 3)
+    {
+        data->cmds->pipe[cnt].argc = 0;
+        data->cmds->pipe[cnt].argv = NULL;
+        data->cmds->pipe[cnt].rread = 0;
+        data->cmds->pipe[cnt].rwrite = 0;
+        data->cmds->pipe[cnt].fd0 = 0;
+        data->cmds->pipe[cnt].fd1 = 1;
+        data->cmds->pipe[cnt].fdnum = 0;
+    }
 }

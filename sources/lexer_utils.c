@@ -4,7 +4,7 @@ void	ft_init_quotes(t_data *data, char **output, char **stripped, int t)
 {
 	if (t == 0)
 	{
-		ft_init_flags(data);
+		ft_reset_flags(data, 1, 0);
 		*output = NULL;
 		data->start = -1;
 	}
@@ -65,7 +65,7 @@ static char	*ft_escapes_tool(char *command, int i)
 
 char		*ft_escapes(t_data *data, char *command, int i)
 {
-	ft_init_flags(data);
+	ft_reset_flags(data, 1, 0);
 	while (command[++i])
 	{
 		ft_flagswitch(data, command[i], 1);

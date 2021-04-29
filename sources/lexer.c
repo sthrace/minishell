@@ -6,22 +6,20 @@ void		ft_splitcmd(t_data *data, char *line, int i, int len)
 
 	if (!ft_validate(data, line))
 	{
-		ft_init_flags(data);
+		ft_reset_flags(data, 1, 0);
 		start = 0;
 		line = ft_escapes(data, line, -1);
 		while (line[++i])
 		{
 			len++;
-			if (ft_semicolumn(data, line[i]) || !line[i + 1])
+			if (ft_delimiter(data, line[i], 59) || !line[i + 1])
 			{
-				if (ft_semicolumn(data, line[i]))
+				if (ft_delimiter(data, line[i], 59))
 					len -= 1;
 				data->cmd = ft_substr(line, start, len);
 				ft_parser(data, data->cmd);
 				start = i + 1;
 				len = 0;
-				if (line[i + 1] == 10)
-					break ;
 			}
 		}
 	}

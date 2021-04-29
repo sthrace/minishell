@@ -19,10 +19,11 @@ typedef struct s_pipe
 {
     int     argc;
     char    **argv;
-    int     fd0;
-    int     fd1;
     short   rread;
     short   rwrite;
+    int     fd0;
+    int     fd1;
+    short   fdnum;
 }               t_pipe;
 
 
@@ -34,7 +35,8 @@ typedef struct s_cmd
     short   rwrite;
     int     fd0;
     int     fd1;
-    int     fdnum;
+    short   fdnum;
+    short   pipes;
     t_pipe  *pipe;
 }               t_cmd;
 
@@ -45,7 +47,7 @@ typedef struct s_data
     int         len;
     short       quotes;
     short       escape;
-    int         insert;
+    short       insert;
     int         ret;
     int         start;
     char        *cmd;
@@ -76,14 +78,14 @@ void        ft_simple(t_data *data, char *cmd, int i);
 
 // parser_utils.c //
 
-char *ft_insert_env(t_data *data, char *line, int i, int cnt);
+char *ft_insert_env(t_data *data, int i, int cnt);
 
 // utils.c //
 
-int     ft_semicolumn(t_data *data, char c);
+int     ft_delimiter(t_data *data, char c, char delimiter);
 int     ft_validate(t_data *data, char *line);
 void    ft_flagswitch(t_data *data, char c, int i);
-void    ft_init_flags(t_data *data);
+void    ft_reset_flags(t_data *data, int type, int cnt);
 void    ft_increment(t_data *data, int *i);
 
 // builtins.c //
@@ -100,7 +102,7 @@ void ft_binsearch(t_data *data, char **argv, int cnt, char *dir);
 
 // pipe.c //
 
-void    ft_pipe(t_data *data, char *cmd, int i);
+void    ft_pipe(t_data *data, char *cmd, int i, int start);
 
 // redirect.c //
 

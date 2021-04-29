@@ -32,17 +32,18 @@ void ft_cd(int argc, char **argv)
 void ft_echo(t_data *data, int argc, char **argv)
 {
     int i;
-    int n;
+    short n;
 
     i = 0;
     n = 0;
-    if (argc > 1 && (!(ft_strncmp(argv[1], "-n", ft_strlen(argv[1])))))
+    if (argc > 1 && (!(ft_strncmp(argv[1], "-n", 2))))
         n = 1;
     while (++i < argc)
     {
         if (n)
             i++;
-        write(data->cmds->fd1, argv[i], (int)ft_strlen(argv[i]));
+        write(data->cmds->fd1, argv[i], ft_strlen(argv[i]));
+        write(data->cmds->fd1, " ", 1);
     }
     if (!n)
         write(data->cmds->fd1, "\n", 1);
@@ -65,6 +66,7 @@ void ft_exit(t_data *data, int argc, char **argv, int i)
     {
         data->ret = 1;
         printf("exit\nbash: exit: too many arguments\n");
+        return ;
     }
     if (data->ret != 2)
     {

@@ -1,21 +1,21 @@
 #include "minishell.h"
 
-void    ft_close_fd(t_data *data, int fd)
+void    ft_close_fd(t_data *data, int type)
 {
-    if (fd == 0 || fd == 2)
+    if (type == 0 || type == 2)
     {
-        if (data->cmds->fd0 != -1)
+        if (data->cmds->fd0 != 0)
         {
             close(data->cmds->fd0);
-            data->cmds->fd0 = -1;
+            data->cmds->fd0 = 0;
         }
     }
-    if (fd == 1 || fd == 2)
+    if (type == 1 || type == 2)
     {
-        if (data->cmds->fd1 != -1)
+        if (data->cmds->fd1 != 1)
         {
             close(data->cmds->fd1);
-            data->cmds->fd1 = -1;
+            data->cmds->fd1 = 1;
         }
     }
 }
@@ -37,6 +37,8 @@ void    ft_clear_cmd(t_data *data, char *cmd, int start)
         cmd[start] = 32;
         start++;
     }
+    data->cmds->rread = 0;
+    data->cmds->rwrite = 0;
 }
 
 void    ft_set_fd(t_data *data, char *cmd, int start)
@@ -68,7 +70,7 @@ void    ft_select_source(t_data *data, char *cmd, int *i, int start)
     while (cmd[*i] == 32 && cmd[*i + 1] != 0)
         *i += 1;
     start = *i;
-    while (cmd[*i] != 32 && cmd[*i] != 0)
+    while (cmd[*i] != 32 && cmd[*i] != 62 && cmd[*i] != 60 && cmd[*i] != 0)
     {
         if (cmd[*i] == 38)
         {
@@ -80,13 +82,13 @@ void    ft_select_source(t_data *data, char *cmd, int *i, int start)
     }
     ft_set_fd(data, cmd, start);
     ft_clear_cmd(data, cmd, start);
-    if (cmd[*i] == 0)
+    if (cmd[*i] == 0 || cmd[*i] == 62 || cmd[*i] == 60)
         *i -= 1;
 }
 
 void    ft_check_redirect(t_data *data, char *cmd, int i)
 {
-    ft_init_flags(data);
+    ft_reset_flags(data, 1, 0);
     ft_close_fd(data, 2);
     while (cmd[++i])
     {   
