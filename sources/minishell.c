@@ -4,14 +4,18 @@ void ft_init(t_data **data)
 {
 	if (!(*(data)))
 		*data = (t_data *)malloc(sizeof(t_data));
-	if (data == NULL)
+	if (*data == NULL)
 	{
-		printf("%s\n", strerror(errno));
+		write(2, strerror(errno), sizeof(strerror(errno)));
 		exit(1);
 	}
 	(*data)->line = NULL;
-	(*data)->cmds = NULL;
-	(*data)->ret = 0;
+    (*data)->cmd = NULL;
+    (*data)->argc = 0;
+    (*data)->argv = NULL;
+    (*data)->len = 0;
+    (*data)->fd0 = 0;
+    (*data)->fd1 = 1;
 }
 
 void	ft_shell_prompt()
@@ -24,10 +28,8 @@ static void	ft_input(t_data *data)
 	char	str[3];
 	int		len;
 
-	ft_shell_prompt();
 	while (1)
 	{	
-		signal(SIGINT, ft_sig_handler);
 		len = read(0, str, 3);
 		if (str[0] == '\e' || !ft_strncmp(str, "\177", len))
 			ft_termios(data, str, len);
@@ -39,7 +41,7 @@ static void	ft_input(t_data *data)
 		if (str[0] == '\n')
 		{
 			data->line[data->len - 1] = 0;
-			ft_splitcmd(data, data->line, -1, 0);
+			ft_validate_line(data, -1);
 			ft_shell_prompt();
 		}
 		if (str[0] == '\4')
@@ -49,13 +51,16 @@ static void	ft_input(t_data *data)
 
 int	main(int argc, char **argv)
 {
-	struct	termios term;
 	t_data	*data;
 
 	if (argc != 1 && !argv[0])
+	{
+		ft_putendl_fd("bash: error: no parameters allowed\n", 2);
 		return (1);
+	}
 	ft_init(&data);
-	ft_initterm(&term);
+	ft_set_term(1);
+	ft_shell_prompt();
 	ft_input(data);
 	return(0);
 }

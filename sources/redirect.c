@@ -4,108 +4,100 @@ void    ft_close_fd(t_data *data, int type)
 {
     if (type == 0 || type == 2)
     {
-        if (data->cmds->fd0 != 0)
+        if (data->fd0 != 0)
         {
-            close(data->cmds->fd0);
-            data->cmds->fd0 = 0;
+            close(data->fd0);
+            data->fd0 = 0;
         }
     }
     if (type == 1 || type == 2)
     {
-        if (data->cmds->fd1 != 1)
+        if (data->fd1 != 1)
         {
-            close(data->cmds->fd1);
-            data->cmds->fd1 = 1;
+            close(data->fd1);
+            data->fd1 = 1;
         }
     }
 }
 
-void    ft_clear_cmd(t_data *data, char *cmd, int start)
+void    ft_clear_cmd(t_data *data)
 {
-    if (data->cmds->rwrite == 2)
+    while (data->flg.length--)
     {
-        data->len += 2;
-        start -= 2;
+        data->cmd[data->flg.begin] = 32;
+        data->flg.begin++;
     }
-    else
-    {
-        data->len += 1;
-        start -= 1;
-    }
-    while (data->len--)
-    {
-        cmd[start] = 32;
-        start++;
-    }
-    data->cmds->rread = 0;
-    data->cmds->rwrite = 0;
+    data->flg.fdread = 0;
+    data->flg.fdwrite = 0;
 }
 
-void    ft_set_fd(t_data *data, char *cmd, int start)
+void    ft_set_fd(t_data *data)
 {
     char *file;
 
     file = NULL;
-    if (data->cmds->fdnum == 0)
-        file = ft_substr(cmd, start, data->len);
+    if (data->flg.fdamp == 0)
+        file = ft_substr(data->cmd, data->flg.begin, data->flg.length);
     if (file)
     {
-        if (data->cmds->rwrite == 1)
-            data->cmds->fd1 = open(file, O_RDWR | O_CREAT | O_TRUNC, 0777);
-        else if (data->cmds->rwrite == 2)
-            data->cmds->fd1 = open(file, O_RDWR | O_CREAT | O_APPEND, 0777);
-        else if (data->cmds->rread == 1)
-            data->cmds->fd0 = open(file, O_RDONLY);
+        if (data->flg.fdwrite == 1)
+            data->fd1 = open(file, O_RDWR | O_CREAT | O_TRUNC, 0777);
+        else if (data->flg.fdwrite == 2)
+            data->fd1 = open(file, O_RDWR | O_CREAT | O_APPEND, 0777);
+        else if (data->flg.fdread == 1)
+            data->fd0 = open(file, O_RDONLY);
         free(file);    
     }
 }
 
-void    ft_select_source(t_data *data, char *cmd, int *i, int start)
+void    ft_select_source(t_data *data, int *i)
 {
-    data->len = 0;
-    if (data->cmds->rread == 1 || data->cmds->rwrite > 0)
-        cmd[*i] = 32;
-    if (data->cmds->rwrite == 2)
-        cmd[*i + 1] = 32;
-    while (cmd[*i] == 32 && cmd[*i + 1] != 0)
+    data->flg.length = 0;
+    data->flg.fdamp = 0;
+    if (data->flg.fdread == 1 || data->flg.fdwrite > 0)
+        data->cmd[*i] = 32;
+    if (data->flg.fdwrite == 2)
+        data->cmd[*i + 1] = 32;
+    while (data->cmd[*i] == 32)
         *i += 1;
-    start = *i;
-    while (cmd[*i] != 32 && cmd[*i] != 62 && cmd[*i] != 60 && cmd[*i] != 0)
+    data->flg.begin = *i;
+    while (data->cmd[*i] != 32 && data->cmd[*i] != 62 && data->cmd[*i] != 60 && data->cmd[*i])
     {
-        if (cmd[*i] == 38)
+        if (data->cmd[*i] == 38)
         {
-            data->cmds->fdnum = 1;
-            data->cmds->fd1 = ft_atoi(&cmd[*i + 1]);
+            data->flg.fdamp = 1;
+            data->fd1 = ft_atoi(&data->cmd[*i + 1]);
         }
         *i += 1;
-        data->len++;
+        data->flg.length++;
     }
-    ft_set_fd(data, cmd, start);
-    ft_clear_cmd(data, cmd, start);
-    if (cmd[*i] == 0 || cmd[*i] == 62 || cmd[*i] == 60)
+    ft_set_fd(data);
+    ft_clear_cmd(data);
+    if (data->cmd[*i] == 0 || data->cmd[*i] == 62 || data->cmd[*i] == 60)
         *i -= 1;
 }
 
-void    ft_check_redirect(t_data *data, char *cmd, int i)
+void    ft_check_redirects(t_data *data, int i)
 {
-    ft_reset_flags(data, 1, 0);
+    ft_flags(data, '\0', 0);
     ft_close_fd(data, 2);
-    while (cmd[++i])
+    data->flg.begin = 0;
+    while (data->cmd[++i])
     {   
-        ft_flagswitch(data, cmd[i], 0);
-        if (cmd[i] == 62 && !data->quotes)
+        ft_flags(data, data->cmd[i], 1);
+        if (data->cmd[i] == 62 && !data->flg.quotes && !data->flg.esc)
         {
             ft_close_fd(data, 1);
-            data->cmds->rwrite++;
-            if (cmd[i + 1] && cmd[i + 1] == 62)
-                data->cmds->rwrite++;
-            ft_select_source(data, cmd, &i, 0);
+            data->flg.fdwrite++;
+            if (data->cmd[i + 1] == 62)
+                data->flg.fdwrite++;
+            ft_select_source(data, &i);
         }
-        else if (cmd[i] == 60 && !data->quotes)
+        else if (data->cmd[i] == 60 && !data->flg.quotes && !data->flg.esc)
         {
             ft_close_fd(data, 0);
-            data->cmds->rread = 1;
-            ft_select_source(data, cmd, &i, 0);
+            data->flg.fdread = 1;
+            ft_select_source(data, &i);
         }
     }
 }

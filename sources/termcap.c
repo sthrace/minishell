@@ -1,13 +1,25 @@
 #include "minishell.h"
 
-void ft_initterm(struct termios *term)
+void ft_set_term(int option)
 {
-	tcgetattr(0, term);
-	term->c_lflag &= ~ECHO;			// отключаем вывод служебных символов
-	term->c_lflag &= ~ICANON;		// переходим в неканонический посимвольный режим ввода
-	tcsetattr(0, TCSANOW,  term);	// применяем настройки
-	tgetent(0, getenv("TERM"));	// загружаем базу данных текущего терминала
-	tputs(save_cursor, 1, &ft_putchar);
+	struct	termios term;
+
+	if (option == 1)
+	{
+		tcgetattr(0, &term);
+		term.c_lflag &= ~ECHO;
+		term.c_lflag &= ~ICANON;
+		tcsetattr(0, TCSANOW,  &term);
+		tgetent(0, getenv("TERM"));
+		tputs(save_cursor, 1, &ft_putchar);
+	}
+	if (option == 2)
+	{
+		tcgetattr(0, &term);
+		term.c_lflag |= ECHO;
+		term.c_lflag |= ICANON;
+		tcsetattr(0, TCSANOW, &term);
+	}
 }
 
 void	ft_termios(t_data *data, char *str, int len)
@@ -33,14 +45,4 @@ void	ft_termios(t_data *data, char *str, int len)
 			ft_line(data, str, -1);
 		}
 	}
-}
-
-void	ft_restoreterm(void)
-{
-	struct termios term;
-
-	tcgetattr(0, &term);
-	term.c_lflag |= ECHO;
-	term.c_lflag |= ICANON;
-	tcsetattr(0, TCSANOW, &term);
 }

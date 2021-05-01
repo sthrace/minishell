@@ -15,105 +15,76 @@
 # include <signal.h>
 # include <errno.h>
 
-typedef struct s_pipe
+typedef struct s_flags
 {
-    int     argc;
-    char    **argv;
-    short   rread;
-    short   rwrite;
-    int     fd0;
-    int     fd1;
-    short   fdnum;
-}               t_pipe;
-
-
-typedef struct s_cmd
-{
-    int     argc;
-    char    **argv;
-    short   rread;
-    short   rwrite;
-    int     fd0;
-    int     fd1;
-    short   fdnum;
-    short   pipes;
-    t_pipe  *pipe;
-}               t_cmd;
+    int     length;
+    int     begin;
+    int     start;
+    short   quotes;
+    short   esc;
+    short   fdread;
+    short   fdwrite;
+    short   fdamp;
+}               t_flags;
 
 
 typedef struct s_data
 {
-    char        *line;
-    int         len;
-    short       quotes;
-    short       escape;
-    short       insert;
-    int         ret;
-    int         start;
-    char        *cmd;
-    t_cmd       *cmds;    
+    char    *line;
+    char    *cmd;
+    char    **argv;
+    int     argc;
+    int     fd0;
+    int     fd1;
+    int     ret;
+    int     len;
+    t_flags flg;
 }               t_data;
+
+// parser.c //
+
+void        ft_parser(t_data *data, int x, int i, char *prefix);
+
+// parser_utils.c //
+
+void ft_set_prefix(t_data *data, int x, char **prefix);
+void ft_substitute_env(t_data *data, int x, int *i, char **insert);
+void ft_join_all(char **temp, char **prefix, char **insert, char **output);
+void ft_finalize(t_data *data, char **output, char **temp, int x);
 
 // term.c //
 
-void	ft_restoreterm(void);
-void    ft_initterm(struct termios *term);
-void	ft_termios(t_data *data, char *str, int len);
+void    ft_set_term(int option);
+void    ft_termios(t_data *data, char *str, int len);
 
 // lexer.c //
 
 void    ft_line(t_data *data, char *str, int len);
-void	ft_splitcmd(t_data *data, char *line, int i, int len);
+void	ft_get_cmd(t_data *data, int i);
 
-// lexer_utils.c
+// validator.c //
 
-char		*ft_escapes(t_data *data, char *command, int i);
-char		*ft_quotes(t_data *data, char *command, int i);
-
-
-// parser.c //
-
-void        ft_parser(t_data *data, char *command);
-void        ft_simple(t_data *data, char *cmd, int i);
-
-// parser_utils.c //
-
-char *ft_insert_env(t_data *data, int i, int cnt);
-
-// utils.c //
-
-int     ft_delimiter(t_data *data, char c, char delimiter);
-int     ft_validate(t_data *data, char *line);
-void    ft_flagswitch(t_data *data, char c, int i);
-void    ft_reset_flags(t_data *data, int type, int cnt);
-void    ft_increment(t_data *data, int *i);
-
-// builtins.c //
-
-void    ft_echo(t_data *data, int argc, char **argv);
-void    ft_exit(t_data *data, int argc, char **argv, int i);
-void    ft_cd(int argc, char **argv);
-void    ft_pwd(void);
-
-// execute.c //
-
-void ft_sorter(t_data *data, int argc, char **argv);
-void ft_binsearch(t_data *data, char **argv, int cnt, char *dir);
-
-// pipe.c //
-
-void    ft_pipe(t_data *data, char *cmd, int i, int start);
+void	ft_validate_line(t_data *data, int i);
+void    ft_flags(t_data *data, char c, int type);
 
 // redirect.c //
 
-void    ft_check_redirect(t_data *data, char *cmd, int i);
-void    ft_close_fd(t_data *data, int fd);
+void    ft_check_redirects(t_data *data, int i);
 
-// signal.c //
+// execute.c //
 
-void	ft_sig_handler(int sig);
-void    ft_free_array(char **array);
-void    ft_free_str(char *str);
+void    ft_sorter(t_data *data);
+
+// builtins.c //
+
+void ft_pwd(void);
+void ft_cd(t_data *data);
+void ft_echo(t_data *data);
+void ft_exit(t_data *data, int i);
+
+// utils.c //
+
+void ft_free_array(char **array);
 
 // minishell.c //
 
