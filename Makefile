@@ -46,9 +46,9 @@ leaks:
 
 git:
 			make fclean
-			git add *
-			git commit -m "commit"
-			git push
+			@git add *
+			@git commit -m "commit"
+			@git push
 
 re:			fclean all
 

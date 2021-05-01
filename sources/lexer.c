@@ -62,9 +62,8 @@ void	ft_crossroads(t_data *data)
 		ft_check_redirects(data, -1);
 		ft_cmd_count(data, -1);
 		ft_cmd_split(data, 0, 0, 0);
-		data->flg.quotes = 0;
-		data->flg.esc = 0;
-		ft_parser(data, -1, -1, NULL);
+		ft_flags(data, '\0', 0);
+		ft_parser(data, -1);
 	}
 	else
 		printf("piped command\n");

@@ -17,7 +17,7 @@ static void  ft_execute(t_data *data, char *file)
     }
     while ((wait(&data->ret)) != -1 || errno != ECHILD)
         ;
-    data->ret /= 256;
+    data->ret %= 256;
 }
 
 static char **ft_split_path(void)

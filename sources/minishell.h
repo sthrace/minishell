@@ -20,13 +20,15 @@ typedef struct s_flags
     int     length;
     int     begin;
     int     start;
-    short   quotes;
-    short   esc;
-    short   fdread;
-    short   fdwrite;
-    short   fdamp;
+    int     swap;
+    int     res;
+    int     quotes;
+    int     esc;
+    int     fdread;
+    int     fdwrite;
+    int     fdamp;
+    char    *key;
 }               t_flags;
-
 
 typedef struct s_data
 {
@@ -43,7 +45,7 @@ typedef struct s_data
 
 // parser.c //
 
-void        ft_parser(t_data *data, int x, int i, char *prefix);
+void        ft_parser(t_data *data, int x);
 
 // parser_utils.c //
 

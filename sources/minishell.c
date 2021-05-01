@@ -16,6 +16,7 @@ void ft_init(t_data **data)
     (*data)->len = 0;
     (*data)->fd0 = 0;
     (*data)->fd1 = 1;
+	(*data)->ret = 0;
 }
 
 void	ft_shell_prompt()
