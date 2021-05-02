@@ -15,6 +15,12 @@
 # include <signal.h>
 # include <errno.h>
 
+typedef struct s_var
+{
+	char	*key;
+	char	*value;
+}				t_var;
+
 typedef struct s_flags
 {
     int     length;
@@ -87,6 +93,15 @@ void ft_exit(t_data *data, int i);
 // utils.c //
 
 void ft_free_array(char **array);
+
+// env.c //
+
+t_list	*envp_to_lst(char *envp[]);
+void	print_env(t_list *env);
+void	print_export(t_list *env);
+char	*get_var(t_list *env, char *str);
+int 	ft_set_var(t_data *data, char *str, int n);
+int		unset_var(t_list **begin, char *str);
 
 // minishell.c //
 

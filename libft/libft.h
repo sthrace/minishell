@@ -79,6 +79,12 @@ void			ft_lstiter(t_list *lst, void (*f)(void *));
 t_list			*ft_lstmap(t_list *lst, void *(*f)(void *),
 							void (*del)(void *));
 
+int				ft_arrclear(char **arr);
+char			**ft_arrdup(char **arr);
+int				ft_arradd(char ***arr, char *str);
+int				ft_arrsort(char ***arr);
+void			ft_lstadd_at(t_list **lst, t_list *new, unsigned int n);
+
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 1
 # endif

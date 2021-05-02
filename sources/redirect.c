@@ -46,6 +46,11 @@ void    ft_set_fd(t_data *data)
             data->fd1 = open(file, O_RDWR | O_CREAT | O_APPEND, 0777);
         else if (data->flg.fdread == 1)
             data->fd0 = open(file, O_RDONLY);
+        if (data->fd0 == -1 || data->fd1 == -1)
+        {
+            printf("bash: syntax error near unexpected token `newline'");
+            return ;
+        }
         free(file);    
     }
 }

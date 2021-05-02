@@ -15,9 +15,9 @@ static void  ft_execute(t_data *data, char *file)
             printf("bash: %s: command not found\n", file);
         exit(data->ret);
     }
-    while ((wait(&data->ret)) != -1 || errno != ECHILD)
-        ;
-    data->ret %= 256;
+    wait(&data->ret);
+    if (WIFEXITED(data->ret))
+        data->ret = WEXITSTATUS(data->ret);
 }
 
 static char **ft_split_path(void)
@@ -75,8 +75,8 @@ void ft_sorter(t_data *data)
         ft_cd(data);
     else if ((!(ft_strncmp(data->argv[0], "pwd", 3)) || !(ft_strncmp(data->argv[0], "PWD", 3))) && ft_strlen(data->argv[0]) == 3)
         ft_pwd();
-    // else if (!(ft_strncmp(argv[0], "export", ft_strlen(argv[0]))))
-    //     ft_export(data, argc, argv);
+    // else if (!(ft_strncmp(data->argv[0], "export", ft_strlen(data->argv[0]))))
+    //     ft_set_var(data, data->argv[1], ft_lstsize(data->env) - 1);
     // else if (!(ft_strncmp(argv[0], "unset", ft_strlen(argv[0]))))
     //     ft_unset(data, argc, argv);
     // else if (!(ft_strncmp(argv[0], "env", ft_strlen(argv[0]))))

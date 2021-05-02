@@ -58,8 +58,12 @@ SRCS	=\
 		ft_clear.c\
 		get_next_line.c\
 		ft_realloc.c\
-		ft_charjoin.c
-SRCS_B	=\
+		ft_charjoin.c\
+		ft_arradd.c\
+		ft_arrsort.c\
+		ft_lstadd_at.c\
+		ft_arrdup.c\
+		ft_arrclear.c\
 		ft_lstadd_back.c\
 		ft_lstadd_front.c\
 		ft_lstclear.c\
