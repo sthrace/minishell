@@ -21,6 +21,14 @@ typedef struct s_var
 	char	*value;
 }				t_var;
 
+typedef struct s_hist
+{
+	char	*file;
+	int		size;
+	int		pos;
+	char	**cmds;
+}				t_hist;
+
 typedef struct s_flags
 {
     int     length;
@@ -47,6 +55,8 @@ typedef struct s_data
     int     ret;
     int     len;
     t_flags flg;
+	t_hist	*hist;
+	t_list	*env;
 }               t_data;
 
 // parser.c //
@@ -100,8 +110,13 @@ t_list	*envp_to_lst(char *envp[]);
 void	print_env(t_list *env);
 void	print_export(t_list *env);
 char	*get_var(t_list *env, char *str);
-int 	ft_set_var(t_data *data, char *str, int n);
+int 	set_var(t_list **begin, char *str, int n);
 int		unset_var(t_list **begin, char *str);
+
+// history.c //
+int		read_file(char *file, char ***arr);
+int		write_str(char *file, char *str, int mode);
+int		add_hist(t_hist *hist, char *str);
 
 // minishell.c //
 

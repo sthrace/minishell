@@ -72,7 +72,9 @@ SRCS	=\
 		ft_lstlast.c\
 		ft_lstmap.c\
 		ft_lstnew.c\
-		ft_lstsize.c
+		ft_lstsize.c\
+		get_lines.c\
+		ft_putarr.c
 
 OBJS	= $(SRCS:.c=.o)
 OBJS_B	= $(SRCS_B:.c=.o)

@@ -83,6 +83,7 @@ int				ft_arrclear(char **arr);
 char			**ft_arrdup(char **arr);
 int				ft_arradd(char ***arr, char *str);
 int				ft_arrsort(char ***arr);
+int				ft_putarr(char **arr);
 void			ft_lstadd_at(t_list **lst, t_list *new, unsigned int n);
 
 # ifndef BUFFER_SIZE
@@ -90,6 +91,7 @@ void			ft_lstadd_at(t_list **lst, t_list *new, unsigned int n);
 # endif
 
 int				get_next_line(int fd, char **line);
+int				get_lines(int fd, char ***arr);
 char			**ft_clear(char **tab);
 
 #endif
