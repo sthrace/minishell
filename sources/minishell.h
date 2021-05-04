@@ -54,7 +54,6 @@ typedef struct s_data
     int     fd1;
     int     ret;
     int     len;
-    int     history;
     t_flags flg;
 	t_hist	*hist;
 	t_list	*env;
@@ -123,5 +122,7 @@ int		add_hist(t_hist *hist, char *str);
 
 void    ft_init(t_data **data);
 void	ft_shell_prompt();
+void	sig_handler(int sig);
+void	child_sig_handler(int sig);
 
 #endif

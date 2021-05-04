@@ -4,6 +4,8 @@ static void	ft_execute(t_data *data, char *file)
 {
 	extern char	**environ;
 
+	signal(SIGINT, &child_sig_handler);
+	signal(SIGQUIT, &child_sig_handler);
 	if (!fork())
 	{
 		if (data->fd0 > 0)
@@ -12,7 +14,7 @@ static void	ft_execute(t_data *data, char *file)
 			dup2(data->fd1, 1);
 		data->ret = execve(file, data->argv, environ);
 		if (data->ret && errno == EACCES)
-			printf("bash: %s: command not found\n", file);
+			printf("bash: %s: %s\n", file, strerror(errno));
 		exit(data->ret);
 	}
 	wait(&data->ret);
@@ -100,7 +102,7 @@ void	ft_sorter(t_data *data)
 	}
 	else if ((!(ft_strncmp(data->argv[0], "unset", 5)) || \
 	!(ft_strncmp(data->argv[0], "UNSET", 5))) && \
-	ft_strlen(data->argv[0]) == 6)
+	ft_strlen(data->argv[0]) == 5)
 	{
 		i = 1;
 		while (data->argv[i])

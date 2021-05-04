@@ -1,5 +1,19 @@
 #include "minishell.h"
 
+void	child_sig_handler(int sig)
+{
+	if (sig == SIGINT)
+		write(2, "^\\\n", 3);
+	if (sig == SIGQUIT)
+		write(2, "^\\Quit: 3\n", 10);
+}
+
+void	sig_handler(int sig)
+{
+	if (sig == SIGINT)
+		write(2, "\033[1;34m\nminishell-> \033[0m", 24);
+}
+
 void ft_init(t_data **data)
 {
 	if (!(*(data)))
@@ -16,8 +30,6 @@ void ft_init(t_data **data)
     (*data)->len = 0;
     (*data)->fd0 = 0;
     (*data)->fd1 = 1;
-	(*data)->history = 0;
-	// (*data)->ret = 0;
 }
 
 void	ft_shell_prompt()
@@ -31,8 +43,11 @@ static void	ft_input(t_data *data)
 	int		len;
 
 	data->ret = 0;
+	
+	signal(SIGQUIT, &sig_handler);
 	while (1)
 	{	
+		signal(SIGINT, &sig_handler);
 		len = read(0, str, 3);
 		if (str[0] == '\e' || !ft_strncmp(str, "\177", len))
 			ft_termios(data, str, len);
@@ -51,7 +66,10 @@ static void	ft_input(t_data *data)
 			tputs(save_cursor, 1, &ft_putchar);
 		}
 		if (str[0] == '\4')
+		{
+			printf("exit\n");
 			break ;
+		}
 	}
 }
 

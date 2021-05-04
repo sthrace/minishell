@@ -40,7 +40,7 @@ void	ft_echo(t_data *data)
 		n = 1;
 	while (++i < data->argc)
 	{
-		if (n)
+		while (!(ft_strncmp(data->argv[i], "-n", 2)))
 			i++;
 		write(data->fd1, data->argv[i], ft_strlen(data->argv[i]));
 		write(data->fd1, " ", 1);
