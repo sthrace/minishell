@@ -13,3 +13,67 @@ pwd
 export
 env
 ls
+hello
+test
+ls
+export
+exn
+v
+export
+unset a
+export
+unset __a
+export
+ls
+M
+b
+n
+m
+ls;ls
+ls;ls
+ls
+asdasdasd
+qweqwesfvv
+lss
+/bin/ls
+ls -asdas
+ls -a
+ls---
+ls asd
+ls asda
+ls
+ls | ls
+ls
+ls
+ls
+ls
+ls
+ls
+ls | ls
+ls
+ls | ls
+ls ; ls
+ls ; ls
+ls
+ls;ls
+ls
+ls
+ls|ls
+ls|ls
+ls | ls
+ls
+ls;ls
+ls | ls
+ls
+ls | grep test
+ | wc
+wc
+wc
+ls | wc
+ls | grep test | wc
+yes
+yes | head
+ls | wc
+yes | head | wc
+ls ; ls ; ls
+ls ; ls ; ls ; ls

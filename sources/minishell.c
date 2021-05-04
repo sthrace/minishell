@@ -59,8 +59,8 @@ static void	ft_input(t_data *data)
 		if (str[0] == '\n')
 		{
 			data->line[data->len - 1] = 0;
-			// if (data->line[0])
-			// 	add_hist(data->hist, data->line);
+			if (data->line[0])
+				add_hist(data->hist, data->line);
 			ft_validate_line(data, -1);
 			ft_shell_prompt();
 			tputs(save_cursor, 1, &ft_putchar);
@@ -79,9 +79,11 @@ int	main(int argc, char **argv, char *envp[])
 	t_data	*data;
 	t_list	*env;
 	t_hist	hist;
+	t_pipeline pl;
 
 	env = envp_to_lst(envp);
 	init_hist(&hist);
+	pl.pipenum = 0;
 
 	if (argc != 1 && !argv[0])
 	{
@@ -89,8 +91,9 @@ int	main(int argc, char **argv, char *envp[])
 		return (1);
 	}
 	ft_init(&data);
-	data->hist = &hist;
 	data->env = env;
+	data->hist = &hist;
+	data->pl = &pl;
 	ft_set_term(1);
 	ft_shell_prompt();
 	ft_input(data);

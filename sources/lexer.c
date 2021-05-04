@@ -55,18 +55,44 @@ void	ft_cmd_count(t_data *data, int i)
 	}
 }
 
+// void	ft_crossroads(t_data *data)
+// {
+// 	if (!(ft_strchr(data->cmd, '|')))
+// 	{
+// 		ft_check_redirects(data, -1);
+// 		ft_cmd_count(data, -1);
+// 		ft_cmd_split(data, 0, 0, 0);
+// 		ft_flags(data, '\0', 0);
+// 		ft_parser(data, -1);
+// 	}
+// 	else
+// 		printf("piped command\n");
+// }
+
 void	ft_crossroads(t_data *data)
 {
-	if (!(ft_strchr(data->cmd, '|')))
+	ft_check_redirects(data, -1);
+	ft_cmd_count(data, -1);
+	ft_cmd_split(data, 0, 0, 0);
+	ft_flags(data, '\0', 0);
+	ft_parser(data, -1);
+
+	if (data->pl->pipenum == 0)
+		wait(0);
+	if (data->pl->pipenum < 0)
 	{
-		ft_check_redirects(data, -1);
-		ft_cmd_count(data, -1);
-		ft_cmd_split(data, 0, 0, 0);
-		ft_flags(data, '\0', 0);
-		ft_parser(data, -1);
+		int i = 1;
+		int ret;
+		data->pl->pipenum *= -1;
+		while(i < data->pl->pipenum + 2)
+		{
+			waitpid(data->pl->pids[i], &ret, 0);
+			if (ret == 65280)
+				printf("Command not found\n");
+			i++;
+		}
+		data->pl->pipenum = 0;
 	}
-	else
-		printf("piped command\n");
 }
 
 void	ft_get_cmd(t_data *data, int i)
@@ -79,8 +105,13 @@ void	ft_get_cmd(t_data *data, int i)
 	while (data->line[++i])
     {
 		ft_flags(data, data->line[i], 1);
-        if (data->line[i] == 59 && !data->flg.quotes && !data->flg.esc)
+        if ((data->line[i] == ';' || data->line[i] == '|') && !data->flg.quotes && !data->flg.esc)
 		{
+			if (data->line[i] == '|')
+				data->pl->pipenum++;
+			else if (data->pl->pipenum != 0)
+				data->pl->pipenum *= -1;
+
 			data->cmd = ft_substr(data->line, start, len);
 			start = i + 1;
 			len = 0;
@@ -89,6 +120,10 @@ void	ft_get_cmd(t_data *data, int i)
 		}
 		len++;
 	}
+
+	if (data->pl->pipenum != 0)
+			data->pl->pipenum *= -1;
+
 	data->cmd = ft_substr(data->line, start, len);
 	ft_crossroads(data);
 	free(data->cmd);

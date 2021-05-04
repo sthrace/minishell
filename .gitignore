@@ -2,3 +2,7 @@
 *.o
 *.a
 minishell
+*.dSYM
+*vscode*
+*.swp
+test*
