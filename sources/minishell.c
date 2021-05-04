@@ -68,6 +68,7 @@ static void	ft_input(t_data *data)
 		if (str[0] == '\4')
 		{
 			printf("exit\n");
+			ft_set_term(2);
 			break ;
 		}
 	}
@@ -80,13 +81,7 @@ int	main(int argc, char **argv, char *envp[])
 	t_hist	hist;
 
 	env = envp_to_lst(envp);
-	if (env == 0)
-		return (1);
-	hist.file = ft_strdup("minishell_history");
-	if (hist.file == 0)
-		return (2);
-	hist.size = read_file(hist.file, &(hist.cmds));
-	hist.pos = hist.size;
+	init_hist(&hist);
 
 	if (argc != 1 && !argv[0])
 	{

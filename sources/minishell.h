@@ -114,6 +114,7 @@ int 	set_var(t_list **begin, char *str, int n);
 int		unset_var(t_list **begin, char *str);
 
 // history.c //
+int		init_hist(t_hist *hist);
 int		read_file(char *file, char ***arr);
 int		write_str(char *file, char *str, int mode);
 int		add_hist(t_hist *hist, char *str);

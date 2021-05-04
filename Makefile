@@ -3,10 +3,11 @@ NAME		= minishell
 CC			= clang
 CFLAGS		= -g3 -Wall -Wextra -Werror
 
-SFLAGS		= -fsanitize=address -fno-omit-frame-pointer \
-			-fsanitize=undefined -fsanitize=nullability \
-			-fsanitize=array-bounds -fsanitize=pointer-overflow \
-			-Wall -Wextra -Werror
+# SFLAGS		= -fsanitize=address -fno-omit-frame-pointer \
+# 			-fsanitize=undefined -fsanitize=nullability \
+# 			-fsanitize=array-bounds -fsanitize=pointer-overflow \
+# 			-Wall -Wextra -Werror
+SFLAGS		=
 RM			= rm -f
 
 #FILES
