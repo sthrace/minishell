@@ -44,9 +44,16 @@ static void ft_validate_dups(t_data *data, int i)
 			    printf("bash: syntax error near unexpected token `%c%c'\n", data->line[i], data->line[i]);
             else
                 printf("bash: syntax error near unexpected token `%c'\n", data->line[i]);
+            data->ret = 258;
 			ft_init(&data);
 			return ;
 		}
+        if (data->line[data->len - 2] == 92)
+        {
+            write(2, "bash: >\n", 8);
+            ft_init(&data);
+            return ;
+        }
 	}
     ft_get_cmd(data, -1);
 }
@@ -68,6 +75,11 @@ static void ft_validate_quotes(t_data *data, int i)
 
 void		ft_validate_line(t_data *data, int i)
 {
+    if (data->line[0] == 0 && data->len == 1)
+    {
+        ft_init(&data);
+        return ;
+    }
 	while (data->line[++i])
 	{
 		while (data->line[i] == 32)
@@ -79,6 +91,7 @@ void		ft_validate_line(t_data *data, int i)
 			else
 				write(2, "bash: syntax error near unexpected token `;'\n", 45);
 			ft_init(&data);
+            data->ret = 258;
 			return ;	
 		}
 		break ;

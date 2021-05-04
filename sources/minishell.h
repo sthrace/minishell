@@ -54,6 +54,7 @@ typedef struct s_data
     int     fd1;
     int     ret;
     int     len;
+    int     history;
     t_flags flg;
 	t_hist	*hist;
 	t_list	*env;
@@ -66,7 +67,7 @@ void        ft_parser(t_data *data, int x);
 // parser_utils.c //
 
 void ft_set_prefix(t_data *data, int x, char **prefix);
-void ft_substitute_env(t_data *data, int x, int *i, char **insert);
+int  ft_substitute_env(t_data *data, int x, int *i, char **insert);
 void ft_join_all(char **temp, char **prefix, char **insert, char **output);
 void ft_finalize(t_data *data, char **output, char **temp, int x);
 

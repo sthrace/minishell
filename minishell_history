@@ -37,3 +37,203 @@ env
 ls
 unset PATH
 ls
+export t='p\p'
+env
+echo $t
+export t='p\p'
+env
+echo $t
+exit
+unset PATH
+ls
+make
+make
+exit
+make
+$PWD
+make
+exit
+$PWD
+"$PWD"
+'$PWD'
+"\$PWD"
+'\$PWD'
+exit
+exit
+$P
+$PWD
+P
+$P
+$PWD
+exit
+$P
+$PWD
+exit
+$P
+$PWD
+exit
+exit
+echo $PWD
+echo '$PWD'
+echo "$PWD"
+echo 'p'
+exit
+echo 'p'
+echo "p"
+exit
+echo 'p'
+exit
+echo 'p'
+exit
+echo 'p'
+export t=p\p
+echo $t
+export t = p\p
+;;
+echo $?
+pwd"
+ls -la
+ls -la
+ls -la
+ls -la
+ls -la
+ls -la
+ls -la
+ls -la
+ls -la
+ls -la
+ls -la
+ls -la
+pwd
+ls -la
+ls -la
+pwd
+pwd
+pwd
+pwd
+ls -la
+ls -la
+pwd
+ls -la
+exit
+export t = p
+echo $PWD
+exit
+echo $PWD
+make
+exit
+echo $PWD
+exit
+echo $PWD
+exit
+echo $PWD
+echo R$PWD
+echo "$PWD"
+echo '$PWD'
+exit
+echo \$PWD
+exit
+echo $PWD
+exit
+echo $PWD
+exit
+echo $PWD
+exit
+echo $PWD
+echo $PWD
+echo $PWD
+echo $PWD
+echo $PWD
+echo $PWD
+echo $PWD
+exit
+echo $PWD
+exit
+echo $PWD
+exit
+echo $PWD
+exit
+echo $PWD
+echo $PWD
+echo $PWD
+echo $PWD""
+echo $PWD
+echo $PWD
+echo $PWD
+echo $PWD
+echo $PWD
+echo $PWD
+echo "$PWD"
+echo '$PWD'
+exit
+echo '$PWD'
+echo \$PWD
+\e\c\h\o \$PWD
+\e\c\h\o $PWD
+echo R$PWD"PP"
+echo R$PWD'PP'
+Ñ
+Ñexit
+exit
+ls -l
+echo $PWD
+echo '$PWD'
+echo "$PWD"
+echo \$PWD
+echo RR$PWD"PP"
+exit
+./minishell
+;;
+echo $?
+ls -la
+echo $?
+echo $?
+echo $?
+echo $?
+exit
+echo $?
+echo $?L\
+echo $?L
+./minishell
+;;
+echo $?
+exit
+echo $?
+exit
+./minishell
+;;
+echo $?
+exit
+echo $?
+exit
+./minishell
+;;
+echo $?
+exit
+exit
+./minishell
+;
+echo $?
+exit
+echo $?
+exit
+./minishell
+;;
+echo $?
+exit
+echo $?
+exit
+pr
+lss
+lll
+lllll
+wer
+ls ::pp
+exit
+export t='p\p'
+echo $t
+exit
+export t='p\p'
+echo $t
+echo $PWD
+echo R$PWD'p'

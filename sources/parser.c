@@ -1,5 +1,33 @@
 #include "minishell.h"
 
+static int   ft_insert_env(t_data *data, int x, int i, char **env)
+{
+    int len;
+    int start;
+    char    *key;
+
+    len = 0;
+    start = i;
+    data->flg.res = data->argv[x][i];
+    while (!(ft_strchr(" \"$\'<>\\`\0?", data->argv[x][i++])))
+        len++;
+    if (len > 0 || data->flg.res == 63)
+    {
+        if (data->flg.res == 63)
+        {
+            key = ft_itoa(data->ret);
+            *env = ft_strdup(key);
+        }
+        else
+        {
+            key = ft_substr(data->argv[x], start, len);
+            *env = ft_strdup(get_var(data->env, key));
+        }
+        free(key);
+    }
+    return (len);
+}
+
 static int ft_quotes(char c, int *dquote, int *squote, int ret)
 {
     if(c == 34)
@@ -30,66 +58,51 @@ static int ft_quotes(char c, int *dquote, int *squote, int ret)
 static void ft_unpack_argv(t_data *data, int x, int i)
 {
     char    *insert;
+    char    *env;
+    char    *temp;
     int     dquote;
     int     squote;
+    int     omit;
 
     insert = ft_strdup("");
     dquote = 0;
     squote = 0;
+    omit = 0;
     while (data->argv[x][i])
     {
         if (ft_quotes(data->argv[x][i], &dquote, &squote, 0))
             i++;
         else
         {
-        if(data->argv[x][i] == 92)
-        {
-            if (squote)
-                insert = ft_charjoin(insert, data->argv[x][i]);
-            else if (!dquote || (dquote && (data->argv[x][i + 1] == 34 || data->argv[x][i + 1] == 36 || data->argv[x][i + 1] == 92 || data->argv[x][i + 1] == 96)))
+            if(data->argv[x][i] == 92)
             {
-                i++;
-                insert = ft_charjoin(insert, data->argv[x][i]);
+                if (squote)
+                    insert = ft_charjoin(insert, data->argv[x][i]);
+                else if (!dquote || (dquote && (data->argv[x][i + 1] == 34 || data->argv[x][i + 1] == 36 || data->argv[x][i + 1] == 92 || data->argv[x][i + 1] == 96)))
+                {
+                    if (data->argv[x][i + 1] == 36)
+                        omit = 1;
+                    i++;
+                    insert = ft_charjoin(insert, data->argv[x][i]);
+                }
+                else
+                    insert = ft_charjoin(insert, data->argv[x][i]);
             }
-            else
+            else if (data->argv[x][i] == 36 && !omit && !squote)
+            {
+                i += ft_insert_env(data, x, i + 1, &env);
+                temp = insert;
+                insert = ft_strjoin(temp, env);
+                free(temp);
+                omit = 0;
+            }
+            else if (((data->argv[x][i] == 34 && !squote) || (data->argv[x][i] == 39 && !dquote)) || data->argv[x][i] != 92)
                 insert = ft_charjoin(insert, data->argv[x][i]);
-        }
-        else if (((data->argv[x][i] == 34 && !squote) || (data->argv[x][i] == 39 && !dquote)) || data->argv[x][i] != 92)
-            insert = ft_charjoin(insert, data->argv[x][i]);
-        i++;
+            i++;
         }
     }
     free(data->argv[x]);
     data->argv[x] = ft_strdup(insert);
-}
-
-static void ft_decrypt_env(t_data *data, int x, int i, char **output)
-{
-    char *temp;
-    char *prefix;
-    char *insert;
-
-    prefix = NULL;
-    while (data->argv[x][++i])
-    {
-        if (data->argv[x][i] != '$')
-            data->flg.length++;
-        ft_flags(data, data->argv[x][i], 1);
-        if (ft_strchr("$", data->argv[x][i]) && data->flg.quotes != 39 && !data->flg.esc)
-        {
-            ft_set_prefix(data, x, &prefix);
-            ft_substitute_env(data, x, &i, &insert);
-            ft_join_all(&temp, &prefix, &insert, output);
-            data->flg.swap = 1;
-        }
-    }
-    if (data->flg.swap)
-    {
-        if (*output == NULL)
-            *output = ft_strdup(prefix);
-        ft_finalize(data, output, &temp, x);
-        data->flg.swap = 0;
-    }
 }
 
 void        ft_parser(t_data *data, int x)
@@ -104,7 +117,6 @@ void        ft_parser(t_data *data, int x)
         i = -1;
         data->flg.begin = 0;
         data->flg.length = 0;
-        ft_decrypt_env(data, x, i, &output);
         ft_unpack_argv(data, x, 0);
     }
     ft_sorter(data);

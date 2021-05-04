@@ -16,7 +16,8 @@ void ft_init(t_data **data)
     (*data)->len = 0;
     (*data)->fd0 = 0;
     (*data)->fd1 = 1;
-	(*data)->ret = 0;
+	(*data)->history = 0;
+	// (*data)->ret = 0;
 }
 
 void	ft_shell_prompt()
@@ -29,6 +30,7 @@ static void	ft_input(t_data *data)
 	char	str[3];
 	int		len;
 
+	data->ret = 0;
 	while (1)
 	{	
 		len = read(0, str, 3);
@@ -42,8 +44,8 @@ static void	ft_input(t_data *data)
 		if (str[0] == '\n')
 		{
 			data->line[data->len - 1] = 0;
-			if (data->line[0])
-				add_hist(data->hist, data->line);
+			// if (data->line[0])
+			// 	add_hist(data->hist, data->line);
 			ft_validate_line(data, -1);
 			ft_shell_prompt();
 			tputs(save_cursor, 1, &ft_putchar);
