@@ -29,14 +29,6 @@ typedef struct s_hist
 	char	**cmds;
 }				t_hist;
 
-typedef struct	s_pipeline
-{
-	int fdin[2];
-	int fdout[2];
-	int pids[100];
-	int pipenum;
-}				t_pipeline;
-
 typedef struct s_flags
 {
     int     length;
@@ -65,7 +57,6 @@ typedef struct s_data
     t_flags flg;
 	t_hist	*hist;
 	t_list	*env;
-	t_pipeline	*pl;
 }               t_data;
 
 // parser.c //

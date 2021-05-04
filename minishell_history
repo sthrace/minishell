@@ -77,3 +77,8 @@ ls | wc
 yes | head | wc
 ls ; ls ; ls
 ls ; ls ; ls ; ls
+ls | wc
+yes | head
+ls
+ls;ls
+ls;ls;ls

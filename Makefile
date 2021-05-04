@@ -3,17 +3,17 @@ NAME		= minishell
 CC			= clang
 CFLAGS		= -g3 -Wall -Wextra -Werror
 
-# SFLAGS		= -fsanitize=address -fno-omit-frame-pointer \
-# 			-fsanitize=undefined -fsanitize=nullability \
-# 			-fsanitize=array-bounds -fsanitize=pointer-overflow \
-# 			-Wall -Wextra -Werror
-SFLAGS		=
+SFLAGS		= -fsanitize=address -fno-omit-frame-pointer \
+			-fsanitize=undefined -fsanitize=nullability \
+			-fsanitize=array-bounds -fsanitize=pointer-overflow \
+			-Wall -Wextra -Werror
+# SFLAGS		=
 RM			= rm -f
 
 #FILES
 FLS			= minishell.c termcap.c lexer.c validator.c parser.c \
 				redirect.c execute.c builtins.c utils.c env.c \
-				env_printer.c history.c pipes.c
+				env_printer.c history.c
 
 SRCS_DIR	= sources/
 HEADER		= $(SRCS_DIR)minishell.h

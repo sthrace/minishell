@@ -79,11 +79,9 @@ int	main(int argc, char **argv, char *envp[])
 	t_data	*data;
 	t_list	*env;
 	t_hist	hist;
-	t_pipeline pl;
 
 	env = envp_to_lst(envp);
 	init_hist(&hist);
-	pl.pipenum = 0;
 
 	if (argc != 1 && !argv[0])
 	{
@@ -93,7 +91,6 @@ int	main(int argc, char **argv, char *envp[])
 	ft_init(&data);
 	data->env = env;
 	data->hist = &hist;
-	data->pl = &pl;
 	ft_set_term(1);
 	ft_shell_prompt();
 	ft_input(data);

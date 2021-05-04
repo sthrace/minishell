@@ -1,55 +1,25 @@
 #include "minishell.h"
 
-// static void	ft_execute(t_data *data, char *file)
-// {
-// 	extern char	**environ;
-
-// 	signal(SIGINT, &child_sig_handler);
-// 	signal(SIGQUIT, &child_sig_handler);
-// 	if (!fork())
-// 	{
-// 		if (data->fd0 > 0)
-// 			dup2(data->fd0, 0);
-// 		if (data->fd1 > 1)
-// 			dup2(data->fd1, 1);
-// 		data->ret = execve(file, data->argv, environ);
-// 		if (data->ret && errno == EACCES)
-// 			printf("bash: %s: %s\n", file, strerror(errno));
-// 		exit(data->ret);
-// 	}
-// 	wait(&data->ret);
-// 	if (WIFEXITED(data->ret))
-// 		data->ret = WEXITSTATUS(data->ret);
-// }
-
-int	ft_execute(t_data *data, char *file)
+static void	ft_execute(t_data *data, char *file)
 {
 	extern char	**environ;
 
-	data->pl->fdin[0] = data->pl->fdout[0];
-	data->pl->fdin[1] = data->pl->fdout[1];
-	if (data->pl->pipenum > 0)
-		pipe(data->pl->fdout);
-
-	int pid = fork();
-	if (pid == 0)
+	signal(SIGINT, &child_sig_handler);
+	signal(SIGQUIT, &child_sig_handler);
+	if (!fork())
 	{
-		// Child thread
-		if (data->pl->pipenum  > 0)								// fdout != 0
-		{
-			dup2(data->pl->fdout[1], 1);
-			close(data->pl->fdout[0]);
-		}
-		if (data->pl->pipenum  > 1 || data->pl->pipenum  < 0)	// fdin != 0
-			dup2(data->pl->fdin[0], 0);
-		exit(execve(file, data->argv, environ));
+		if (data->fd0 > 0)
+			dup2(data->fd0, 0);
+		if (data->fd1 > 1)
+			dup2(data->fd1, 1);
+		data->ret = execve(file, data->argv, environ);
+		if (data->ret && errno == EACCES)
+			printf("bash: %s: %s\n", file, strerror(errno));
+		exit(data->ret);
 	}
-	// Parent thread
-	if (data->pl->pipenum  > 0)									// fdout != 0
-		close(data->pl->fdout[1]);
-	if (data->pl->pipenum  > 1 || data->pl->pipenum  < 0)		// fdin != 0
-		close(data->pl->fdin[0]);
-	return (pid);
+	wait(&data->ret);
+	if (WIFEXITED(data->ret))
+		data->ret = WEXITSTATUS(data->ret);
 }
 
 static char	**ft_split_path(t_data *data)
@@ -97,13 +67,7 @@ void	ft_binsearch(t_data *data, int cnt, char *dir)
 			printf("bash: %s: command not found\n", data->argv[0]);
 		ft_free_array(paths);
 		if (data->ret != -1)
-		{
-			int i;
-			i  = data->pl->pipenum;
-			if (data->pl->pipenum < 0)
-				i = data->pl->pipenum * -1 + 1;
-			data->pl->pids[i] = ft_execute(data, file);
-		}
+			ft_execute(data, file);
 	}
 }
 
