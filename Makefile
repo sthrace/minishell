@@ -27,10 +27,10 @@ LIBFT		= $(LIBFT_DIR)libft.a
 all:		$(NAME)
 
 $(NAME):	tools writeComp $(OBJS) writeOK
-			$(CC) $(SFLAGS) -o $(NAME) -ltermcap $(OBJS) $(LIBFT)
+			$(CC) $(CFLAGS) -o $(NAME) -ltermcap $(OBJS) $(LIBFT)
 
 %.o: %.c
-			$(CC) -c $(SFLAGS) -o $@ $<
+			$(CC) -c $(CFLAGS) -o $@ $<
 			printf "$(WHITE)██"		
 
 tools:

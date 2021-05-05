@@ -82,3 +82,55 @@ yes | head
 ls
 ls;ls
 ls;ls;ls
+ls;pwd;echo Kirill
+ls;pwd;echo Kirill
+ls;pwd;echo Kirill
+ls ; pwd ; echo Kirill
+make fclean
+exit
+echo Kirill;pwd
+echo Kirill;pwd;ls
+exit
+ls;pwd;ls
+exit
+ls;pwd;ls;pwd
+exit
+ls;pwd;ls;pwd
+exit
+ls;pwd;ls;pwd
+exit
+ls;pwd;ls;pwd
+ls;pwd;ls;echo Kirill
+ls ; pwd ; ls
+"ls;pwd";ls   ;   pwd
+exit
+exexit
+exit
+asdsdfs
+exit
+ls
+exit
+ls -la
+ls;pwd;ls;echo Kirill
+exit
+ls
+exit
+ls
+exit
+ls
+exit
+ls
+exit
+ls
+exit
+exit
+echo Kirill
+eChO Kirill
+ECHO Kirill
+echor Kirill
+exit
+pwd
+PWD
+pWD
+pWd
+exit

@@ -59,9 +59,9 @@ void	ft_binsearch(t_data *data, int cnt, char *dir)
 			file = ft_strjoin(dir, data->argv[0]);
 			free(dir);
 			data->ret = stat(file, buf);
+			free(file);
 			if (!data->ret)
 				break ;
-			free(file);
 		}
 		if (data->ret == -1)
 			printf("bash: %s: command not found\n", data->argv[0]);
@@ -75,20 +75,16 @@ void	ft_sorter(t_data *data)
 {
 	int	i;
 
-	if ((!(ft_strncmp(data->argv[0], "echo", 4)) || \
-	!(ft_strncmp(data->argv[0], "ECHO", 4))) && \
+	if ((!(ft_strncmp_case(data->argv[0], "echo", 4))) && \
 	ft_strlen(data->argv[0]) == 4)
 		ft_echo(data);
-	else if ((!(ft_strncmp(data->argv[0], "cd", 2)) || \
-	!(ft_strncmp(data->argv[0], "CD", 2))) && \
+	else if ((!(ft_strncmp_case(data->argv[0], "cd", 2))) && \
 	ft_strlen(data->argv[0]) == 2)
 		ft_cd(data);
-	else if ((!(ft_strncmp(data->argv[0], "pwd", 3)) || \
-	!(ft_strncmp(data->argv[0], "PWD", 3))) && \
+	else if ((!(ft_strncmp_case(data->argv[0], "pwd", 3))) && \
 	ft_strlen(data->argv[0]) == 3)
 		ft_pwd();
-	else if ((!(ft_strncmp(data->argv[0], "export", 6)) || \
-	!(ft_strncmp(data->argv[0], "EXPORT", 6))) && \
+	else if ((!(ft_strncmp_case(data->argv[0], "export", 6))) && \
 	ft_strlen(data->argv[0]) == 6)
 	{
 		if (data->argc == 1)
@@ -100,23 +96,20 @@ void	ft_sorter(t_data *data)
 				set_var(&data->env, data->argv[i++], 0);
 		}
 	}
-	else if ((!(ft_strncmp(data->argv[0], "unset", 5)) || \
-	!(ft_strncmp(data->argv[0], "UNSET", 5))) && \
+	else if ((!(ft_strncmp_case(data->argv[0], "unset", 5))) && \
 	ft_strlen(data->argv[0]) == 5)
 	{
 		i = 1;
 		while (data->argv[i])
 			unset_var(&data->env, data->argv[i++]);
 	}
-	else if ((!(ft_strncmp(data->argv[0], "env", 3)) || \
-	!(ft_strncmp(data->argv[0], "ENV", 3))) && \
+	else if ((!(ft_strncmp_case(data->argv[0], "env", 3))) && \
 	ft_strlen(data->argv[0]) == 3)
 		print_env(data->env);
-	else if ((!(ft_strncmp(data->argv[0], "exit", 4)) || \
-	!(ft_strncmp(data->argv[0], "EXIT", 4))) && \
+	else if ((!(ft_strncmp_case(data->argv[0], "exit", 4))) && \
 	ft_strlen(data->argv[0]) == 4)
 		ft_exit(data, -1);
 	else
 		ft_binsearch(data, -1, NULL);
-	free(data->argv);
+	ft_free_array(data->argv);
 }

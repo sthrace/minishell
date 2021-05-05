@@ -82,7 +82,8 @@ void	ft_get_cmd(t_data *data, int i)
         if (data->line[i] == 59 && !data->flg.quotes && !data->flg.esc)
 		{
 			data->cmd = ft_substr(data->line, start, len);
-			start = i + 1;
+			i++;
+			start = i;
 			len = 0;
 			ft_crossroads(data);
 			free(data->cmd);

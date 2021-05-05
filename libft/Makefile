@@ -74,7 +74,8 @@ SRCS	=\
 		ft_lstnew.c\
 		ft_lstsize.c\
 		get_lines.c\
-		ft_putarr.c
+		ft_putarr.c\
+		ft_strncmp_case.c
 
 OBJS	= $(SRCS:.c=.o)
 OBJS_B	= $(SRCS_B:.c=.o)

@@ -103,6 +103,7 @@ static void ft_unpack_argv(t_data *data, int x, int i)
     }
     free(data->argv[x]);
     data->argv[x] = ft_strdup(insert);
+    free(insert);
 }
 
 void        ft_parser(t_data *data, int x)
@@ -119,5 +120,6 @@ void        ft_parser(t_data *data, int x)
         data->flg.length = 0;
         ft_unpack_argv(data, x, 0);
     }
+    free(output);
     ft_sorter(data);
 }
