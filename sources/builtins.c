@@ -7,26 +7,43 @@ void	ft_pwd(void)
 	printf("%s\n", getcwd(buf, 4096));
 }
 
-void	ft_cd(t_data *data)
+void	ft_set_dir(t_data *data, char **newdir, char **pwd)
 {
-	int		i;
-	char	*newdir;
-	int		ret;
+	char	buf[4096];
 
-	newdir = ft_strdup("");
-	if (data->argc == 2)
-		newdir = ft_strjoin(newdir, data->argv[1]);
-	else if (data->argc > 2)
+	free(*newdir);
+	*pwd = ft_strjoin("PWD=", getcwd(buf, 4096));
+	set_var(&data->env, *pwd, 0);
+	free(*pwd);
+}
+
+void	ft_cd(t_data *data, int ret, char *pwd, char *oldpwd)
+{
+	char	buf[4096];
+	char	*newdir;
+	char	*temp;
+
+	temp = ft_strdup(getcwd(buf, 4096));
+	oldpwd = ft_strjoin("OLDPWD=", temp);
+	free(temp);
+	set_var(&data->env, oldpwd, 0);
+	free(oldpwd);
+	if (data->argc == 1 && get_var(data->env, "HOME"))
+		newdir = ft_strdup(get_var(data->env, "HOME"));
+	else if (data->argc == 1 && !get_var(data->env, "HOME"))
 	{
-		i = 0;
-		while (++i < data->argc)
-			newdir = ft_strjoin(newdir, data->argv[i]);
+		printf("bash: cd: HOME not set\n");
+		return ;
 	}
-	else
-		printf("\n");
+	else if (data->argc == 2)
+		newdir = ft_strdup(data->argv[1]);
 	ret = chdir(newdir);
 	if (ret == -1)
+	{
 		printf("bash: cd: %s: %s\n", newdir, strerror(errno));
+		return ;
+	}
+	ft_set_dir(data, &newdir, &pwd);
 }
 
 void	ft_echo(t_data *data)

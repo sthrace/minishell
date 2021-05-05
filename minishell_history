@@ -599,3 +599,65 @@ ls;pwd
 echo $PWD
 echo R$PWD"PP"
 exit
+cd ..
+pwd
+echo $PWD
+echo $OLDPWD
+cd ..
+pwd
+cd
+pwd
+exit
+pwd
+cd
+exit
+cd
+pwd
+cd
+pwd
+cd 
+pwd
+unset HOME
+env
+cd
+pwd
+cd ..
+pwd
+cd
+cd
+pwd
+env
+cd
+pwd
+cd
+pwd
+cd 
+pwd
+xit
+exit
+pwd
+cd
+pwd
+cd ..
+cd
+cd
+cd
+cd llp p
+exit
+pwd
+cd
+pwd
+cd
+cd
+cd
+pwd
+cd
+pwd
+cd
+pwd
+exit
+pwd
+cd
+pwd
+cd ..
+cd

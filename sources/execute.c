@@ -78,7 +78,7 @@ void	ft_sorter(t_data *data)
 	if ((!(ft_strncmpul(data->argv[0], "echo", 4))) && !data->argv[0][4])
 		ft_echo(data);
 	else if ((!(ft_strncmpul(data->argv[0], "cd", 2))) && !data->argv[0][2])
-		ft_cd(data);
+		ft_cd(data, 0, NULL, NULL);
 	else if ((!(ft_strncmpul(data->argv[0], "pwd", 3))) && !data->argv[0][3])
 		ft_pwd();
 	else if ((!(ft_strncmpul(data->argv[0], "export", 6))) && \

@@ -99,7 +99,7 @@ void    ft_sorter(t_data *data);
 // builtins.c //
 
 void ft_pwd(void);
-void ft_cd(t_data *data);
+void	ft_cd(t_data *data, int ret, char *pwd, char *oldpwd);
 void ft_echo(t_data *data);
 void ft_exit(t_data *data, int i);
 
