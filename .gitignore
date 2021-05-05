@@ -1,8 +1,10 @@
 .DS_Store
 *.o
 *.a
+*.out
 minishell
-*.dSYM
+*minishell_history
 *vscode*
+*.dSYM
 *.swp
 test*

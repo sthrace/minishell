@@ -30,7 +30,7 @@ int	add_hist(t_hist *hist, char *str)
 	if (ft_arradd(&hist->cmds, str))
 		return (1);
 	hist->size++;
-	hist->pos++;
+	hist->pos = hist->size;
 	write_str(hist->file, str, O_APPEND);
 	write_str(hist->file, "\n", O_APPEND);
 	return (0);
