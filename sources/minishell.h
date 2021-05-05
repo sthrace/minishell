@@ -59,6 +59,8 @@ typedef struct s_data
 	t_list	*env;
 }               t_data;
 
+// int         g_child;
+
 // parser.c //
 
 void        ft_parser(t_data *data, int x);

@@ -59,9 +59,9 @@ void	ft_binsearch(t_data *data, int cnt, char *dir)
 			file = ft_strjoin(dir, data->argv[0]);
 			free(dir);
 			data->ret = stat(file, buf);
-			free(file);
 			if (!data->ret)
 				break ;
+			free(file);
 		}
 		if (data->ret == -1)
 			printf("bash: %s: command not found\n", data->argv[0]);
