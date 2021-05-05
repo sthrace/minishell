@@ -1,11 +1,9 @@
 #include "minishell.h"
 
-void	ft_cmd_split(t_data *data, int i, int len, int start)
+void	ft_cmd_split(t_data *data, int i, int len, int x)
 {
-	int		x;
+	int		start;
 
-	x = -1;
-	
 	while (++x < data->argc)
 	{
 		ft_flags(data, '\0', 0);
@@ -17,14 +15,12 @@ void	ft_cmd_split(t_data *data, int i, int len, int start)
 			ft_flags(data, data->cmd[i], 1);
 			while (data->flg.quotes && data->cmd[i])
 			{
-                len++;
-    			i += 1;
+				ft_pointer_inc(&len, &i);
 				ft_flags(data, data->cmd[i], 1);
 			}
 			if (data->cmd[i] == 0)
 				break ;
-            len++;
-    		i += 1;
+			ft_pointer_inc(&len, &i);
 		}
 		data->argv[x] = ft_substr(data->cmd, start, len);
 		len = 0;
@@ -37,11 +33,12 @@ void	ft_cmd_count(t_data *data, int i)
 	ft_flags(data, '\0', 0);
 	data->argc = 1;
 	while (data->cmd[++i] == 32)
-			;
+		;
 	while (data->cmd[i])
 	{
 		ft_flags(data, data->cmd[i], 1);
-		if (data->cmd[i] == 32 && data->cmd[i + 1] != 32 && data->cmd[i + 1] && !data->flg.quotes && !data->flg.esc)
+		if (data->cmd[i] == 32 && data->cmd[i + 1] != 32 && data->cmd[i + 1] \
+		&& !data->flg.quotes && !data->flg.esc)
 			data->argc++;
 		i++;
 	}
@@ -61,7 +58,7 @@ void	ft_crossroads(t_data *data)
 	{
 		ft_check_redirects(data, -1);
 		ft_cmd_count(data, -1);
-		ft_cmd_split(data, 0, 0, 0);
+		ft_cmd_split(data, 0, 0, -1);
 		ft_flags(data, '\0', 0);
 		ft_parser(data, -1);
 	}
@@ -77,14 +74,13 @@ void	ft_get_cmd(t_data *data, int i)
 	start = 0;
 	len = 0;
 	while (data->line[++i])
-    {
+	{
 		ft_flags(data, data->line[i], 1);
-        if (data->line[i] == 59 && !data->flg.quotes && !data->flg.esc)
+		if (data->line[i] == 59 && !data->flg.quotes && !data->flg.esc)
 		{
 			data->cmd = ft_substr(data->line, start, len);
-			i++;
-			start = i;
-			len = 0;
+			start = i + 1;
+			len = -1;
 			ft_crossroads(data);
 			free(data->cmd);
 		}
@@ -99,28 +95,20 @@ void	ft_get_cmd(t_data *data, int i)
 
 void 	ft_line(t_data *data, char *str, int len)
 {
-	if (!data->line)
+	write(1, str, len);
+	if (g_sig == 1)
 	{
-		data->line = (char *)malloc(sizeof(char) * 2);
-		data->line[0] = str[0];
-		data->line[1] = '\0';
-		data->len = len;
+		ft_line_handler(data, str, len, 3);
+		g_sig = 0;
 	}
+	if (!data->line)
+		ft_line_handler(data, str, len, 1);
 	else
 	{
 		data->len += len;
 		if (data->len > 0)
-		{
-			data->line = (char *)ft_realloc(data->line, (sizeof(char) * (data->len + 1)));
-			if (len > 0)
-				data->line[data->len - 1] = str[0];
-			data->line[data->len] = '\0';
-		}
+			ft_line_handler(data, str, len, 2);
 		else
-		{
-			data->len = 0;
-			data->line = NULL;
-			free(data->line);
-		}
+			ft_line_handler(data, str, len, 3);
 	}
 }

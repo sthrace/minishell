@@ -37,6 +37,9 @@ typedef struct s_flags
     int     swap;
     int     res;
     int     quotes;
+    int     dquote;
+    int     squote;
+    int     omit;
     int     esc;
     int     fdread;
     int     fdwrite;
@@ -59,18 +62,11 @@ typedef struct s_data
 	t_list	*env;
 }               t_data;
 
-// int         g_child;
+int         g_sig;
 
 // parser.c //
 
 void        ft_parser(t_data *data, int x);
-
-// parser_utils.c //
-
-void ft_set_prefix(t_data *data, int x, char **prefix);
-int  ft_substitute_env(t_data *data, int x, int *i, char **insert);
-void ft_join_all(char **temp, char **prefix, char **insert, char **output);
-void ft_finalize(t_data *data, char **output, char **temp, int x);
 
 // term.c //
 
@@ -91,6 +87,11 @@ void    ft_flags(t_data *data, char c, int type);
 
 void    ft_check_redirects(t_data *data, int i);
 
+// signal.c //
+
+void	sig_handler(int sig);
+void	child_sig_handler(int sig);
+
 // execute.c //
 
 void    ft_sorter(t_data *data);
@@ -105,6 +106,10 @@ void ft_exit(t_data *data, int i);
 // utils.c //
 
 void ft_free_array(char **array);
+void    ft_line_handler(t_data *data, char *str, int len, int type);
+void	ft_pointer_inc(int *a, int *b);
+void	ft_str_handle(t_data *data, char **insert, char **env);
+void	ft_set_argv(t_data *data, int x, char **insert);
 
 // env.c //
 
@@ -116,6 +121,7 @@ int 	set_var(t_list **begin, char *str, int n);
 int		unset_var(t_list **begin, char *str);
 
 // history.c //
+
 int		init_hist(t_hist *hist);
 int		read_file(char *file, char ***arr);
 int		write_str(char *file, char *str, int mode);
@@ -125,7 +131,5 @@ int		add_hist(t_hist *hist, char *str);
 
 void    ft_init(t_data **data);
 void	ft_shell_prompt();
-void	sig_handler(int sig);
-void	child_sig_handler(int sig);
 
 #endif

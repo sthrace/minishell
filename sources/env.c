@@ -31,7 +31,7 @@ int	set_var(t_list **begin, char *str, int n)
 	char	**key_val;
 
 	if (ft_strchr(str, '=') == str)
-		return(printf("bash: export: `%s': not a valid identifier\n", str));
+		return (printf("bash: export: `%s': not a valid identifier\n", str));
 	key_val = ft_split(str, '=');
 	if (key_val == 0)
 		return (1);

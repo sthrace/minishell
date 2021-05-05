@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-int		read_file(char *file, char ***arr)
+int	read_file(char *file, char ***arr)
 {
 	int		fd;
 	int		size;
@@ -13,7 +13,7 @@ int		read_file(char *file, char ***arr)
 	return (size);
 }
 
-int		write_str(char *file, char *str, int mode)		// mode = O_APPEND, O_TRUNC
+int	write_str(char *file, char *str, int mode)
 {
 	int	fd;
 
@@ -25,7 +25,7 @@ int		write_str(char *file, char *str, int mode)		// mode = O_APPEND, O_TRUNC
 	return (0);
 }
 
-int		add_hist(t_hist *hist, char *str)
+int	add_hist(t_hist *hist, char *str)
 {
 	if (ft_arradd(&hist->cmds, str))
 		return (1);
@@ -36,7 +36,7 @@ int		add_hist(t_hist *hist, char *str)
 	return (0);
 }
 
-int		init_hist(t_hist *hist)
+int	init_hist(t_hist *hist)
 {
 	hist->file = ft_strdup("minishell_history");
 	if (hist->file == 0)
