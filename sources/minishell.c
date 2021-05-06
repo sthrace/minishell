@@ -46,6 +46,7 @@ static void	ft_input(t_data *data)
 		if (str[0] == '\4')
 		{
 			printf("exit\n");
+			ft_set_term(2);
 			break ;
 		}
 	}
@@ -56,6 +57,7 @@ int	main(int argc, char **argv, char *envp[])
 	t_data	*data;
 	t_list	*env;
 	t_hist	hist;
+	t_pl	pl;
 
 	env = envp_to_lst(envp);
 	init_hist(&hist);
@@ -68,6 +70,9 @@ int	main(int argc, char **argv, char *envp[])
 	data->ret = 0;
 	data->env = env;
 	data->hist = &hist;
+	data->pl = &pl;
+	data->pl->state = 0;
+	data->pl->count = 0;
 	g_sig = 0;
 	ft_shell_prompt();
 	signal(SIGQUIT, &sig_handler);

@@ -24,7 +24,7 @@ void	ft_clear_cmd(t_data *data)
 {
 	while (data->flg.length--)
 	{
-		data->cmd[data->flg.begin] = 32;
+		data->cmd[data->flg.begin] = ' ';
 		data->flg.begin++;
 	}
 	data->flg.fdread = 0;
@@ -60,16 +60,16 @@ void	ft_select_source(t_data *data, int *i)
 	data->flg.length = 0;
 	data->flg.fdamp = 0;
 	if (data->flg.fdread == 1 || data->flg.fdwrite > 0)
-		data->cmd[*i] = 32;
+		data->cmd[*i] = ' ';
 	if (data->flg.fdwrite == 2)
-		data->cmd[*i + 1] = 32;
-	while (data->cmd[*i] == 32)
+		data->cmd[*i + 1] = ' ';
+	while (data->cmd[*i] == ' ')
 		*i += 1;
 	data->flg.begin = *i;
-	while (data->cmd[*i] != 32 && data->cmd[*i] != 62 && \
-			data->cmd[*i] != 60 && data->cmd[*i])
+	while (data->cmd[*i] != ' ' && data->cmd[*i] != '>' && \
+			data->cmd[*i] != '<' && data->cmd[*i])
 	{
-		if (data->cmd[*i] == 38)
+		if (data->cmd[*i] == '&')
 		{
 			data->flg.fdamp = 1;
 			data->fd1 = ft_atoi(&data->cmd[*i + 1]);
@@ -79,7 +79,7 @@ void	ft_select_source(t_data *data, int *i)
 	}
 	ft_set_fd(data);
 	ft_clear_cmd(data);
-	if (data->cmd[*i] == 0 || data->cmd[*i] == 62 || data->cmd[*i] == 60)
+	if (data->cmd[*i] == 0 || data->cmd[*i] == '>' || data->cmd[*i] == '<')
 		*i -= 1;
 }
 
@@ -91,15 +91,15 @@ void	ft_check_redirects(t_data *data, int i)
 	while (data->cmd[++i])
 	{
 		ft_flags(data, data->cmd[i], 1);
-		if (data->cmd[i] == 62 && !data->flg.quotes && !data->flg.esc)
+		if (data->cmd[i] == '>' && !data->flg.quotes && !data->flg.esc)
 		{
 			ft_close_fd(data, 1);
 			data->flg.fdwrite++;
-			if (data->cmd[i + 1] == 62)
+			if (data->cmd[i + 1] == '>')
 				data->flg.fdwrite++;
 			ft_select_source(data, &i);
 		}
-		else if (data->cmd[i] == 60 && !data->flg.quotes && !data->flg.esc)
+		else if (data->cmd[i] == '<' && !data->flg.quotes && !data->flg.esc)
 		{
 			ft_close_fd(data, 0);
 			data->flg.fdread = 1;
