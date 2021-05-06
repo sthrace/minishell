@@ -661,3 +661,37 @@ cd
 pwd
 cd ..
 cd
+$USER=$USER
+exit
+$USER=$USER
+exit
+$USER
+$USER=$USER
+exit
+$USER=$USER
+exit
+$USER
+$USER=
+$USER=$USER
+export $USER=123
+exit
+export $USER=123
+env
+exit
+ls
+ls
+pwd
+exit
+ls
+pwd
+exit
+ls
+pwd
+exit
+cd /usr/asd
+cd /pasd
+exit
+$USER=$USER
+exit
+export
+exit

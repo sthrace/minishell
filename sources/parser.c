@@ -7,7 +7,7 @@ static int   ft_insert_env(t_data *data, int x, int i, char **env)
     data->len = 0;
     data->flg.start = i;
     data->flg.res = data->argv[x][i];
-    while (!(ft_strchr(" \"$\'<>\\`\0?", data->argv[x][i++])))
+    while (!(ft_strchr("= \"$\'<>\\`\0?", data->argv[x][i++])))
         data->len++;
     if (data->len > 0 || data->flg.res == 63)
     {

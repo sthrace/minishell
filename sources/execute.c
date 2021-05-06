@@ -22,6 +22,8 @@ static void	ft_execute(t_data *data, char *file)
 	signal(SIGQUIT, &sig_handler);
 	if (WIFEXITED(data->ret))
 		data->ret = WEXITSTATUS(data->ret);
+	ft_free_array(data->argv);
+	free(data->argv);
 }
 
 static char	**ft_split_path(t_data *data)
@@ -58,9 +60,9 @@ void	ft_binsearch(t_data *data, int cnt, char *dir, char *file)
 			file = ft_strjoin(dir, data->argv[0]);
 			free(dir);
 			data->ret = stat(file, buf);
+			free(file);
 			if (!data->ret)
 				break ;
-			free(file);
 		}
 		ft_free_array(paths);
 		if (data->ret == -1 || !paths)
