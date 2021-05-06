@@ -104,8 +104,8 @@ void	ft_binsearch(t_data *data, int cnt, char *dir, char *file)
 			printf("bash: %s: %s\n", data->argv[0], strerror(errno));
 		else if (data->pl->state == 0)
 			ft_execute(data, file);
-		else
-			data->pl->pids[data->pl->count - 1] = execute_pipe(data, file);
+		if (data->pl->state != 0)
+			data->pl->pids[data->pl->count - 1] = execute_pipe(data, file);		// have to execute pipe on error (yess | head | wc)
 	}
 }
 

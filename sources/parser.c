@@ -9,7 +9,7 @@ static int   ft_insert_env(t_data *data, int x, int i, char **env)
     data->flg.res = data->argv[x][i];
     if (data->argv[x][i] == '$')
     {
-        *env = ft_strdup(ft_itoa(getpid()));
+        *env = ft_itoa(getpid());
         return (1);
     }
     while (!(ft_strchr("= \"$\'<>\\`\0?", data->argv[x][i++])))
@@ -18,9 +18,7 @@ static int   ft_insert_env(t_data *data, int x, int i, char **env)
     {
         if (data->flg.res == '?')
         {
-            key = ft_itoa(data->ret);
-            *env = ft_strdup(key);
-			free(key);
+            *env = ft_itoa(data->ret);
 			return (data->len);
         }
         key = ft_substr(data->argv[x], data->flg.start, data->len);
@@ -95,6 +93,7 @@ static void ft_unpack_argv(t_data *data, int x, int i)
             {
                 i += ft_insert_env(data, x, i + 1, &env);
 				ft_str_handle(data, &insert, &env);
+				free(env);
             }
             else if (((data->argv[x][i] == '"' && !data->flg.squote) || \
 			(data->argv[x][i] == '\'' && !data->flg.dquote)) || data->argv[x][i] != '\\')
