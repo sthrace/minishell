@@ -7,11 +7,16 @@ static int   ft_insert_env(t_data *data, int x, int i, char **env)
     data->len = 0;
     data->flg.start = i;
     data->flg.res = data->argv[x][i];
+    if (data->argv[x][i] == '$')
+    {
+        *env = ft_strdup(ft_itoa(getpid()));
+        return (1);
+    }
     while (!(ft_strchr("= \"$\'<>\\`\0?", data->argv[x][i++])))
         data->len++;
-    if (data->len > 0 || data->flg.res == 63)
+    if (data->len > 0 || data->flg.res == '?')
     {
-        if (data->flg.res == 63)
+        if (data->flg.res == '?')
         {
             key = ft_itoa(data->ret);
             *env = ft_strdup(key);
@@ -30,7 +35,7 @@ static int   ft_insert_env(t_data *data, int x, int i, char **env)
 
 static int ft_quotes(t_data *data, char c, int ret)
 {
-    if(c == 34)
+    if(c == '"')
     {
         if (!data->flg.squote)
         {
@@ -41,7 +46,7 @@ static int ft_quotes(t_data *data, char c, int ret)
             ret = 1;
         }
     } 
-    else if(c == 39)
+    else if(c == '\'')
     {
         if (!data->flg.dquote)
         {
@@ -59,11 +64,11 @@ static void	ft_esc_symb(t_data *data, int x, int *i, char **insert)
 {
 	if (data->flg.squote)
         *insert = ft_charjoin(*insert, data->argv[x][*i]);
-    else if (!data->flg.dquote || (data->flg.dquote && (data->argv[x][*i + 1] == 34 \
-	|| data->argv[x][*i + 1] == 36 || data->argv[x][*i + 1] == 92 \
-	|| data->argv[x][*i + 1] == 96)))
+    else if (!data->flg.dquote || (data->flg.dquote && (data->argv[x][*i + 1] == '"' \
+	|| data->argv[x][*i + 1] == '$' || data->argv[x][*i + 1] == '\\' \
+	|| data->argv[x][*i + 1] == '`')))
     {
-        if (data->argv[x][*i + 1] == 36)
+        if (data->argv[x][*i + 1] == '$')
             data->flg.omit = 1;
         *i += 1;
         *insert = ft_charjoin(*insert, data->argv[x][*i]);
@@ -84,15 +89,15 @@ static void ft_unpack_argv(t_data *data, int x, int i)
             i++;
         else
         {
-            if(data->argv[x][i] == 92)
+            if(data->argv[x][i] == '\\')
 				ft_esc_symb(data, x, &i, &insert);
-            else if (data->argv[x][i] == 36 && !data->flg.omit && !data->flg.squote)
+            else if (data->argv[x][i] == '$' && !data->flg.omit && !data->flg.squote)
             {
                 i += ft_insert_env(data, x, i + 1, &env);
 				ft_str_handle(data, &insert, &env);
             }
-            else if (((data->argv[x][i] == 34 && !data->flg.squote) || \
-			(data->argv[x][i] == 39 && !data->flg.dquote)) || data->argv[x][i] != 92)
+            else if (((data->argv[x][i] == '"' && !data->flg.squote) || \
+			(data->argv[x][i] == '\'' && !data->flg.dquote)) || data->argv[x][i] != '\\')
                 insert = ft_charjoin(insert, data->argv[x][i]);
             i++;
         }

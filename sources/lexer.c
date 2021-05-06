@@ -7,10 +7,10 @@ void	ft_cmd_split(t_data *data, int i, int len, int x)
 	while (++x < data->argc)
 	{
 		ft_flags(data, '\0', 0);
-		while (data->cmd[i] == 32)
+		while (data->cmd[i] == ' ')
 			i++;
 		start = i;
-		while (data->cmd[i] != 32 && data->cmd[i])
+		while (data->cmd[i] != ' ' && data->cmd[i])
 		{
 			ft_flags(data, data->cmd[i], 1);
 			while (data->flg.quotes && data->cmd[i])
@@ -32,12 +32,12 @@ void	ft_cmd_count(t_data *data, int i)
 {
 	ft_flags(data, '\0', 0);
 	data->argc = 1;
-	while (data->cmd[++i] == 32)
+	while (data->cmd[++i] == ' ')
 		;
 	while (data->cmd[i])
 	{
 		ft_flags(data, data->cmd[i], 1);
-		if (data->cmd[i] == 32 && data->cmd[i + 1] != 32 && data->cmd[i + 1] \
+		if (data->cmd[i] == ' ' && data->cmd[i + 1] != ' ' && data->cmd[i + 1] \
 		&& !data->flg.quotes && !data->flg.esc)
 			data->argc++;
 		i++;
@@ -52,18 +52,36 @@ void	ft_cmd_count(t_data *data, int i)
 	}
 }
 
+void	check_pipes(t_data *data, int i)
+{
+	if (data->line[i] == '|' || data->pl->state > 0)
+	{
+		data->pl->state++;
+		data->pl->count++;
+	}
+	if (!(data->line[i] == '|') && data->pl->state > 0)
+		data->pl->state *= -1;
+}
+
 void	ft_crossroads(t_data *data)
 {
-	if (!(ft_strchr(data->cmd, '|')))
+	ft_check_redirects(data, -1);
+	ft_cmd_count(data, -1);
+	ft_cmd_split(data, 0, 0, -1);
+	ft_flags(data, '\0', 0);
+	ft_parser(data, -1);
+
+	if (data->pl->state < 0)
 	{
-		ft_check_redirects(data, -1);
-		ft_cmd_count(data, -1);
-		ft_cmd_split(data, 0, 0, -1);
-		ft_flags(data, '\0', 0);
-		ft_parser(data, -1);
+		while (data->pl->count--)
+		{
+			waitpid(data->pl->pids[data->pl->count], &data->ret, 0);
+			// if (data->ret == 65280)
+			// 	printf("Command not found\n");
+		}
+		data->pl->state = 0;
+		data->pl->count = 0;
 	}
-	else
-		printf("piped command\n");
 }
 
 void	ft_get_cmd(t_data *data, int i)
@@ -76,8 +94,9 @@ void	ft_get_cmd(t_data *data, int i)
 	while (data->line[++i])
 	{
 		ft_flags(data, data->line[i], 1);
-		if (data->line[i] == 59 && !data->flg.quotes && !data->flg.esc)
+		if ((data->line[i] == ';' || data->line[i] == '|') && !data->flg.quotes && !data->flg.esc)
 		{
+			check_pipes(data, i);
 			data->cmd = ft_substr(data->line, start, len);
 			start = i + 1;
 			len = -1;
@@ -86,6 +105,7 @@ void	ft_get_cmd(t_data *data, int i)
 		}
 		len++;
 	}
+	check_pipes(data, i);
 	data->cmd = ft_substr(data->line, start, len);
 	ft_crossroads(data);
 	free(data->cmd);

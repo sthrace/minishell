@@ -15,6 +15,11 @@
 # include <signal.h>
 # include <errno.h>
 
+#define STDIN	0
+#define STDOUT	1
+#define RD	0
+#define WR	1
+
 typedef struct s_var
 {
 	char	*key;
@@ -28,6 +33,15 @@ typedef struct s_hist
 	int		pos;
 	char	**cmds;
 }				t_hist;
+
+typedef struct	s_pl
+{
+	int fdin[2];
+	int fdout[2];
+	int pids[100];
+	int state;
+	int count;
+}				t_pl;
 
 typedef struct s_flags
 {
@@ -60,6 +74,7 @@ typedef struct s_data
     t_flags flg;
 	t_hist	*hist;
 	t_list	*env;
+	t_pl	*pl;
 }               t_data;
 
 int         g_sig;

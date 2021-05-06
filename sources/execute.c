@@ -13,17 +13,46 @@ static void	ft_execute(t_data *data, char *file)
 		if (data->fd1 > 1)
 			dup2(data->fd1, 1);
 		data->ret = execve(file, data->argv, environ);
-		ft_set_term(2);
-		if (data->ret && errno == EACCES)
+		if (data->ret == -1 || errno == EACCES)
 			printf("bash: %s: %s\n", file, strerror(errno));
+		ft_set_term(2);
 		exit(data->ret);
 	}
 	wait(&data->ret);
 	signal(SIGQUIT, &sig_handler);
 	if (WIFEXITED(data->ret))
 		data->ret = WEXITSTATUS(data->ret);
-	ft_free_array(data->argv);
-	free(data->argv);
+	free(file);
+}
+
+int	execute_pipe(t_data *data, char *file)
+{
+	data->pl->fdin[RD] = data->pl->fdout[RD];
+	data->pl->fdin[WR] = data->pl->fdout[WR];
+	if (data->pl->state > 0)
+		pipe(data->pl->fdout);
+
+	int pid = fork();
+	if (pid == 0)
+	{
+		// Child thread
+		if (data->pl->state > 0)						// fdout != 0
+		{
+			dup2(data->pl->fdout[WR], STDOUT);
+			close(data->pl->fdout[RD]);
+		}
+		if (data->pl->state > 1 || data->pl->state < 0)	// fdin != 0
+		{
+			dup2(data->pl->fdin[RD], STDIN);
+		}
+		exit(execve(file, data->argv, 0));
+	}
+	// Parent thread
+	if (data->pl->state > 0)						// fdout != 0
+		close(data->pl->fdout[WR]);
+	if (data->pl->state > 1 || data->pl->state < 0)	// fdin != 0
+		close(data->pl->fdin[RD]);
+	return (pid);
 }
 
 static char	**ft_split_path(t_data *data)
@@ -50,8 +79,14 @@ void	ft_binsearch(t_data *data, int cnt, char *dir, char *file)
 	struct stat	buf[4096];
 
 	paths = ft_split_path(data);
-	if (data->argv[0][0] == 46 || data->argv[0][0] == 47)
-		ft_execute(data, ft_strdup(data->argv[0]));
+	if (data->argv[0][0] == '.' || data->argv[0][0] == '/')
+	{
+		file = ft_strdup(data->argv[0]);
+		if (data->pl->state == 0)
+			ft_execute(data, file);
+		else
+			data->pl->pids[data->pl->count - 1] = execute_pipe(data, file);
+	}
 	else if (paths)
 	{
 		while (paths[++cnt])
@@ -60,15 +95,17 @@ void	ft_binsearch(t_data *data, int cnt, char *dir, char *file)
 			file = ft_strjoin(dir, data->argv[0]);
 			free(dir);
 			data->ret = stat(file, buf);
-			free(file);
 			if (!data->ret)
 				break ;
+			free(file);
 		}
 		ft_free_array(paths);
 		if (data->ret == -1 || !paths)
 			printf("bash: %s: %s\n", data->argv[0], strerror(errno));
-		if (data->ret != -1)
+		else if (data->pl->state == 0)
 			ft_execute(data, file);
+		else
+			data->pl->pids[data->pl->count - 1] = execute_pipe(data, file);
 	}
 }
 

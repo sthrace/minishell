@@ -695,3 +695,131 @@ $USER=$USER
 exit
 export
 exit
+ls
+pwd
+ls
+ls
+pwd
+echo Kirill 
+ps
+ls
+ls
+exit
+ls
+exit
+ls
+exit
+ls
+ls -la
+exit
+exit
+ls
+ls -la
+ls |grep Make
+exit
+ls
+ls
+pwd
+exit
+"
+"
+ls;pwd;ls
+ls";"pwd
+ls";"pwd
+exit
+env
+cd ..
+ls
+pwd
+ls -la
+"/usr/abc"
+"usr/abc"
+exit
+ls
+ls -la
+"/usr/abc"
+"usr/abc"
+ls | grep Make
+yes | head | ws
+yes | head | wc
+env
+exit
+env
+exit
+env
+exit
+env
+export
+exit
+ls
+ls -la
+ls | grep Make >test
+ls >test | grep Make
+ls >test
+exit
+ls
+ls
+pwd
+exit
+"/usr/abs"
+"usr/abs"
+"/usr/abs"
+"usr/abs"
+"/usr/abs"
+"usr/abs"
+"usr/abs"
+"usr/abs"
+"usr/abs"
+"/usr/abs"
+exit
+exit
+"usr/abs"
+"/usr/abs"
+exit
+"usr/abs"
+"/usr/abs"
+echo $?
+"usr/abs"
+echo $?
+exit
+"/usr/abs"
+"usr/abs"
+exit
+"usr/abs"
+echo $?
+"/usr/abs"
+man 2 execve
+exit
+"/usr/abs"
+exit
+"/usr/abs"
+exit
+"/usr/abs"
+exit
+"/usr/abs"
+cat
+cat
+cat
+cat
+exit
+"/usr/pwa"
+echo $?
+echo $$
+echo $$$
+echo $$$$$
+exit
+env
+e
+exit
+echo $$
+ps
+e
+export t=r
+export kek= lol haha=4
+env
+exit
+export kek= lol haha=4
+env
+export
+Ñ
+exit
