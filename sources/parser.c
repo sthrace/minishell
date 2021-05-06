@@ -117,5 +117,8 @@ void        ft_parser(t_data *data, int x)
     	data->flg.omit = 0;
         ft_unpack_argv(data, x, 0);
     }
-    ft_sorter(data);
+	if (data->pl->state == 0 || !is_cmd_bltin(data))
+		ft_sorter(data);
+	else
+		data->pl->pids[data->pl->count - 1] = execute_pipe(data, 0);
 }

@@ -29,8 +29,8 @@ static void	term_key_up(t_data *data)
 	tputs(delete_line, 1, ft_putchar);
 	ft_shell_prompt();
 	ft_putstr_fd(data->hist->cmds[--(data->hist->pos)], 1);
-	data->line = NULL;
 	free(data->line);
+	data->line = NULL;
 	data->line = ft_strdup(data->hist->cmds[data->hist->pos]);
 	data->len = ft_strlen(data->hist->cmds[data->hist->pos]);
 }
@@ -42,8 +42,8 @@ static void	term_key_down(t_data *data)
 	ft_shell_prompt();
 	if (data->hist->pos < data->hist->size)
 		ft_putstr_fd(data->hist->cmds[++(data->hist->pos)], 1);
-	data->line = NULL;
 	free(data->line);
+	data->line = NULL;
 	data->line = ft_strdup(data->hist->cmds[data->hist->pos]);
 	data->len = ft_strlen(data->hist->cmds[data->hist->pos]);
 }

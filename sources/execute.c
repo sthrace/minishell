@@ -45,13 +45,17 @@ int	execute_pipe(t_data *data, char *file)
 		{
 			dup2(data->pl->fdin[RD], STDIN);
 		}
-		exit(execve(file, data->argv, 0));
+		if (file)
+			exit(execve(file, data->argv, 0));
+		else
+			exit(ft_sorter(data));
 	}
 	// Parent thread
 	if (data->pl->state > 0)						// fdout != 0
 		close(data->pl->fdout[WR]);
 	if (data->pl->state > 1 || data->pl->state < 0)	// fdin != 0
 		close(data->pl->fdin[RD]);
+	free(file);
 	return (pid);
 }
 
@@ -109,7 +113,22 @@ void	ft_binsearch(t_data *data, int cnt, char *dir, char *file)
 	}
 }
 
-void	ft_sorter(t_data *data)
+int		is_cmd_bltin(t_data *data)
+{
+	if (((!(ft_strncmpul(data->argv[0], "echo", 4))) && !data->argv[0][4]) ||
+		((!(ft_strncmpul(data->argv[0], "cd", 2))) && !data->argv[0][2]) ||
+		((!(ft_strncmpul(data->argv[0], "pwd", 3))) && !data->argv[0][3]) ||
+		((!(ft_strncmpul(data->argv[0], "export", 6))) && \
+			!data->argv[0][6] && data->argc == 1) ||
+		((!(ft_strncmpul(data->argv[0], "export", 6))) && !data->argv[0][6]) ||
+		((!(ft_strncmpul(data->argv[0], "unset", 5))) && !data->argv[0][5]) ||
+		((!(ft_strncmpul(data->argv[0], "env", 3))) && !data->argv[0][3])	||
+		((!(ft_strncmpul(data->argv[0], "exit", 4))) && !data->argv[0][4]))
+		return (1);
+	return (0);
+}
+
+int		ft_sorter(t_data *data)
 {
 	int	i;
 
@@ -135,5 +154,5 @@ void	ft_sorter(t_data *data)
 		ft_exit(data, -1);
 	else
 		ft_binsearch(data, -1, NULL, NULL);
-	ft_free_array(data->argv);
+	return (ft_free_array(data->argv));
 }
