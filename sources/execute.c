@@ -36,6 +36,11 @@ int	execute_pipe(t_data *data, char *file)
 	if (pid == 0)
 	{
 		// Child thread
+		if (data->fd0 > STDIN)
+			dup2(data->fd0, STDIN);
+		if (data->fd1 > STDOUT)
+			dup2(data->fd1, STDOUT);
+			
 		if (data->pl->state > 0)						// fdout != 0
 		{
 			dup2(data->pl->fdout[WR], STDOUT);
