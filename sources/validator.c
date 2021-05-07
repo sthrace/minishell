@@ -50,6 +50,7 @@ static void	ft_validate_dups(t_data *data, int i)
 		if (data->line[data->len - 2] == '\\')
 		{
 			write(2, "bash: >\n", 8);
+			data->ret = 258;
 			ft_init(&data);
 			return ;
 		}
@@ -65,6 +66,7 @@ static void	ft_validate_quotes(t_data *data, int i)
 	if (data->flg.quotes)
 	{
 		write(2, "bash: >\n", 8);
+		data->ret = 258;
 		ft_init(&data);
 		return ;
 	}
@@ -74,6 +76,7 @@ static void	ft_validate_quotes(t_data *data, int i)
 void	ft_validate_line(t_data *data, int i)
 {
 	data->line[data->len - 1] = 0;
+	data->ret = 0;
 	ft_set_term(2);
 	if (data->line[0] == 0 && data->len == 1)
 	{

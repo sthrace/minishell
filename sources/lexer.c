@@ -77,11 +77,7 @@ void	ft_crossroads(t_data *data)
 	if (data->pl->state < 0)
 	{
 		while (data->pl->count--)
-		{
 			waitpid(data->pl->pids[data->pl->count], &data->ret, 0);
-			// if (data->ret == 65280)
-			// 	printf("Command not found\n");
-		}
 		data->pl->state = 0;
 		data->pl->count = 0;
 	}

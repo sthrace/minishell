@@ -1461,3 +1461,130 @@ cd
 yes | head |wc
 ls -la>test>test66 | grep Make <test66
 exit
+ls >test5 | <test5 grep Make >test6 | cat <test6
+ls >test5 | <test5 grep Make >test6 | cat <test5
+"ls" >test5 | <test5 grep Make >test6 | "cat" <test5
+"ls" >test5 '|<test5 grep Make >test6' | "cat <test5
+"ls" >test5 '|<test5 grep Make >test6' | "cat" <test5
+"ls" >test5 '|<test5 grep Make >test6' | "cat <test5
+echo $?
+"ls" >test5 '|<test5 grep Make >test6' | "cat <test5
+echo $?
+exit
+"ls
+echo $?
+exit
+"ls
+echo $?
+exit 45 55
+echo $?
+exit
+echo -n -n -n test tout
+echo -n -n -n test tout | cat -e
+"echo -n -n -n test tout"
+echo -n -n -n test tout
+echo Kirill | cat -e
+echo Kirill|cat -e
+exit
+echo -n Kirill | cat -e
+echo Kirill | cat -e
+ecit
+exit
+echo Kirill |cat -e
+exit
+echo Kirill | cat -e
+exit
+echo Kirill | cat -e
+echo -n -n -n test tout
+echo -n -n -n test tout | cat -e
+exit
+cd .. ; 
+cd .. ; pwdbash e
+cd .. ;
+echo -n "Test   $1 :"
+exit
+echo "echo $PWD"
+echo "echo \"$PWD\""
+echo "echo \'$PWD\':
+echo "echo \'$PWD\'"
+echo "echo coucou; echo $?"
+echo "bash ; export"
+echo "./minishell ; export"
+echo "export PATH=$PWD/srcs/test1:$PWD/srcs/test2:$PATH ; testexecpath"
+echo $PATH
+echo "cat < secs/cmds.txt"
+export PATH=$PWD/srcs/test1:$PWD/srcs/test2:$PATH ; testexecpath
+export PATH=$PWD/srcs/test1:$PWD/srcs/test2:$PATH
+testexecpath
+export PATH=$PWD/srcs/test1:$PWD/srcs/test2:$PATH;testexecpath
+export PATH=$PWD/srcs/test1:$PWD/srcs/test2:$PATH;testexecpath
+export PATH=$PWD/srcs/test1:$PWD/srcs/test2:$PATH;testexecpath
+export PATH=$PWD/srcs/test1:$PWD/srcs/test2:$PATH;testexecpath
+export PATH=$PWD/srcs/test1:$PWD/srcs/test2:$PATH;testexecpath
+export PATH=$PWD/srcs/test1:$PWD/srcs/test2:$PATH;testexecpath
+export PATH=$PWD/srcs/test1:$PWD/srcs/test2:$PATH;testexecpath
+exit
+export PATH=$PWD/srcs/test1:$PWD/srcs/test2:$PATH;testexecpath
+export PATH=$PWD/srcs/test1:$PWD/srcs/test2:$PATH;testexecpath
+export PATH=$PWD/srcs/test1:$PWD/srcs/test2:$PATH;testexecpath
+pwd
+cd 42TESTERS-MINISHELL
+unset PWD; cd ..; echo $OLDPWD
+export $abc
+export $abc
+export $abc
+export $abc
+export $abc
+export $abc
+exit
+exit
+export $abc
+$abc
+echo $?
+exit
+make
+export $abc
+$abc
+exit
+make
+$abc
+export $abc
+$abc
+$abs
+exit
+exit
+exit
+exit
+export $abs
+$abs
+exit
+exit
+export $abs
+$abs
+exit
+exit
+export $abs
+$abs
+exit
+exit
+export $abs
+$abs
+exit
+exit
+$abs
+exit
+exit
+$abs
+exit
+export $abs
+$abs
+$abs
+echo $?
+cho $?
+echo $?
+echo $?
+exit
+ls
+exit
+echo $$
+exit

@@ -69,7 +69,8 @@ void	ft_echo(t_data *data)
 			if (ft_strncmp(data->argv[i], "-n", 2))
 			{
 				write(data->fd1, data->argv[i], ft_strlen(data->argv[i]));
-				write(data->fd1, " ", 1);
+				if (i < data->argc - 1)
+					write(data->fd1, " ", 1);
 			}
 		}
 		i++;

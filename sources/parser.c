@@ -125,6 +125,7 @@ void        ft_parser(t_data *data, int x)
     	data->flg.omit = 0;
         ft_unpack_argv(data, x, 0);
     }
+    data->len = 0;
 	if (data->pl->state == 0 || !is_cmd_bltin(data))
 		ft_sorter(data);
 	else

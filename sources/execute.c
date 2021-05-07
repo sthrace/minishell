@@ -97,6 +97,8 @@ void	ft_binsearch(t_data *data, int cnt, char *dir, char *file)
 	struct stat	buf[4096];
 
 	paths = ft_split_path(data);
+	if (ft_strlen(data->argv[0]) == 0)
+		return ;
 	if (data->argv[0][0] == '.' || data->argv[0][0] == '/')
 	{
 		file = ft_strdup(data->argv[0]);
@@ -157,7 +159,7 @@ int		ft_sorter(t_data *data)
 	else if ((!(ft_strncmpul(data->argv[0], "pwd", 3))) && !data->argv[0][3])
 		ft_pwd();
 	else if ((!(ft_strncmpul(data->argv[0], "export", 6))) && \
-			!data->argv[0][6] && data->argc == 1)
+			!data->argv[0][6] && (data->argc == 1 || ft_strlen(data->argv[1]) == 0))
 		print_export(data->env);
 	else if ((!(ft_strncmpul(data->argv[0], "export", 6))) && !data->argv[0][6])
 		while (data->argv[i])
