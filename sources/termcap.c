@@ -7,8 +7,7 @@ void	ft_set_term(int option)
 	if (option == 1)
 	{
 		tcgetattr(0, &term);
-		term.c_lflag &= ~ECHO;
-		term.c_lflag &= ~ICANON;
+		term.c_lflag &= ~(ECHO | ICANON);
 		term.c_cc[VEOF] = 4;
 		tcsetattr(0, TCSANOW, &term);
 		if (tgetent(0, getenv("TERM")))
@@ -18,15 +17,14 @@ void	ft_set_term(int option)
 	if (option == 2)
 	{
 		tcgetattr(0, &term);
-		term.c_lflag |= ECHO;
-		term.c_lflag |= ICANON;
+		term.c_lflag |= (ECHO | ICANON);
 		tcsetattr(0, TCSANOW, &term);
 	}
 }
 
 static void	term_key_up(t_data *data)
 {
-	tputs(restore_cursor, 1, &ft_putchar);
+	tputs(tgoto(tgetstr("ch", NULL), 0, 0), 1, &ft_putchar);
 	tputs(delete_line, 1, ft_putchar);
 	ft_shell_prompt();
 	ft_putstr_fd(data->hist->cmds[--(data->hist->pos)], 1);
@@ -38,7 +36,7 @@ static void	term_key_up(t_data *data)
 
 static void	term_key_down(t_data *data)
 {
-	tputs(restore_cursor, 1, &ft_putchar);
+	tputs(tgoto(tgetstr("ch", NULL), 0, 0), 1, &ft_putchar);
 	tputs(delete_line, 1, ft_putchar);
 	ft_shell_prompt();
 	if (data->hist->pos < data->hist->size)

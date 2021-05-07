@@ -32,6 +32,7 @@ void	ft_init(t_data **data)
 
 void	ft_shell_prompt(void)
 {
+	
 	write(2, "\033[1;34mminishell-> \033[0m", 23);
 }
 
@@ -47,7 +48,7 @@ static void	ft_input(t_data *data)
 		len = read(0, str, 3);
 		if (str[0] == '\e' || !ft_strncmp(str, "\177", len))
 			ft_termios(data, str, len);
-		else
+		else if (str[0] != '\t')
 			ft_line(data, str, len);
 		if (str[0] == '\n')
 		{
