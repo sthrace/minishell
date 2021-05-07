@@ -48,6 +48,7 @@ void	ft_set_fd(t_data *data)
 			data->fd0 = open(file, O_RDONLY);
 		if (data->fd0 == -1 || data->fd1 == -1)
 		{
+			data->ret = 258;
 			printf("bash: syntax error near unexpected token `newline'");
 			return ;
 		}

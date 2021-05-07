@@ -3,13 +3,16 @@
 static int   ft_insert_env(t_data *data, int x, int i, char **env)
 {
     char    *key;
+    char    *ppid;
 
     data->len = 0;
     data->flg.start = i;
     data->flg.res = data->argv[x][i];
     if (data->argv[x][i] == '$')
     {
-        *env = ft_strdup(ft_itoa(data->ppid));
+        ppid = ft_itoa(data->ppid);
+        *env = ft_strdup(ppid);
+        free(ppid);
         return (1);
     }
     if (!data->argv[x][i] || (data->flg.dquote && data->argv[x][i] == '"'))
@@ -23,9 +26,7 @@ static int   ft_insert_env(t_data *data, int x, int i, char **env)
     {
         if (data->flg.res == '?')
         {
-            key = ft_itoa(data->ret);
-            *env = ft_strdup(key);
-			free(key);
+            *env = ft_itoa(data->ret);
 			return (data->len);
         }
         key = ft_substr(data->argv[x], data->flg.start, data->len);
@@ -100,6 +101,7 @@ static void ft_unpack_argv(t_data *data, int x, int i)
             {
                 i += ft_insert_env(data, x, i + 1, &env);
 				ft_str_handle(data, &insert, &env);
+				free(env);
             }
             else if (((data->argv[x][i] == '"' && !data->flg.squote) || \
 			(data->argv[x][i] == '\'' && !data->flg.dquote)) || data->argv[x][i] != '\\')
@@ -123,5 +125,8 @@ void        ft_parser(t_data *data, int x)
     	data->flg.omit = 0;
         ft_unpack_argv(data, x, 0);
     }
-    ft_sorter(data);
+	if (data->pl->state == 0 || !is_cmd_bltin(data))
+		ft_sorter(data);
+	else
+		data->pl->pids[data->pl->count - 1] = execute_pipe(data, 0);
 }

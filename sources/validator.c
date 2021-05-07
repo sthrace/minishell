@@ -75,12 +75,13 @@ void	ft_validate_line(t_data *data, int i)
 {
 	data->line[data->len - 1] = 0;
 	ft_set_term(2);
-	add_hist(data->hist, data->line);
 	if (data->line[0] == 0 && data->len == 1)
 	{
+		free(data->line);
 		ft_init(&data);
 		return ;
 	}
+	add_hist(data->hist, data->line);
 	while (data->line[++i])
 	{
 		while (data->line[i] == ' ')

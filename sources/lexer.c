@@ -71,6 +71,9 @@ void	ft_crossroads(t_data *data)
 	ft_flags(data, '\0', 0);
 	ft_parser(data, -1);
 
+	if (is_cmd_bltin(data))
+		ft_free_array(data->argv);
+		
 	if (data->pl->state < 0)
 	{
 		while (data->pl->count--)

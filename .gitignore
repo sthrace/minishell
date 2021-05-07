@@ -8,3 +8,4 @@ minishell
 *.dSYM
 *.swp
 test*
+temp*

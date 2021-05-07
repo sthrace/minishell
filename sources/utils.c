@@ -43,22 +43,23 @@ void	ft_line_handler(t_data *data, char *str, int len, int type)
 	else if (type == 3)
 	{
 		data->len = 0;
-		data->line = NULL;
 		free(data->line);
+		data->line = NULL;
 	}
 }
 
-void	ft_free_array(char **array)
+int		ft_free_array(char **array)
 {
 	int	cnt;
 
 	cnt = 0;
 	if (!array)
-		return ;
+		return (1);
 	while (array[cnt])
 	{
 		free(array[cnt]);
 		cnt++;
 	}
 	free(array);
+	return (0);
 }

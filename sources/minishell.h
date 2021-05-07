@@ -84,6 +84,7 @@ int         g_sig;
 // parser.c //
 
 void        ft_parser(t_data *data, int x);
+int			is_cmd_bltin(t_data *data);
 
 // term.c //
 
@@ -111,7 +112,8 @@ void	child_sig_handler(int sig);
 
 // execute.c //
 
-void    ft_sorter(t_data *data);
+int		ft_sorter(t_data *data);
+int		execute_pipe(t_data *data, char *file);
 
 // builtins.c //
 
@@ -122,7 +124,7 @@ void ft_exit(t_data *data, int i);
 
 // utils.c //
 
-void ft_free_array(char **array);
+int		ft_free_array(char **array);
 void    ft_line_handler(t_data *data, char *str, int len, int type);
 void	ft_pointer_inc(int *a, int *b);
 void	ft_str_handle(t_data *data, char **insert, char **env);
