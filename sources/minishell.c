@@ -1,5 +1,16 @@
 #include "minishell.h"
 
+void	ft_get_pid(t_data *data)
+{
+	int		pid;
+
+	pid = fork();
+	data->ppid = pid - 1;
+	if (!pid)
+		exit (0);
+	wait(NULL);
+}
+
 void	ft_init(t_data **data)
 {
 	if (!(*(data)))
@@ -16,6 +27,7 @@ void	ft_init(t_data **data)
 	(*data)->len = 0;
 	(*data)->fd0 = 0;
 	(*data)->fd1 = 1;
+	(*data)->flg.opwd = 1;
 }
 
 void	ft_shell_prompt(void)
@@ -62,13 +74,12 @@ int	main(int argc, char **argv, char *envp[])
 	env = envp_to_lst(envp);
 	init_hist(&hist);
 	if (argc != 1 && !argv[0])
-	{
-		ft_putendl_fd("bash: error: no parameters allowed\n", 2);
 		return (1);
-	}
 	ft_init(&data);
+	ft_get_pid(data);
 	data->ret = 0;
 	data->env = env;
+	set_var(&data->env, "OLDPWD", 0);
 	data->hist = &hist;
 	data->pl = &pl;
 	data->pl->state = 0;

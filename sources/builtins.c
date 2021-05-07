@@ -13,7 +13,8 @@ void	ft_set_dir(t_data *data, char **newdir, char **pwd)
 
 	free(*newdir);
 	*pwd = ft_strjoin("PWD=", getcwd(buf, 4096));
-	set_var(&data->env, *pwd, 0);
+	if (get_var(data->env, "PWD"))
+		set_var(&data->env, *pwd, 0);
 	free(*pwd);
 }
 
@@ -23,11 +24,15 @@ void	ft_cd(t_data *data, int ret, char *pwd, char *oldpwd)
 	char	*newdir;
 	char	*temp;
 
-	temp = ft_strdup(getcwd(buf, 4096));
-	oldpwd = ft_strjoin("OLDPWD=", temp);
-	free(temp);
-	set_var(&data->env, oldpwd, 0);
-	free(oldpwd);
+	if (get_var(data->env, "OLDPWD") || data->flg.opwd)
+	{
+		temp = ft_strdup(getcwd(buf, 4096));
+		oldpwd = ft_strjoin("OLDPWD=", temp);
+		free(temp);
+		set_var(&data->env, oldpwd, 0);
+		free(oldpwd);
+		data->flg.opwd = 0;
+	}
 	if (data->argc == 1 && get_var(data->env, "HOME"))
 		newdir = ft_strdup(get_var(data->env, "HOME"));
 	else if (data->argc == 1 && !get_var(data->env, "HOME"))
@@ -51,16 +56,23 @@ void	ft_echo(t_data *data)
 	int		i;
 	short	n;
 
-	i = 0;
+	i = 1;
 	n = 0;
 	if (data->argc > 1 && (!(ft_strncmp(data->argv[1], "-n", 2))))
 		n = 1;
-	while (++i < data->argc)
+	while (i < data->argc)
 	{
-		while (!(ft_strncmp(data->argv[i], "-n", 2)))
+		while (!(ft_strncmp(data->argv[i], "-n", 2)) && data->argv[i + 1])
 			i++;
-		write(data->fd1, data->argv[i], ft_strlen(data->argv[i]));
-		write(data->fd1, " ", 1);
+		if (data->argv[i])
+		{
+			if (ft_strncmp(data->argv[i], "-n", 2))
+			{
+				write(data->fd1, data->argv[i], ft_strlen(data->argv[i]));
+				write(data->fd1, " ", 1);
+			}
+		}
+		i++;
 	}
 	if (!n)
 		write(data->fd1, "\n", 1);
@@ -92,5 +104,8 @@ void	ft_exit(t_data *data, int i)
 			data->ret = ft_atoi(data->argv[1]);
 		printf("exit\n");
 	}
-	exit(data->ret);
+	if (data->ret == 1 || data->ret == 2)
+		exit(data->ret);
+	else
+		exit(0);
 }

@@ -58,6 +58,7 @@ typedef struct s_flags
     int     fdread;
     int     fdwrite;
     int     fdamp;
+    int     opwd;
     char    *key;
 }               t_flags;
 
@@ -71,6 +72,7 @@ typedef struct s_data
     int     fd1;
     int     ret;
     int     len;
+    int     ppid;
     t_flags flg;
 	t_hist	*hist;
 	t_list	*env;

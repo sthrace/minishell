@@ -11,7 +11,8 @@ void	ft_set_term(int option)
 		term.c_lflag &= ~ICANON;
 		term.c_cc[VEOF] = 4;
 		tcsetattr(0, TCSANOW, &term);
-		tgetent(0, getenv("TERM"));
+		if (tgetent(0, getenv("TERM")))
+			tgetent(0, "xterm-256color");
 		tputs(save_cursor, 1, &ft_putchar);
 	}
 	if (option == 2)

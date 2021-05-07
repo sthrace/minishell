@@ -9,7 +9,12 @@ static int   ft_insert_env(t_data *data, int x, int i, char **env)
     data->flg.res = data->argv[x][i];
     if (data->argv[x][i] == '$')
     {
-        *env = ft_strdup(ft_itoa(getpid()));
+        *env = ft_strdup(ft_itoa(data->ppid));
+        return (1);
+    }
+    if (!data->argv[x][i] || (data->flg.dquote && data->argv[x][i] == '"'))
+    {
+        *env = ft_strdup("$");
         return (1);
     }
     while (!(ft_strchr("= \"$\'<>\\`\0?", data->argv[x][i++])))

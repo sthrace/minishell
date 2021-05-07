@@ -16,7 +16,6 @@ static void	ft_execute(t_data *data, char *file)
 		if (data->ret == -1 || errno == EACCES)
 			printf("bash: %s: %s\n", file, strerror(errno));
 		ft_set_term(2);
-		exit(data->ret);
 	}
 	wait(&data->ret);
 	signal(SIGQUIT, &sig_handler);
@@ -42,9 +41,7 @@ int	execute_pipe(t_data *data, char *file)
 			close(data->pl->fdout[RD]);
 		}
 		if (data->pl->state > 1 || data->pl->state < 0)	// fdin != 0
-		{
 			dup2(data->pl->fdin[RD], STDIN);
-		}
 		exit(execve(file, data->argv, 0));
 	}
 	// Parent thread
@@ -61,12 +58,14 @@ static char	**ft_split_path(t_data *data)
 
 	if (!get_var(data->env, "PATH"))
 	{
-		printf("bash: %s\n", strerror(errno));
+		data->ret = 127;
+		printf("bash: No such file or directory\n");
 		return (0x0);
 	}
 	paths = ft_split(get_var(data->env, "PATH"), ':');
 	if (!paths)
 	{
+		data->ret = 127;
 		printf("bash: %s\n", strerror(errno));
 		return (0x0);
 	}
@@ -101,7 +100,10 @@ void	ft_binsearch(t_data *data, int cnt, char *dir, char *file)
 		}
 		ft_free_array(paths);
 		if (data->ret == -1 || !paths)
+		{
+			data->ret = 127;
 			printf("bash: %s: %s\n", data->argv[0], strerror(errno));
+		}
 		else if (data->pl->state == 0)
 			ft_execute(data, file);
 		else

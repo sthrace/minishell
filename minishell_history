@@ -823,3 +823,310 @@ env
 export
 Ñ
 exit
+echo $$
+echo $$
+ls | grep Make
+yes | head | wc
+yes | yes | head
+ps
+Ñ
+exit
+ps
+exit
+ls
+env
+exit
+env
+export
+ls|grep Make
+ls    | grep Make
+export t=pp; echo $t
+exit
+ps
+
+ps
+
+exit
+exit
+exit
+exit
+exit
+echo $$
+echo $$$
+exit
+echo $
+echo "$"
+echo '$'
+echo $$
+echo $$$
+echo $$$$
+echo $$$$$
+exit
+echo "$"
+exit
+echo $
+echo "$"
+exit
+echo $
+echo "$"
+echo '$'
+exit
+echo "$"
+echo $
+echo $$
+exit
+ls | ps
+ps
+echo $$
+exit
+echo $$
+echo $$$
+exit
+ls
+echo $
+echo $?
+ls
+echo $?
+pwd
+echo $?
+ls -la
+echo $?
+lpfd
+echo $?
+exit
+ls -la
+echo $?
+pwd
+echo $?
+lpasd
+echo $?
+exit
+./minishell
+echo Kirill
+lasfsdlf
+echo $?
+exit
+echo $?
+exit
+asdklaf
+echo $?
+exit
+asjfk
+echo $?
+exit
+asdjkh
+asdf
+"/usr/asd"
+echo $?
+ls qpqp
+echo $?
+ls -n
+ls -o
+ls -q
+ls -r
+ls -w
+ls -e
+ls -t
+ls -y
+echo $?
+env
+export P_ID=pid
+env
+exit
+exit
+env
+cd ..
+env
+cd ..
+wc > Makefile | cat -e
+exit
+wc Makefile | cat -e
+\
+\n "_____\""
+echo $?
+exit
+exit
+exit
+\n "_____\""
+echo $?
+exit
+\n ""
+echo $?
+exit
+\n "__"
+echo $?
+exit
+\n "__"
+exit
+\n
+exit
+asd
+\n
+exit
+asd
+exit
+asd
+echo $?
+unset PATH
+ls
+ls
+exit
+asd
+echo $?
+unset PATH
+ls
+echo $?
+exit
+asd
+echo $?
+exit
+echo "kek">>test lol kek HELLO
+cat test
+echo -n
+exit 12 asdasdasf
+exit
+echo -n
+echo -n -n -n Kirill
+exit
+echo -n
+ls -l
+cd sources
+echo -n
+echo -n
+echo -n -n -n -n -nnnnn Kirill
+echo -nnnnnnn Kirill
+exit
+echo -n
+echo -n
+echo -n
+echo -n -n -n Kirill
+exit
+echo Kirill
+echo Kirill
+echo -n Kirill
+echo -n
+echo -n -n -n Kirill
+echo Kirill
+exit
+echo Kirill
+echo -n Kirill
+echo -n -n -nnn Kirill
+echo -n
+exit
+echo -n
+echo -nnn Kirill
+echo Kirill
+echo -n -n -n Kirill
+echo $PWD
+echo $PPP
+echo R$PPP"PPP"
+echo $?
+exit
+m
+exit
+exls
+ls
+exit
+echo $$
+exit
+echo $$
+exit
+echo $$
+exit
+echo $$
+exit
+echoexit
+exit
+echo $$
+exit
+echo $$
+exit
+echo $$
+exit
+exit
+echo $$
+ls
+ls -la
+ls | grep Make
+ls >test55
+ls>> test55
+exit
+exit
+exit
+ls
+exit
+echo $$
+exit
+ls
+echo $$
+exit
+echo $$
+exit
+echo $$
+exit
+echo $$
+echo ASldkhar['2'490r8uvfhuszdfcnv x8394o7p	2;ek
+echo -n
+echo -n
+exit
+echo -n
+echo -n -n K
+echo -nnnn K
+echo K
+echo -n
+man 3 tgetend
+man 3 tgetent
+man 2 tgetent
+man tgetent
+exit
+exit
+env
+export
+./minishell
+pwd
+export PWD="/Users/sthrace/42Cursus/4Circle/minishell-1"
+cd
+./minishell
+export PWD=/Users/sthrace/42Cursus/4Circle/minishell-1
+./minishell
+pwdd
+pwd
+echo $PWD
+export P=/P
+echo $P
+echo $PWD
+export PWD=/Users/sthrace
+echo $PWD
+cd 42Cursus
+ls
+export PWD=/Users/sthrace/42Cursus/4Circle/minishell-1
+echo $PWD
+./minishell
+minishell
+.minishell
+./minishell
+exit
+exit
+exit
+exit
+exit
+exit
+exit
+env
+./minishell
+env
+./minishell
+env
+exi
+exit
+exit
+exit
+export PWD=/Users/sthrace/42Cursus/4Circle/minishell-1
+echo $PWD
+exit
+export PWD=/Users/sthrace/42Cursus/4Circle/minishell-1
+./minishell
+env
+export
+exit
+exit
