@@ -1708,3 +1708,174 @@ exit
 dwad
 Ñ
 exit
+exit
+exit
+dwad
+dwad
+exit
+exit 2 5t
+echo $?
+exit 5 5
+echo $?
+exit
+exit 5 6
+echo $?
+exit
+exit 5 6
+echo $?
+exit
+exit 5 6
+echo $?
+;
+echo $?
+"
+echo $?
+lpr
+por
+echo $?
+exit 5
+exit 5t 6
+exit
+exit 5t 6
+exit
+exit 5t 6
+exit
+exit 5t 6
+exit
+exit 5t 6
+exit t5 6
+echo $?
+exit
+exit 5t 6
+exit
+exit 5t 6
+exit 2
+exit 2 5
+echo $?
+mkdir lll
+chmod 000 lll
+cd lll
+exit
+cd ..
+cd lll
+cd asdop
+exit
+exit 5 6
+exit 5t 6
+exit 2r 5
+exit
+exit 5t 5
+exit 5 5
+exit
+exit 5t 4
+exit
+exit 5t 5
+exit 5 5
+echo $?
+exit 5
+exit 5t 5
+exit 5 5
+echo $?
+exit 68
+exit t5 4
+env | grep PWD
+pwd
+cd ..
+env | grep PWD
+cd ..
+env | grep PWD
+cd ..
+env | grep PWD
+cd ..
+cd lll
+echo $?
+exit
+cd ff
+exit
+cd ll
+echo $?
+exit 5t 5
+cd ..
+cd ..
+echo $?
+echo $?
+exit
+echo $?
+cat
+echo $?
+exit 5 5
+echo $?
+exit
+ls
+ls -la
+;;
+;;
+;;
+;;
+;;
+;;
+;
+;
+   ;
+ls
+ls -la
+exit 5 5
+exit
+>
+>>
+>>>
+;
+asd;;
+asd>>>
+exit
+>>>
+asd;
+asd;;
+asd||
+asd>>>
+exit
+ls -la
+ls -la
+ls -la
+ls -la
+ls
+echo $PWD
+echo "$PWD"
+echo R"$PWD"
+echo R$PWD"PP"
+exit
+echo $PWD$PWD
+echo $
+echo "$"
+echo '$'
+echo $$
+echo $?
+exit
+ls -la
+echo $PWD
+exit
+echo $$
+ps
+echo $?
+echo $
+echo "$"
+echo $$
+echo $$$
+exit 4 5
+exit 6
+ls -la
+yes | head | wc
+yes | head
+ls >test>>test5 | grep Make
+ls >test>>test5 | grep Make <test5
+exit
+asd
+asd
+
+exit
+exit
+asdasd
+exit
+exit
+asd
+exit

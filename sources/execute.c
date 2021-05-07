@@ -21,22 +21,22 @@ static void	ft_execute(t_data *data, char *file)
 		printf("bash: %s: %s\n", file, strerror(errno));
 	}
 	signal(SIGQUIT, &sig_handler);
-	// if (WIFEXITED(data->ret))
-	// 	data->ret = WEXITSTATUS(data->ret);
+	if (WIFEXITED(data->ret))
+		data->ret = WEXITSTATUS(data->ret);
 	free(file);
 }
 
 int	execute_pipe(t_data *data, char *file)
 {
+	int	pid;
+
 	data->pl->fdin[RD] = data->pl->fdout[RD];
 	data->pl->fdin[WR] = data->pl->fdout[WR];
 	if (data->pl->state > 0)
 		pipe(data->pl->fdout);
-
-	int pid = fork();
+	pid = fork();
 	if (pid == 0)
 	{
-		// Child thread
 		if (data->fd0 != 0 || data->fd1 != 1)
 		{
 			if (data->fd0 != 0 && (data->pl->state > 1 || data->pl->state < 0))
@@ -46,12 +46,12 @@ int	execute_pipe(t_data *data, char *file)
 		}
 		else
 		{
-			if (data->pl->state > 0)						// fdout != 0
+			if (data->pl->state > 0)
 			{
 				dup2(data->pl->fdout[WR], STDOUT);
 				close(data->pl->fdout[RD]);
 			}
-			if (data->pl->state > 1 || data->pl->state < 0)	// fdin != 0
+			if (data->pl->state > 1 || data->pl->state < 0)
 				dup2(data->pl->fdin[RD], STDIN);
 		}
 		if (file)
@@ -59,36 +59,14 @@ int	execute_pipe(t_data *data, char *file)
 		else
 			exit(ft_sorter(data));
 	}
-	// Parent thread
 	if (data->fd0 != 0 || data->fd1 != 1)
 		wait (NULL);
-	if (data->pl->state > 0)	// fdout != 0
-			close(data->pl->fdout[WR]);
-	if (data->pl->state > 1 || data->pl->state < 0) // fdin != 0
-			close(data->pl->fdin[RD]);
-		
+	if (data->pl->state > 0)
+		close(data->pl->fdout[WR]);
+	if (data->pl->state > 1 || data->pl->state < 0)
+		close(data->pl->fdin[RD]);
 	free(file);
 	return (pid);
-}
-
-static char	**ft_split_path(t_data *data)
-{
-	char	**paths;
-
-	if (!get_var(data->env, "PATH"))
-	{
-		data->ret = 127;
-		printf("bash: No such file or directory\n");
-		return (0x0);
-	}
-	paths = ft_split(get_var(data->env, "PATH"), ':');
-	if (!paths)
-	{
-		data->ret = 127;
-		printf("bash: %s\n", strerror(errno));
-		return (0x0);
-	}
-	return (paths);
 }
 
 void	ft_binsearch(t_data *data, int cnt, char *dir, char *file)
@@ -128,26 +106,26 @@ void	ft_binsearch(t_data *data, int cnt, char *dir, char *file)
 		else if (data->pl->state == 0)
 			ft_execute(data, file);
 		if (data->pl->state != 0)
-			data->pl->pids[data->pl->count - 1] = execute_pipe(data, file);		// have to execute pipe on error (yess | head | wc)
+			data->pl->pids[data->pl->count - 1] = execute_pipe(data, file);
 	}
 }
 
-int		is_cmd_bltin(t_data *data)
+int	is_cmd_bltin(t_data *data)
 {
-	if (((!(ft_strncmpul(data->argv[0], "echo", 4))) && !data->argv[0][4]) ||
-		((!(ft_strncmpul(data->argv[0], "cd", 2))) && !data->argv[0][2]) ||
-		((!(ft_strncmpul(data->argv[0], "pwd", 3))) && !data->argv[0][3]) ||
+	if (((!(ft_strncmpul(data->argv[0], "echo", 4))) && !data->argv[0][4]) || \
+		((!(ft_strncmpul(data->argv[0], "cd", 2))) && !data->argv[0][2]) || \
+		((!(ft_strncmpul(data->argv[0], "pwd", 3))) && !data->argv[0][3]) || \
 		((!(ft_strncmpul(data->argv[0], "export", 6))) && \
-			!data->argv[0][6] && data->argc == 1) ||
-		((!(ft_strncmpul(data->argv[0], "export", 6))) && !data->argv[0][6]) ||
-		((!(ft_strncmpul(data->argv[0], "unset", 5))) && !data->argv[0][5]) ||
-		((!(ft_strncmpul(data->argv[0], "env", 3))) && !data->argv[0][3])	||
+		!data->argv[0][6] && data->argc == 1) || \
+		((!(ft_strncmpul(data->argv[0], "export", 6))) && !data->argv[0][6]) || \
+		((!(ft_strncmpul(data->argv[0], "unset", 5))) && !data->argv[0][5]) || \
+		((!(ft_strncmpul(data->argv[0], "env", 3))) && !data->argv[0][3]) || \
 		((!(ft_strncmpul(data->argv[0], "exit", 4))) && !data->argv[0][4]))
 		return (1);
 	return (0);
 }
 
-int		ft_sorter(t_data *data)
+int	ft_sorter(t_data *data)
 {
 	int	i;
 
@@ -159,7 +137,7 @@ int		ft_sorter(t_data *data)
 	else if ((!(ft_strncmpul(data->argv[0], "pwd", 3))) && !data->argv[0][3])
 		ft_pwd();
 	else if ((!(ft_strncmpul(data->argv[0], "export", 6))) && \
-			!data->argv[0][6] && (data->argc == 1 || ft_strlen(data->argv[1]) == 0))
+		!data->argv[0][6] && (data->argc == 1 || ft_strlen(data->argv[1]) == 0))
 		print_export(data->env);
 	else if ((!(ft_strncmpul(data->argv[0], "export", 6))) && !data->argv[0][6])
 		while (data->argv[i])

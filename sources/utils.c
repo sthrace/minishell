@@ -1,22 +1,5 @@
 #include "minishell.h"
 
-void	ft_set_argv(t_data *data, int x, char **insert)
-{
-	free(data->argv[x]);
-    data->argv[x] = ft_strdup(*insert);
-	free(*insert);
-}
-
-void	ft_str_handle(t_data *data, char **insert, char **env)
-{
-	char	*temp;
-
-	temp = *insert;
-    *insert = ft_strjoin(temp, *env);
-    free(temp);
-    data->flg.omit = 0;
-}
-
 void	ft_pointer_inc(int *a, int *b)
 {
 	*a += 1;
@@ -48,7 +31,7 @@ void	ft_line_handler(t_data *data, char *str, int len, int type)
 	}
 }
 
-int		ft_free_array(char **array)
+int	ft_free_array(char **array)
 {
 	int	cnt;
 

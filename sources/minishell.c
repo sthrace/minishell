@@ -32,7 +32,6 @@ void	ft_init(t_data **data)
 
 void	ft_shell_prompt(void)
 {
-	
 	write(2, "\033[1;34mminishell-> \033[0m", 23);
 }
 
@@ -48,7 +47,7 @@ static void	ft_input(t_data *data)
 		len = read(0, str, 3);
 		if (str[0] == '\e' || !ft_strncmp(str, "\177", len))
 			ft_termios(data, str, len);
-		else if (str[0] != '\t')
+		else if (str[0] != '\t' && str[0] != '\4')
 			ft_line(data, str, len);
 		if (str[0] == '\n')
 		{
@@ -56,7 +55,7 @@ static void	ft_input(t_data *data)
 			ft_shell_prompt();
 			tputs(save_cursor, 1, &ft_putchar);
 		}
-		if (str[0] == '\4')
+		if (str[0] == '\4' && data->len == 0)
 		{
 			printf("exit\n");
 			ft_set_term(2);
@@ -78,7 +77,6 @@ int	main(int argc, char **argv, char *envp[])
 		return (1);
 	ft_init(&data);
 	ft_get_pid(data);
-	data->ret = 0;
 	data->env = env;
 	set_var(&data->env, "OLDPWD", 0);
 	data->hist = &hist;

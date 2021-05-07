@@ -63,37 +63,16 @@ void	check_pipes(t_data *data, int i)
 		data->pl->state *= -1;
 }
 
-void	ft_crossroads(t_data *data)
+void	ft_get_cmd(t_data *data, int i, int start)
 {
-	ft_check_redirects(data, -1);
-	ft_cmd_count(data, -1);
-	ft_cmd_split(data, 0, 0, -1);
-	ft_flags(data, '\0', 0);
-	ft_parser(data, -1);
-
-	if (is_cmd_bltin(data))
-		ft_free_array(data->argv);
-		
-	if (data->pl->state < 0)
-	{
-		while (data->pl->count--)
-			waitpid(data->pl->pids[data->pl->count], &data->ret, 0);
-		data->pl->state = 0;
-		data->pl->count = 0;
-	}
-}
-
-void	ft_get_cmd(t_data *data, int i)
-{
-	int		start;
 	int		len;
 
-	start = 0;
 	len = 0;
 	while (data->line[++i])
 	{
 		ft_flags(data, data->line[i], 1);
-		if ((data->line[i] == ';' || data->line[i] == '|') && !data->flg.quotes && !data->flg.esc)
+		if ((data->line[i] == ';' || data->line[i] == '|') && \
+		!data->flg.quotes && !data->flg.esc)
 		{
 			check_pipes(data, i);
 			data->cmd = ft_substr(data->line, start, len);
@@ -119,6 +98,7 @@ void 	ft_line(t_data *data, char *str, int len)
 	{
 		ft_line_handler(data, str, len, 3);
 		g_sig = 0;
+		data->ret = 1;
 	}
 	if (!data->line)
 		ft_line_handler(data, str, len, 1);

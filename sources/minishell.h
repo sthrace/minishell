@@ -15,10 +15,10 @@
 # include <signal.h>
 # include <errno.h>
 
-#define STDIN	0
-#define STDOUT	1
-#define RD	0
-#define WR	1
+# define STDIN	0
+# define STDOUT	1
+# define RD	0
+# define WR	1
 
 typedef struct s_var
 {
@@ -34,13 +34,13 @@ typedef struct s_hist
 	char	**cmds;
 }				t_hist;
 
-typedef struct	s_pl
+typedef struct s_pl
 {
-	int fdin[2];
-	int fdout[2];
-	int pids[100];
-	int state;
-	int count;
+    int fdin[2];
+    int fdout[2];
+    int pids[100];
+    int state;
+    int count;
 }				t_pl;
 
 typedef struct s_flags
@@ -94,7 +94,9 @@ void    ft_termios(t_data *data, char *str, int len);
 // lexer.c //
 
 void    ft_line(t_data *data, char *str, int len);
-void	ft_get_cmd(t_data *data, int i);
+void	ft_get_cmd(t_data *data, int i, int start);
+void	ft_cmd_count(t_data *data, int i);
+void	ft_cmd_split(t_data *data, int i, int len, int x);
 
 // validator.c //
 
@@ -118,17 +120,26 @@ int		execute_pipe(t_data *data, char *file);
 // builtins.c //
 
 void ft_pwd(void);
-void	ft_cd(t_data *data, int ret, char *pwd, char *oldpwd);
 void ft_echo(t_data *data);
 void ft_exit(t_data *data, int i);
+
+// cd.c //
+
+void	ft_cd(t_data *data, int ret, char *pwd, char *oldpwd);
 
 // utils.c //
 
 int		ft_free_array(char **array);
 void    ft_line_handler(t_data *data, char *str, int len, int type);
 void	ft_pointer_inc(int *a, int *b);
+
+// parser_utils.c //
+
 void	ft_str_handle(t_data *data, char **insert, char **env);
 void	ft_set_argv(t_data *data, int x, char **insert);
+int	ft_func_env(t_data *data, char **env, int x, int i);
+void	ft_crossroads(t_data *data);
+char	**ft_split_path(t_data *data);
 
 // env.c //
 
