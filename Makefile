@@ -1,13 +1,7 @@
 #SETUP
 NAME		= minishell
-CC			= clang
-CFLAGS		= -g3 -Wall -Wextra -Werror
-
-SFLAGS		= -fsanitize=address -fno-omit-frame-pointer \
-			-fsanitize=undefined -fsanitize=nullability \
-			-fsanitize=array-bounds -fsanitize=pointer-overflow \
-			-Wall -Wextra -Werror
-# SFLAGS		=
+CC			= gcc
+CFLAGS		= -Wall -Wextra -Werror
 RM			= rm -f
 
 #FILES
@@ -25,40 +19,30 @@ LIBFT_DIR	= libft/
 LIBFT		= $(LIBFT_DIR)libft.a
 
 #COMMANDS
-all:		$(NAME)
+all:		tools $(NAME)
 
-$(NAME):	tools writeComp $(OBJS) writeOK
-			$(CC) $(CFLAGS) -o $(NAME) -ltermcap $(OBJS) $(LIBFT)
+$(NAME):	$(LIBFT) $(OBJS)
+			@$(CC) $(CFLAGS) -ltermcap $(LIBFT) $(OBJS) -o $(NAME)
+			@echo "$(GREEN)$(NAME) created!$(DEFAULT)"
 
-%.o: %.c
-			$(CC) -c $(CFLAGS) -o $@ $<
-			printf "$(WHITE)██"		
+$(OBJS):	$(HEADER)
 
 tools:
-			$(MAKE) -C $(LIBFT_DIR)
+			@$(MAKE) -C $(LIBFT_DIR)
 
-clean:		writeCL
-			$(RM) $(OBJS)
-			$(MAKE) -C $(LIBFT_DIR) clean
+clean:
+			@$(RM) $(OBJS)
+			@$(MAKE) -C $(LIBFT_DIR) clean
+			@echo "$(YELLOW)$(NAME) cleaned!$(DEFAULT)"
 
-fclean:		clean writeFCL
-			$(RM) $(NAME)
-			$(RM) $(LIBFT)
-
-leaks:		
-			valgrind --show-leak-kinds=definite --leak-check=full ./$(NAME)
-
-git:
-			make fclean
-			@git add *
-			@git commit -m "commit"
-			@git push
+fclean:		clean
+			@$(RM) $(NAME)
+			@$(RM) $(LIBFT)
+			@echo "$(RED)$(NAME) $(LIBFT) deleted!$(DEFAULT)"
 
 re:			fclean all
 
-.PHONY:		all clean fclean re leaks git
-.SILENT:
-
+#EXTRA
 RED = \033[1;31m
 GREEN = \033[1;32m
 YELLOW = \033[1;33m
@@ -66,15 +50,4 @@ CYAN = \033[1;36m
 WHITE = \033[1;37m
 DEFAULT = \033[0m
 
-writeComp:
-	echo "$(CYAN)COMPILING...$(DEFAULT)"
-
-writeOK:
-	echo "\n"
-	echo "$(GREEN)$(NAME) => PROJECT COMPILED$(DEFAULT)\n"
-
-writeCL:
-	echo "\n$(YELLOW)*.o CLEANED$(DEFAULT)\n"
-
-writeFCL:
-	echo "$(RED)ALL CLEAN$(DEFAULT)\n"
+.PHONY:		all clean fclean re
