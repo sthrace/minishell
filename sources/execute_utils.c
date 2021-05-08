@@ -27,3 +27,32 @@ void	ft_exectool(t_data *data, char ***paths, char **file)
 	if (data->pl->state != 0)
 		data->pl->pids[data->pl->count - 1] = execute_pipe(data, *file, 0);
 }
+
+int	pipe_fork(t_data *data, char *file, int builtin)
+{
+	if (data->fd0 != STDIN || data->fd1 != STDOUT)
+	{
+		if (data->fd0 != STDIN && (data->pl->state > 1 || \
+		data->pl->state < 0))
+			dup2(data->fd0, STDIN);
+		if (data->fd1 != STDOUT && data->pl->state > 0)
+			dup2(data->fd1, STDOUT);
+	}
+	else
+	{
+		if (data->pl->state > 0)
+		{
+			dup2(data->pl->fdout[WR], STDOUT);
+			close(data->pl->fdout[RD]);
+		}
+		if (data->pl->state > 1 || data->pl->state < 0)
+		{
+			dup2(data->pl->fdin[RD], STDIN);
+			close(data->pl->fdout[WR]);
+		}
+	}
+	if (builtin)
+		exit(ft_sorter(data));
+	else
+		exit(execve(file, data->argv, env_to_arr(data->env)));
+}

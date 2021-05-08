@@ -123,6 +123,7 @@ void	ft_execute(t_data *data, char *file);
 
 void	ft_abs_path(t_data *data, char **file);
 void	ft_exectool(t_data *data, char ***paths, char **file);
+int		pipe_fork(t_data *data, char *file, int builtin);
 
 // builtins.c //
 
