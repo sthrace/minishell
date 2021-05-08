@@ -14,7 +14,7 @@
 
 char	*ft_strtoupper(char *str)
 {
-	char *rslt;
+	char	*rslt;
 
 	if (!str)
 		return (0);

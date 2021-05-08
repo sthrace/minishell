@@ -14,7 +14,7 @@
 
 t_list	*ft_lstnew(void *content)
 {
-	t_list *rslt;
+	t_list	*rslt;
 
 	if (!content)
 		return (0);

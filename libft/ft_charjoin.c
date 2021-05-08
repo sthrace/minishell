@@ -1,6 +1,6 @@
 #include "libft.h"
 
-char		*ft_charjoin(char *line, char c)
+char	*ft_charjoin(char *line, char c)
 {
 	char		*joined;
 	int			i;

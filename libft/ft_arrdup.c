@@ -10,7 +10,7 @@ char	**ft_arrdup(char **arr)
 	i = 0;
 	while (arr[i])
 		i++;
-	dest = malloc(sizeof(char*) * (i + 1));
+	dest = malloc(sizeof(char *) * (i + 1));
 	i = 0;
 	while (arr[i])
 	{

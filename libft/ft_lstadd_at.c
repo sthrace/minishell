@@ -9,7 +9,7 @@ void	ft_lstadd_at(t_list **lst, t_list *new, unsigned int n)
 		return ;
 	prev = 0;
 	temp = *lst;
-	while(temp && n--)
+	while (temp && n--)
 	{
 		prev = temp;
 		temp = temp->next;
@@ -17,6 +17,6 @@ void	ft_lstadd_at(t_list **lst, t_list *new, unsigned int n)
 	if (prev)
 		prev->next = new;
 	else
-		*lst = new; 
+		*lst = new;
 	new->next = temp;
 }

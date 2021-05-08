@@ -14,9 +14,9 @@
 
 char	*ft_strrchr(const char *s, int c)
 {
-	char *ptr;
+	char	*ptr;
 
-	ptr = (char*)s + ft_strlen(s);
+	ptr = (char *)s + ft_strlen(s);
 	while (ptr >= s)
 	{
 		if (*ptr == (char)c)

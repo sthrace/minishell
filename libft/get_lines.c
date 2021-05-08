@@ -1,8 +1,8 @@
 #include "libft.h"
 
-int		get_lines(int fd, char ***arr)
+int	get_lines(int fd, char ***arr)
 {
-	int 	i;
+	int		i;
 	char	*line;
 	int		rslt;
 
