@@ -61,7 +61,7 @@ int	check_remain(char **remain)
 		*remain = ft_strdup("");
 	if (*remain == 0)
 		return (-1);
-	return(0);
+	return (0);
 }
 
 int	get_next_line(int fd, char **line)

@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-static void	ft_execute(t_data *data, char *file)
+void	ft_execute(t_data *data, char *file)
 {
 	signal(SIGINT, &child_sig_handler);
 	signal(SIGQUIT, &child_sig_handler);
@@ -21,7 +21,6 @@ static void	ft_execute(t_data *data, char *file)
 	signal(SIGQUIT, &sig_handler);
 	if (WIFEXITED(data->ret))
 		data->ret = WEXITSTATUS(data->ret);
-	printf("ret: %d\n", data->ret);
 	free(file);
 }
 
@@ -78,16 +77,7 @@ void	ft_binsearch(t_data *data, int cnt, char *dir, char *file)
 	if (ft_strlen(data->argv[0]) == 0)
 		return ;
 	if (data->argv[0][0] == '.' || data->argv[0][0] == '/')
-	{
-		file = ft_strdup(data->argv[0]);
-		data->ret = stat(file, buf);
-		if (data->ret == -1)
-			printf("bash: %s: %s\n", file, strerror(errno));
-		if (data->pl->state == 0)
-			ft_execute(data, file);
-		else
-			data->pl->pids[data->pl->count - 1] = execute_pipe(data, file, 0);
-	}
+		ft_abs_path(data, &file);
 	else if (paths)
 	{
 		while (paths[++cnt])
@@ -99,18 +89,8 @@ void	ft_binsearch(t_data *data, int cnt, char *dir, char *file)
 			if (!data->ret)
 				break ;
 			free(file);
-			file = NULL;
 		}
-		ft_free_array(paths);
-		if (data->ret == -1 || !paths)
-		{
-			data->ret = 127;
-			printf("bash: %s: %s\n", data->argv[0], strerror(errno));
-		}
-		else if (data->pl->state == 0)
-			ft_execute(data, file);
-		if (data->pl->state != 0)
-			data->pl->pids[data->pl->count - 1] = execute_pipe(data, file, 0);
+		ft_exectool(data, &paths, &file);
 	}
 }
 
