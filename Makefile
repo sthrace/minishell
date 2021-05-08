@@ -1,6 +1,6 @@
 #SETUP
 NAME		= minishell
-CC			= clang
+CC			= gcc
 CFLAGS		= -g3 -Wall -Wextra -Werror
 
 SFLAGS		= -fsanitize=address -fno-omit-frame-pointer \
@@ -28,9 +28,9 @@ LIBFT		= $(LIBFT_DIR)libft.a
 all:		$(NAME)
 
 $(NAME):	tools writeComp $(OBJS) writeOK
-			$(CC) $(CFLAGS) -o $(NAME) -ltermcap $(OBJS) $(LIBFT)
+			$(CC) $(CFLAGS) -o $(NAME) -ltermcap $(OBJS) $(LIBFT) 
 
-%.o: %.c
+.c.o:		$(NAME)
 			$(CC) -c $(CFLAGS) -o $@ $<
 			printf "$(WHITE)██"		
 
