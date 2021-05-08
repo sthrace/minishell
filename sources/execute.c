@@ -19,6 +19,7 @@ void	ft_execute(t_data *data, char *file)
 	}
 	wait(&data->ret);
 	signal(SIGQUIT, &sig_handler);
+	signal(SIGINT, &sig_handler);
 	if (WIFEXITED(data->ret))
 		data->ret = WEXITSTATUS(data->ret);
 	free(file);
@@ -41,7 +42,7 @@ int	execute_pipe(t_data *data, char *file, int builtin)
 		close(data->pl->fdout[WR]);
 	if (data->pl->state > 1 || data->pl->state < 0)
 		close(data->pl->fdin[RD]);
-	free(file);
+	free (file);
 	return (pid);
 }
 
@@ -66,6 +67,7 @@ void	ft_binsearch(t_data *data, int cnt, char *dir, char *file)
 			if (!data->ret)
 				break ;
 			free(file);
+			file = NULL;
 		}
 		ft_exectool(data, &paths, &file);
 	}

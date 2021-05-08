@@ -11,7 +11,8 @@ void	ft_flags(t_data *data, char c, int type)
 	}
 	if (type == 1 || type == 2)
 	{
-		if (c == '\\' && (!data->flg.esc || data->flg.esc == 1))
+		if (c == '\\' && (!data->flg.esc || data->flg.esc == 1) \
+		&& data->flg.quotes != 39)
 			data->flg.esc = 2;
 		else if (data->flg.esc == 2)
 			data->flg.esc = 1;

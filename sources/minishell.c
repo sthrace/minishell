@@ -72,6 +72,7 @@ int	main(int argc, char **argv, char *envp[])
 	g_sig = 0;
 	ft_shell_prompt();
 	signal(SIGQUIT, &sig_handler);
+	signal(SIGINT, &sig_handler);
 	ft_input(data);
 	return (0);
 }
