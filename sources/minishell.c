@@ -71,10 +71,10 @@ int	main(int argc, char **argv, char *envp[])
 	t_hist	hist;
 	t_pl	pl;
 
-	env = envp_to_lst(envp);
-	init_hist(&hist);
 	if (argc != 1 && !argv[0])
 		return (1);
+	env = envp_to_lst(envp);
+	init_hist(&hist, env);
 	ft_init(&data);
 	ft_get_pid(data);
 	data->env = env;

@@ -118,5 +118,5 @@ void	ft_parser(t_data *data, int x)
 	if (data->pl->state == 0 || !is_cmd_bltin(data))
 		ft_sorter(data);
 	else
-		data->pl->pids[data->pl->count - 1] = execute_pipe(data, 0);
+		data->pl->pids[data->pl->count - 1] = execute_pipe(data, NULL, 1);
 }

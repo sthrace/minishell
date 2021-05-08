@@ -2,17 +2,15 @@
 
 static void	ft_execute(t_data *data, char *file)
 {
-	extern char	**environ;
-
 	signal(SIGINT, &child_sig_handler);
 	signal(SIGQUIT, &child_sig_handler);
 	if (!fork())
 	{
-		if (data->fd0 > 0)
-			dup2(data->fd0, 0);
-		if (data->fd1 > 1)
-			dup2(data->fd1, 1);
-		data->ret = execve(file, data->argv, environ);
+		if (data->fd0 > STDIN)
+			dup2(data->fd0, STDIN);
+		if (data->fd1 > STDOUT)
+			dup2(data->fd1, STDOUT);
+		data->ret = execve(file, data->argv, env_to_arr(data->env));
 	}
 	wait(&data->ret);
 	if (data->ret == -1 || errno == EACCES)
@@ -26,7 +24,7 @@ static void	ft_execute(t_data *data, char *file)
 	free(file);
 }
 
-int	execute_pipe(t_data *data, char *file)
+int	execute_pipe(t_data *data, char *file, int builtin)
 {
 	int	pid;
 
@@ -37,12 +35,12 @@ int	execute_pipe(t_data *data, char *file)
 	pid = fork();
 	if (pid == 0)
 	{
-		if (data->fd0 != 0 || data->fd1 != 1)
+		if (data->fd0 != STDIN || data->fd1 != STDOUT)
 		{
-			if (data->fd0 != 0 && (data->pl->state > 1 || data->pl->state < 0))
+			if (data->fd0 != STDIN && (data->pl->state > 1 || data->pl->state < 0))
 				dup2(data->fd0, STDIN);
 			if (data->fd1 != STDOUT && data->pl->state > 0)
-				dup2(data->fd1, 1);
+				dup2(data->fd1, STDOUT);
 		}
 		else
 		{
@@ -54,12 +52,12 @@ int	execute_pipe(t_data *data, char *file)
 			if (data->pl->state > 1 || data->pl->state < 0)
 				dup2(data->pl->fdin[RD], STDIN);
 		}
-		if (file)
-			exit(execve(file, data->argv, 0));
-		else
+		if (builtin)
 			exit(ft_sorter(data));
+		else
+			exit(execve(file, data->argv, env_to_arr(data->env)));
 	}
-	if (data->fd0 != 0 || data->fd1 != 1)
+	if (data->fd0 != STDIN || data->fd1 != STDOUT)
 		wait (NULL);
 	if (data->pl->state > 0)
 		close(data->pl->fdout[WR]);
@@ -83,7 +81,7 @@ void	ft_binsearch(t_data *data, int cnt, char *dir, char *file)
 		if (data->pl->state == 0)
 			ft_execute(data, file);
 		else
-			data->pl->pids[data->pl->count - 1] = execute_pipe(data, file);
+			data->pl->pids[data->pl->count - 1] = execute_pipe(data, file, 0);
 	}
 	else if (paths)
 	{
@@ -96,6 +94,7 @@ void	ft_binsearch(t_data *data, int cnt, char *dir, char *file)
 			if (!data->ret)
 				break ;
 			free(file);
+			file = NULL;
 		}
 		ft_free_array(paths);
 		if (data->ret == -1 || !paths)
@@ -106,7 +105,7 @@ void	ft_binsearch(t_data *data, int cnt, char *dir, char *file)
 		else if (data->pl->state == 0)
 			ft_execute(data, file);
 		if (data->pl->state != 0)
-			data->pl->pids[data->pl->count - 1] = execute_pipe(data, file);
+			data->pl->pids[data->pl->count - 1] = execute_pipe(data, file, 0);
 	}
 }
 

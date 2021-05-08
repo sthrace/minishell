@@ -1,5 +1,44 @@
 #include "minishell.h"
 
+t_list	*envp_to_lst(char *envp[])
+{
+	int		i;
+	t_list	*begin;
+
+	if (!envp)
+		return (0);
+	i = 0;
+	begin = 0;
+	while (envp[i])
+	{
+		if (set_var(&begin, envp[i], ft_lstsize(begin)))
+			return (0);
+		i++;
+	}
+	return (begin);
+}
+
+char	**env_to_arr(t_list *env)
+{
+	char	**arr;
+	char	*str;
+
+	arr = 0;
+	while (env)
+	{
+		if (((t_var *)(env->content))->value == 0)
+		{
+			env = env->next;
+			continue ;
+		}
+		str = ft_strjoin(((t_var *)env->content)->key, "=");
+		ft_arradd(&arr, ft_strjoin(str, ((t_var *)env->content)->value));
+		free(str);
+		env = env->next;
+	}
+	return (arr);
+}
+
 void	print_env(t_list *env)
 {
 	while (env)

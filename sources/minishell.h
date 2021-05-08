@@ -38,7 +38,7 @@ typedef struct s_pl
 {
 	int	fdin[2];
 	int	fdout[2];
-	int	pids[100];
+	int	pids[256];
 	int	state;
 	int	count;
 }				t_pl;
@@ -115,7 +115,7 @@ void	child_sig_handler(int sig);
 // execute.c //
 
 int		ft_sorter(t_data *data);
-int		execute_pipe(t_data *data, char *file);
+int		execute_pipe(t_data *data, char *file, int builtin);
 
 // builtins.c //
 
@@ -144,6 +144,7 @@ char	**ft_split_path(t_data *data);
 // env.c //
 
 t_list	*envp_to_lst(char *envp[]);
+char	**env_to_arr(t_list *env);
 void	print_env(t_list *env);
 void	print_export(t_list *env);
 char	*get_var(t_list *env, char *str);
@@ -152,7 +153,7 @@ int		unset_var(t_list **begin, char *str);
 
 // history.c //
 
-int		init_hist(t_hist *hist);
+int		init_hist(t_hist *hist, t_list *env);
 int		read_file(char *file, char ***arr);
 int		write_str(char *file, char *str, int mode);
 int		add_hist(t_hist *hist, char *str);

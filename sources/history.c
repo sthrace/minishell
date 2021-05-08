@@ -2,8 +2,8 @@
 
 int	read_file(char *file, char ***arr)
 {
-	int		fd;
-	int		size;
+	int	fd;
+	int	size;
 
 	fd = open(file, O_RDWR);
 	if (fd == -1)
@@ -36,9 +36,16 @@ int	add_hist(t_hist *hist, char *str)
 	return (0);
 }
 
-int	init_hist(t_hist *hist)
+int	init_hist(t_hist *hist, t_list *env)
 {
-	hist->file = ft_strdup("minishell_history");
+	char	*temp;
+	char	buf[4096];
+
+	temp = ft_strdup(get_var(env, "TMPDIR"));
+	if (temp == 0)
+		temp = ft_strdup(getcwd(buf, 4096));
+	hist->file = ft_strjoin(temp, "/.minishell_history");
+	free(temp);
 	if (hist->file == 0)
 		return (1);
 	write_str(hist->file, "", O_APPEND);
