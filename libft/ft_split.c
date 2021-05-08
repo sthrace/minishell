@@ -14,7 +14,7 @@
 
 static size_t	get_words_number(char const *s, char c)
 {
-	size_t count;
+	size_t	count;
 
 	count = 0;
 	while (*s)
@@ -30,7 +30,7 @@ static size_t	get_words_number(char const *s, char c)
 	return (count);
 }
 
-static char		*get_next_word(char const *s, size_t len)
+static char	*get_next_word(char const *s, size_t len)
 {
 	char	*rslt;
 	size_t	k;
@@ -48,7 +48,7 @@ static char		*get_next_word(char const *s, size_t len)
 	return (rslt);
 }
 
-static char		**free_mem(char **rslt, size_t i)
+static char	**free_mem(char **rslt, size_t i)
 {
 	while (i--)
 		free(rslt[i]);
@@ -56,18 +56,11 @@ static char		**free_mem(char **rslt, size_t i)
 	return (0);
 }
 
-char			**ft_split(char const *s, char c)
+static char	**add_words(const char *s, char c, size_t wnumb, char **rslt)
 {
-	char	**rslt;
-	size_t	wnumb;
-	size_t	len;
 	size_t	i;
+	size_t	len;
 
-	if (!s)
-		return (0);
-	wnumb = get_words_number(s, c);
-	if (!(rslt = malloc(sizeof(char*) * (wnumb + 1))))
-		return (0);
 	i = 0;
 	while (i < wnumb)
 	{
@@ -76,11 +69,26 @@ char			**ft_split(char const *s, char c)
 		len = 0;
 		while (s[len] && s[len] != c)
 			len++;
-		if (!(rslt[i] = get_next_word(s, len)))
+		rslt[i] = get_next_word(s, len);
+		if (!rslt[i])
 			return (free_mem(rslt, i));
 		s += len;
 		i++;
 	}
 	rslt[i] = 0;
 	return (rslt);
+}
+
+char	**ft_split(char const *s, char c)
+{
+	char	**rslt;
+	size_t	wnumb;
+
+	if (!s)
+		return (0);
+	wnumb = get_words_number(s, c);
+	rslt = malloc(sizeof(char *) * (wnumb + 1));
+	if (!rslt)
+		return (0);
+	return (add_words(s, c, wnumb, rslt));
 }

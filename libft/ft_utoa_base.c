@@ -22,11 +22,15 @@ char	*ft_utoa_base(unsigned long n, unsigned int base, char type)
 	nums = "0123456789abcdef";
 	if (type == 'i')
 		n = (unsigned int)n;
-	tmp = n;
+	tmp = n / 10;
 	len = 1;
-	while ((tmp = tmp / base))
+	while (tmp)
+	{
 		len++;
-	if ((rslt = malloc(sizeof(char) * (len + 1))) == 0)
+		tmp = tmp / 10;
+	}
+	rslt = malloc(sizeof(char) * (len + 1));
+	if (rslt == 0)
 		return (0);
 	rslt[len] = '\0';
 	while (len--)

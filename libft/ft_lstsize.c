@@ -14,7 +14,7 @@
 
 int	ft_lstsize(t_list *lst)
 {
-	int rslt;
+	int	rslt;
 
 	rslt = 0;
 	while (lst)

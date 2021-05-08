@@ -24,6 +24,15 @@ int	add_var(t_list **begin, char **key_val, int n)
 	return (0);
 }
 
+int	reset_var(t_list *temp, char **key_val)
+{
+	free(((t_var *)(temp->content))->key);
+	free(((t_var *)(temp->content))->value);
+	((t_var *)(temp->content))->key = key_val[0];
+	((t_var *)(temp->content))->value = key_val[1];
+	return (0);
+}
+
 int	set_var(t_list **begin, char *str, int n)
 {
 	t_list	*temp;
@@ -43,13 +52,7 @@ int	set_var(t_list **begin, char *str, int n)
 	while (temp)
 	{
 		if (!ft_strcmp(((t_var *)temp->content)->key, key_val[0]))
-		{
-			free(((t_var *)(temp->content))->key);
-			free(((t_var *)(temp->content))->value);
-			((t_var *)(temp->content))->key = key_val[0];
-			((t_var *)(temp->content))->value = key_val[1];
-			return (0);
-		}
+			return (reset_var(temp, key_val));
 		temp = temp->next;
 	}
 	return (add_var(begin, key_val, n));

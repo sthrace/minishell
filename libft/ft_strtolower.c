@@ -14,7 +14,7 @@
 
 char	*ft_strtolower(char *str)
 {
-	char *rslt;
+	char	*rslt;
 
 	if (!str)
 		return (0);

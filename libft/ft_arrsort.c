@@ -1,6 +1,6 @@
 #include "libft.h"
 
-int		ft_arrsort(char ***arr)
+int	ft_arrsort(char ***arr)
 {
 	int		i;
 	char	*temp;

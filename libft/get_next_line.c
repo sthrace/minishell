@@ -17,7 +17,8 @@ static int	read_until(int fd, char **buffer, char **remain, char chr)
 	ssize_t	rb;
 	char	*temp;
 
-	while ((rb = read(fd, *buffer, BUFFER_SIZE)) > 0)
+	rb = read(fd, *buffer, BUFFER_SIZE);
+	while (rb > 0)
 	{
 		(*buffer)[rb] = '\0';
 		temp = *remain;
@@ -27,6 +28,7 @@ static int	read_until(int fd, char **buffer, char **remain, char chr)
 			return (-1);
 		if (ft_strchr(*buffer, chr))
 			return (1);
+		rb = read(fd, *buffer, BUFFER_SIZE);
 	}
 	return (rb);
 }
@@ -51,20 +53,30 @@ static int	get_remain_line(char **remain, char **line)
 	return (0);
 }
 
-int			get_next_line(int fd, char **line)
+int	check_remain(char **remain)
 {
-	static char *remain;
+	if (BUFFER_SIZE <= 0)
+		return (-1);
+	if (*remain == 0)
+		*remain = ft_strdup("");
+	if (*remain == 0)
+		return (-1);
+	return(0);
+}
+
+int	get_next_line(int fd, char **line)
+{
+	static char	*remain;
 	char		*buffer;
 	ssize_t		rslt;
 
-	if (BUFFER_SIZE <= 0)
+	if (check_remain(&remain) == -1)
 		return (-1);
-	if (remain == 0)
-		if (!(remain = ft_strdup("")))
-			return (-1);
-	if ((rslt = get_remain_line(&remain, line)))
+	rslt = get_remain_line(&remain, line);
+	if (rslt)
 		return (rslt);
-	if (!(buffer = malloc(sizeof(char) * (BUFFER_SIZE + 1))))
+	buffer = malloc(sizeof(char) * (BUFFER_SIZE + 1));
+	if (buffer == 0)
 		return (-1);
 	rslt = read_until(fd, &buffer, &remain, '\n');
 	free(buffer);
