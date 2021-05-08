@@ -1,13 +1,7 @@
 #SETUP
 NAME		= minishell
 CC			= gcc
-CFLAGS		= -g3 -Wall -Wextra -Werror
-
-SFLAGS		= -fsanitize=address -fno-omit-frame-pointer \
-			-fsanitize=undefined -fsanitize=nullability \
-			-fsanitize=array-bounds -fsanitize=pointer-overflow \
-			-Wall -Wextra -Werror
-# SFLAGS		=
+CFLAGS		= -Wall -Wextra -Werror
 RM			= rm -f
 
 #FILES
@@ -27,12 +21,11 @@ LIBFT		= $(LIBFT_DIR)libft.a
 #COMMANDS
 all:		tools $(NAME)
 
-$(NAME):	tools writeComp $(OBJS) writeOK
-			$(CC) $(CFLAGS) -o $(NAME) -ltermcap $(OBJS) $(LIBFT) 
+$(NAME):	$(LIBFT) $(OBJS)
+			@$(CC) $(CFLAGS) -ltermcap $(LIBFT) $(OBJS) -o $(NAME)
+			@echo "$(GREEN)$(NAME) created!$(DEFAULT)"
 
-.c.o:		$(NAME)
-			$(CC) -c $(CFLAGS) -o $@ $<
-			printf "$(WHITE)██"		
+$(OBJS):	$(HEADER)
 
 tools:
 			@$(MAKE) -C $(LIBFT_DIR)
