@@ -13,7 +13,8 @@ RM			= rm -f
 #FILES
 FLS			= minishell.c termcap.c lexer.c validator.c parser.c \
 				redirect.c execute.c builtins.c utils.c env.c \
-				env_printer.c history.c signal.c cd.c parser_utils.c
+				env_printer.c history.c signal.c cd.c parser_utils.c \
+				execute_utils.c
 
 SRCS_DIR	= sources/
 HEADER		= $(SRCS_DIR)minishell.h

@@ -117,6 +117,12 @@ void	child_sig_handler(int sig);
 
 int		ft_sorter(t_data *data);
 int		execute_pipe(t_data *data, char *file, int builtin);
+void	ft_execute(t_data *data, char *file);
+
+// execute_utils.c //
+
+void	ft_abs_path(t_data *data, char **file);
+void	ft_exectool(t_data *data, char ***paths, char **file);
 
 // builtins.c //
 
