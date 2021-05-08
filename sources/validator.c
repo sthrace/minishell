@@ -103,6 +103,7 @@ void	ft_validate_line(t_data *data, int i)
 			data->ret = 258;
 			return ;
 		}
+		break ;
 	}
 	ft_validate_quotes(data, -1);
 }

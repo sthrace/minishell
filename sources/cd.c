@@ -1,5 +1,12 @@
 #include "minishell.h"
 
+static void	ft_cd_err(t_data *data, char *newdir)
+{
+	data->ret = 1;
+	printf("bash: cd: %s: %s\n", newdir, strerror(errno));
+	free(newdir);
+}
+
 static void	ft_set_dir(t_data *data, char **pwd)
 {
 	char	buf[4096];
@@ -10,14 +17,10 @@ static void	ft_set_dir(t_data *data, char **pwd)
 	free(*pwd);
 }
 
-static void	ft_set_oldpwd(t_data *data, char **oldpwd)
+static void	ft_set_oldpwd(t_data *data, char **oldpwd, char **temp)
 {
-	char	buf[4096];
-	char	*temp;
-
-	temp = ft_strdup(getcwd(buf, 4096));
-	*oldpwd = ft_strjoin("OLDPWD=", temp);
-	free(temp);
+	*oldpwd = ft_strjoin("OLDPWD=", *temp);
+	free(*temp);
 	set_var(&data->env, *oldpwd, 0);
 	free(*oldpwd);
 	data->flg.opwd = 0;
@@ -26,10 +29,11 @@ static void	ft_set_oldpwd(t_data *data, char **oldpwd)
 void	ft_cd(t_data *data, int ret, char *pwd, char *oldpwd)
 {
 	char	*newdir;
+	char	*temp;
+	char	buf[4096];
 
 	newdir = NULL;
-	if (get_var(data->env, "OLDPWD") || data->flg.opwd)
-		ft_set_oldpwd(data, &oldpwd);
+	temp = ft_strdup(getcwd(buf, 4096));
 	if (data->argc == 1 && get_var(data->env, "HOME"))
 		newdir = ft_strdup(get_var(data->env, "HOME"));
 	else if (data->argc == 1 && !get_var(data->env, "HOME"))
@@ -42,11 +46,11 @@ void	ft_cd(t_data *data, int ret, char *pwd, char *oldpwd)
 	ret = chdir(newdir);
 	if (ret == -1)
 	{
-		data->ret = 1;
-		printf("bash: cd: %s: %s\n", newdir, strerror(errno));
-		free(newdir);
+		ft_cd_err(data, newdir);
 		return ;
 	}
 	free(newdir);
 	ft_set_dir(data, &pwd);
+	if (get_var(data->env, "OLDPWD") || data->flg.opwd)
+		ft_set_oldpwd(data, &oldpwd, &temp);
 }

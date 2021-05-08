@@ -93,12 +93,13 @@ void	ft_get_cmd(t_data *data, int i, int start)
 
 void 	ft_line(t_data *data, char *str, int len)
 {
-	write(1, str, len);
+	if (g_sig == 0)
+		write(1, str, len);
 	if (g_sig == 1)
 	{
-		ft_line_handler(data, str, len, 3);
 		g_sig = 0;
 		data->ret = 1;
+		ft_line_handler(data, str, len, 3);
 	}
 	if (!data->line)
 		ft_line_handler(data, str, len, 1);

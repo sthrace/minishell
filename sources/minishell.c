@@ -55,7 +55,7 @@ static void	ft_input(t_data *data)
 			ft_shell_prompt();
 			tputs(save_cursor, 1, &ft_putchar);
 		}
-		if (str[0] == '\4' && data->len == 0)
+		if (str[0] == '\4' && (data->len == 0 || g_sig == 1))
 		{
 			printf("exit\n");
 			ft_set_term(2);
