@@ -25,6 +25,35 @@ static void	ft_execute(t_data *data, char *file)
 	free(file);
 }
 
+int	pipe_fork(t_data *data, char *file, int builtin)
+{
+	if (data->fd0 != STDIN || data->fd1 != STDOUT)
+	{
+		if (data->fd0 != STDIN && (data->pl->state > 1 || \
+		data->pl->state < 0))
+			dup2(data->fd0, STDIN);
+		if (data->fd1 != STDOUT && data->pl->state > 0)
+			dup2(data->fd1, STDOUT);
+	}
+	else
+	{
+		if (data->pl->state > 0)
+		{
+			dup2(data->pl->fdout[WR], STDOUT);
+			close(data->pl->fdout[RD]);
+		}
+		if (data->pl->state > 1 || data->pl->state < 0)
+		{
+			dup2(data->pl->fdin[RD], STDIN);
+			close(data->pl->fdout[WR]);
+		}
+	}
+	if (builtin)
+		exit(ft_sorter(data));
+	else
+		exit(execve(file, data->argv, env_to_arr(data->env)));
+}
+
 int	execute_pipe(t_data *data, char *file, int builtin)
 {
 	int	pid;
@@ -35,30 +64,7 @@ int	execute_pipe(t_data *data, char *file, int builtin)
 		pipe(data->pl->fdout);
 	pid = fork();
 	if (pid == 0)
-	{
-		if (data->fd0 != STDIN || data->fd1 != STDOUT)
-		{
-			if (data->fd0 != STDIN && (data->pl->state > 1 || \
-			data->pl->state < 0))
-				dup2(data->fd0, STDIN);
-			if (data->fd1 != STDOUT && data->pl->state > 0)
-				dup2(data->fd1, STDOUT);
-		}
-		else
-		{
-			if (data->pl->state > 0)
-			{
-				dup2(data->pl->fdout[WR], STDOUT);
-				close(data->pl->fdout[RD]);
-			}
-			if (data->pl->state > 1 || data->pl->state < 0)
-				dup2(data->pl->fdin[RD], STDIN);
-		}
-		if (builtin)
-			exit(ft_sorter(data));
-		else
-			exit(execve(file, data->argv, env_to_arr(data->env)));
-	}
+		pipe_fork(data, file, builtin);
 	if (data->fd0 != STDIN || data->fd1 != STDOUT)
 		wait (NULL);
 	if (data->pl->state > 0)
