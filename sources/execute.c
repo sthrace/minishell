@@ -4,8 +4,6 @@ static void	ft_execute(t_data *data, char *file)
 {
 	signal(SIGINT, &child_sig_handler);
 	signal(SIGQUIT, &child_sig_handler);
-	printf("file: %s\n", file);
-	printf("data->argv[0]: %s\n", data->argv[0]);
 	if (!fork())
 	{
 		if (data->fd0 > STDIN)
@@ -16,7 +14,6 @@ static void	ft_execute(t_data *data, char *file)
 		if (data->ret == -1 || errno == EACCES)
 		{
 			data->ret = 127;
-			printf("bash: %s: %s\n", file, strerror(errno));
 			exit(data->ret);
 		}
 	}
@@ -24,6 +21,7 @@ static void	ft_execute(t_data *data, char *file)
 	signal(SIGQUIT, &sig_handler);
 	if (WIFEXITED(data->ret))
 		data->ret = WEXITSTATUS(data->ret);
+	printf("ret: %d\n", data->ret);
 	free(file);
 }
 
@@ -59,16 +57,7 @@ int	execute_pipe(t_data *data, char *file, int builtin)
 		if (builtin)
 			exit(ft_sorter(data));
 		else
-		{
-			printf("file: %s\n", file);
 			exit(execve(file, data->argv, env_to_arr(data->env)));
-			// if (data->ret == -1 || errno == EACCES)
-			// {
-			// 	printf("bash: %s: %s\n", file, strerror(errno));
-			// 	data->ret = 127;
-			// 	exit(data->ret);
-			// }
-		}
 	}
 	if (data->fd0 != STDIN || data->fd1 != STDOUT)
 		wait (NULL);
@@ -91,6 +80,9 @@ void	ft_binsearch(t_data *data, int cnt, char *dir, char *file)
 	if (data->argv[0][0] == '.' || data->argv[0][0] == '/')
 	{
 		file = ft_strdup(data->argv[0]);
+		data->ret = stat(file, buf);
+		if (data->ret == -1)
+			printf("bash: %s: %s\n", file, strerror(errno));
 		if (data->pl->state == 0)
 			ft_execute(data, file);
 		else
