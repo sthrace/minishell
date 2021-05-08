@@ -7,15 +7,14 @@ void	ft_pwd(void)
 	printf("%s\n", getcwd(buf, 4096));
 }
 
-void	ft_echo(t_data *data)
+void	ft_echo(t_data *data, int i, int n)
 {
-	int		i;
-	short	n;
-
-	i = 1;
-	n = 0;
 	if (data->argc > 1 && (!(ft_strncmp(data->argv[1], "-n", 2))))
+	{
 		n = 1;
+		data->flg.n = 1;
+		tputs(save_cursor, 1, &ft_putchar);
+	}
 	while (i < data->argc)
 	{
 		while (!(ft_strncmp(data->argv[i], "-n", 2)) && data->argv[i + 1])

@@ -60,6 +60,7 @@ typedef struct s_flags
 	int		fdamp;
 	int		opwd;
 	char	*key;
+	int		n;
 }			t_flags;
 
 typedef struct s_data
@@ -120,7 +121,7 @@ int		execute_pipe(t_data *data, char *file, int builtin);
 // builtins.c //
 
 void	ft_pwd(void);
-void	ft_echo(t_data *data);
+void	ft_echo(t_data *data, int i, int n);
 void	ft_exit(t_data *data, int i);
 
 // cd.c //
@@ -132,6 +133,8 @@ void	ft_cd(t_data *data, int ret, char *pwd, char *oldpwd);
 int		ft_free_array(char **array);
 void	ft_line_handler(t_data *data, char *str, int len, int type);
 void	ft_pointer_inc(int *a, int *b);
+void	validator_err(t_data *data, int i);
+void	line_tool(t_data *data, int type);
 
 // parser_utils.c //
 

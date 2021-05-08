@@ -1,16 +1,5 @@
 #include "minishell.h"
 
-void	ft_get_pid(t_data *data)
-{
-	int		pid;
-
-	pid = fork();
-	data->ppid = pid - 1;
-	if (!pid)
-		exit (0);
-	wait(NULL);
-}
-
 void	ft_init(t_data **data)
 {
 	if (!(*(data)))
@@ -42,23 +31,20 @@ static void	ft_input(t_data *data)
 
 	while (1)
 	{	
-		signal(SIGINT, &sig_handler);
 		ft_set_term(1);
 		len = read(0, str, 3);
+		signal(SIGINT, &sig_handler);
+		if (g_sig == 1)
+			ft_line_handler(data, str, len, 3);
 		if (str[0] == '\e' || !ft_strncmp(str, "\177", len))
 			ft_termios(data, str, len);
 		else if (str[0] != '\t' && str[0] != '\4')
 			ft_line(data, str, len);
 		if (str[0] == '\n')
-		{
-			ft_validate_line(data, -1);
-			ft_shell_prompt();
-			tputs(save_cursor, 1, &ft_putchar);
-		}
+			line_tool(data, 1);
 		if (str[0] == '\4' && (data->len == 0 || g_sig == 1))
 		{
-			printf("exit\n");
-			ft_set_term(2);
+			line_tool(data, 2);
 			break ;
 		}
 	}
@@ -76,13 +62,13 @@ int	main(int argc, char **argv, char *envp[])
 	env = envp_to_lst(envp);
 	init_hist(&hist, env);
 	ft_init(&data);
-	ft_get_pid(data);
 	data->env = env;
 	set_var(&data->env, "OLDPWD", 0);
 	data->hist = &hist;
 	data->pl = &pl;
 	data->pl->state = 0;
 	data->pl->count = 0;
+	data->flg.n = 0;
 	g_sig = 0;
 	ft_shell_prompt();
 	signal(SIGQUIT, &sig_handler);

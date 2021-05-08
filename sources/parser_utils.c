@@ -2,17 +2,15 @@
 
 int	ft_func_env(t_data *data, char **env, int x, int i)
 {
-	char	*ppid;
-
 	if (data->argv[x][i] == '$')
 	{
-		ppid = ft_itoa(data->ppid);
-		*env = ft_strdup(ppid);
-		free(ppid);
-		return (1);
+		data->ret = 0;
+		*env = ft_strdup("$");
+		return (0);
 	}
 	if (!data->argv[x][i] || (data->flg.dquote && data->argv[x][i] == '"'))
 	{
+		data->ret = 0;
 		*env = ft_strdup("$");
 		return (1);
 	}

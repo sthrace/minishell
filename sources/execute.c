@@ -4,6 +4,8 @@ static void	ft_execute(t_data *data, char *file)
 {
 	signal(SIGINT, &child_sig_handler);
 	signal(SIGQUIT, &child_sig_handler);
+	printf("file: %s\n", file);
+	printf("data->argv[0]: %s\n", data->argv[0]);
 	if (!fork())
 	{
 		if (data->fd0 > STDIN)
@@ -11,13 +13,14 @@ static void	ft_execute(t_data *data, char *file)
 		if (data->fd1 > STDOUT)
 			dup2(data->fd1, STDOUT);
 		data->ret = execve(file, data->argv, env_to_arr(data->env));
+		if (data->ret == -1 || errno == EACCES)
+		{
+			data->ret = 127;
+			printf("bash: %s: %s\n", file, strerror(errno));
+			exit(data->ret);
+		}
 	}
 	wait(&data->ret);
-	if (data->ret == -1 || errno == EACCES)
-	{
-		data->ret = 127;
-		printf("bash: %s: %s\n", file, strerror(errno));
-	}
 	signal(SIGQUIT, &sig_handler);
 	if (WIFEXITED(data->ret))
 		data->ret = WEXITSTATUS(data->ret);
@@ -37,7 +40,8 @@ int	execute_pipe(t_data *data, char *file, int builtin)
 	{
 		if (data->fd0 != STDIN || data->fd1 != STDOUT)
 		{
-			if (data->fd0 != STDIN && (data->pl->state > 1 || data->pl->state < 0))
+			if (data->fd0 != STDIN && (data->pl->state > 1 || \
+			data->pl->state < 0))
 				dup2(data->fd0, STDIN);
 			if (data->fd1 != STDOUT && data->pl->state > 0)
 				dup2(data->fd1, STDOUT);
@@ -55,7 +59,16 @@ int	execute_pipe(t_data *data, char *file, int builtin)
 		if (builtin)
 			exit(ft_sorter(data));
 		else
+		{
+			printf("file: %s\n", file);
 			exit(execve(file, data->argv, env_to_arr(data->env)));
+			// if (data->ret == -1 || errno == EACCES)
+			// {
+			// 	printf("bash: %s: %s\n", file, strerror(errno));
+			// 	data->ret = 127;
+			// 	exit(data->ret);
+			// }
+		}
 	}
 	if (data->fd0 != STDIN || data->fd1 != STDOUT)
 		wait (NULL);
@@ -130,7 +143,7 @@ int	ft_sorter(t_data *data)
 
 	i = 1;
 	if ((!(ft_strncmpul(data->argv[0], "echo", 4))) && !data->argv[0][4])
-		ft_echo(data);
+		ft_echo(data, 1, 0);
 	else if ((!(ft_strncmpul(data->argv[0], "cd", 2))) && !data->argv[0][2])
 		ft_cd(data, 0, NULL, NULL);
 	else if ((!(ft_strncmpul(data->argv[0], "pwd", 3))) && !data->argv[0][3])

@@ -28,14 +28,21 @@ void	ft_flags(t_data *data, char c, int type)
 	}
 }
 
-static void	ft_print_err(t_data *data, int i)
+static void	ft_print_err(t_data *data, int i, int type)
 {
-	if (data->line[i] != '>')
-		printf("bash: syntax error near unexpected token `%c%c'\n", \
-		data->line[i], data->line[i]);
-	else
-		printf("bash: syntax error near unexpected token `%c'\n", \
-		data->line[i]);
+	if (type == 1)
+	{
+		if (data->line[i] != '>')
+			printf("bash: syntax error near unexpected token `%c%c'\n", \
+			data->line[i], data->line[i]);
+		else
+			printf("bash: syntax error near unexpected token `%c'\n", \
+			data->line[i]);
+	}
+	if (type == 2)
+		write(2, "bash: syntax error near unexpected token `newline'\n", 51);
+	if (type == 3)
+		write(2, "bash: >\n", 8);
 	data->ret = 258;
 	ft_init(&data);
 }
@@ -45,18 +52,21 @@ static void	ft_validate_dups(t_data *data, int i)
 	while (data->line[++i])
 	{
 		ft_flags(data, data->line[i], 2);
-		if ((!data->flg.esc && (data->line[i] == ';' || data->line[i] == '|' || data->line[i] \
-		== '<') && data->line[i + 1] == data->line[i]) || (data->line[i] == '>' && data->\
+		if ((!data->flg.esc && (data->line[i] == ';' || data->line[i] == '|') 
+		&& data->line[i + 1] == data->line[i]) || (data->line[i] == '>' && data->\
 		line[i + 1] == data->line[i] && data->line[i + 2] == data->line[i]))
 		{
-			ft_print_err(data, i);
+			ft_print_err(data, i, 1);
+			return ;
+		}
+		if (!data->flg.esc && (data->line[i] == '>' || data->line[i] == '<') && !data->line[i + 1])
+		{
+			ft_print_err(data, i, 2);
 			return ;
 		}
 		if (data->line[data->len - 2] == '\\')
 		{
-			write(2, "bash: >\n", 8);
-			data->ret = 258;
-			ft_init(&data);
+			ft_print_err(data, i, 3);
 			return ;
 		}
 	}
@@ -93,12 +103,9 @@ void	ft_validate_line(t_data *data, int i)
 	{
 		while (data->line[i] == ' ')
 			i++;
-		if (data->line[i] == ';')
+		if (data->line[i] == ';' || data->line[i] == '|')
 		{
-			if (data->line[i + 1] == ';')
-				write(2, "bash: syntax error near unexpected token `;;'\n", 46);
-			else
-				write(2, "bash: syntax error near unexpected token `;'\n", 45);
+			validator_err(data, i);
 			ft_init(&data);
 			data->ret = 258;
 			return ;
