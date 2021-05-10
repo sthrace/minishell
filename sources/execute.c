@@ -6,9 +6,9 @@ void	ft_execute(t_data *data, char *file)
 	signal(SIGQUIT, &child_sig_handler);
 	if (!fork())
 	{
-		if (data->fd0 > STDIN)
+		if (data->fd0 != STDIN)
 			dup2(data->fd0, STDIN);
-		if (data->fd1 > STDOUT)
+		if (data->fd1 != STDOUT)
 			dup2(data->fd1, STDOUT);
 		data->ret = execve(file, data->argv, env_to_arr(data->env));
 		if (data->ret == -1 || errno == EACCES)
@@ -98,7 +98,7 @@ int	ft_sorter(t_data *data)
 	else if ((!(ft_strncmpul(data->argv[0], "cd", 2))) && !data->argv[0][2])
 		ft_cd(data, 0, NULL, NULL);
 	else if ((!(ft_strncmpul(data->argv[0], "pwd", 3))) && !data->argv[0][3])
-		ft_pwd();
+		ft_pwd(data);
 	else if ((!(ft_strncmpul(data->argv[0], "export", 6))) && \
 		!data->argv[0][6] && (data->argc == 1 || ft_strlen(data->argv[1]) == 0))
 		print_export(data->env);

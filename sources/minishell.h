@@ -127,7 +127,7 @@ int		pipe_fork(t_data *data, char *file, int builtin);
 
 // builtins.c //
 
-void	ft_pwd(void);
+void	ft_pwd(t_data *data);
 void	ft_echo(t_data *data, int i, int n);
 void	ft_exit(t_data *data, int i);
 

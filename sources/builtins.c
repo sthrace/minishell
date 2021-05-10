@@ -1,10 +1,13 @@
 #include "minishell.h"
 
-void	ft_pwd(void)
+void	ft_pwd(t_data *data)
 {
 	char	buf[4096];
+	char	*pwd;
 
-	printf("%s\n", getcwd(buf, 4096));
+	pwd = getcwd(buf, 4096);
+	write(data->fd1, pwd, ft_strlen(pwd));
+	write(data->fd1, "\n", 1);
 }
 
 void	ft_echo(t_data *data, int i, int n)
