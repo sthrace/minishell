@@ -36,8 +36,6 @@ int	execute_pipe(t_data *data, char *file, int builtin)
 	pid = fork();
 	if (pid == 0)
 		pipe_fork(data, file, builtin);
-	if (data->fd0 != STDIN || data->fd1 != STDOUT)
-		wait (NULL);
 	if (data->pl->state > 0)
 		close(data->pl->fdout[WR]);
 	if (data->pl->state > 1 || data->pl->state < 0)
