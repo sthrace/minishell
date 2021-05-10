@@ -1,7 +1,7 @@
 #SETUP
 NAME		= minishell
-CC			= gcc
-CFLAGS		= -Wall -Wextra -Werror
+CC			= clang
+CFLAGS		= -g3 -Wall -Wextra -Werror
 RM			= rm -f
 
 #FILES
@@ -21,26 +21,46 @@ LIBFT		= $(LIBFT_DIR)libft.a
 #COMMANDS
 all:		tools $(NAME)
 
-$(NAME):	$(LIBFT) $(OBJS)
+$(NAME):	$(LIBFT) COMP $(OBJS) DONE
 			@$(CC) $(CFLAGS) -ltermcap $(LIBFT) $(OBJS) -o $(NAME)
-			@echo "$(GREEN)$(NAME) created!$(DEFAULT)"
 
-$(OBJS):	$(HEADER)
+%.o:		%.c
+			$(CC) -c $(CFLAGS) -o $@ $<
+			printf "$(WHITE)██"
 
 tools:
 			@$(MAKE) -C $(LIBFT_DIR)
 
-clean:
+clean:		CLEAN
 			@$(RM) $(OBJS)
 			@$(MAKE) -C $(LIBFT_DIR) clean
-			@echo "$(YELLOW)$(NAME) cleaned!$(DEFAULT)"
 
-fclean:		clean
+fclean:		clean FCLEAN
 			@$(RM) $(NAME)
 			@$(RM) $(LIBFT)
-			@echo "$(RED)$(NAME) $(LIBFT) deleted!$(DEFAULT)"
 
 re:			fclean all
+
+leaks:
+			valgrind --leak-check=full --show-leak-kinds=all ./$(NAME)
+
+git:
+			make fclean
+			git add .
+			git commit -m "commit"
+			git push
+
+.PHONY:		all clean fclean re
+.SILENT:
+
+COMP:
+	echo "$(CYAN) COMPILING $(NAME) $(DEFAULT)\n"
+DONE:
+	echo "$(GREEN)\n\n $(NAME) COMPILED $(DEFAULT)\n"
+CLEAN :
+	echo "\n$(YELLOW) REMOVING OBJECT FILES $(DEFAULT)"
+FCLEAN :
+	echo "$(RED) REMOVING EXECUTABLE AND LIBRARY $(DEFAULT)"
 
 #EXTRA
 RED = \033[1;31m
@@ -49,5 +69,3 @@ YELLOW = \033[1;33m
 CYAN = \033[1;36m
 WHITE = \033[1;37m
 DEFAULT = \033[0m
-
-.PHONY:		all clean fclean re
