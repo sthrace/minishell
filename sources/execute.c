@@ -2,6 +2,8 @@
 
 void	ft_execute(t_data *data, char *file)
 {
+	if (!(strncmp(data->argv[0], "./minishell", 11)))
+		g_sig = 2;
 	signal(SIGINT, &child_sig_handler);
 	signal(SIGQUIT, &child_sig_handler);
 	if (!fork())
