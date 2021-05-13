@@ -84,14 +84,17 @@ all:		$(NAME)
 
 $(NAME):	$(OBJS)
 			@ar rcs $(NAME) $(OBJS)
+			@echo "$(GREEN)$(NAME) created!$(DEFAULT)"
 
 $(OBJS):	$(HEADER)
 
 clean:
 			@$(RM) $(OBJS)
+			@echo "$(YELLOW)$(NAME) cleaned!$(DEFAULT)"
 
 fclean:		clean
 			@$(RM) $(NAME)
+			@echo "$(RED)$(NAME) deleted!$(DEFAULT)"
 
 re:			fclean all
 
